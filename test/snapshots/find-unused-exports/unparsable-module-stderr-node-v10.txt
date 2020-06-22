@@ -1,7 +1,7 @@
 [1m[31m
 Error running find-unused-exports:
 [22m[39m
-  SyntaxError: /Users/jaydenseric/Sites/find-unused-exports/test/fixtures/unparsable-module/a.txt: Unexpected token (2:0)
+  { SyntaxError: <path>/a.txt: Unexpected token (2:0)
   
     1 | // A syntax error so Babel can’t parse this file.
   > 2 | *
@@ -9,6 +9,4 @@ Error running find-unused-exports:
     3 | 
     loc: Position { line: 2, column: 0 },
     pos: 50,
-    code: 'BABEL_PARSE_ERROR'
-  } 
-  
+    code: 'BABEL_PARSE_ERROR' } '\n'

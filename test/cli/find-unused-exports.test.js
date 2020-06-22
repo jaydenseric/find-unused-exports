@@ -7,6 +7,7 @@ const snapshot = require('snapshot-assertion');
 const stripStackTraces = require('../stripStackTraces');
 
 const CLI_PATH = resolve(__dirname, '../../cli/find-unused-exports.js');
+const [nodeVersionMajor] = process.versions.node.split('.');
 
 module.exports = (tests) => {
   tests.add('`find-unused-exports` CLI with no unused exports.', async () => {
@@ -177,10 +178,12 @@ module.exports = (tests) => {
 
       strictEqual(stdout.toString(), '');
       await snapshot(
-        stripStackTraces(stderr.toString()),
+        stripStackTraces(
+          stderr.toString().replace(fixtureProjectPath, '<path>')
+        ),
         resolve(
           __dirname,
-          '../snapshots/find-unused-exports/unparsable-module-stderr.txt'
+          `../snapshots/find-unused-exports/unparsable-module-stderr-node-v${nodeVersionMajor}.txt`
         )
       );
       strictEqual(status, 1);
