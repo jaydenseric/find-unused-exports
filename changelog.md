@@ -1,6 +1,6 @@
 # find-unused-exports changelog
 
-## Next
+## 1.0.1
 
 ### Patch
 
