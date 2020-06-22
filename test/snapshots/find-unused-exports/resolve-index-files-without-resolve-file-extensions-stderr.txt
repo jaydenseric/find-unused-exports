@@ -1,0 +1,5 @@
+[1m[31m
+Error running find-unused-exports:
+[22m[39m
+  [31mThe `--resolve-index-files` flag can only be used with the `--resolve-file-extensions` argument.[39m 
+  

@@ -1,0 +1,2 @@
+// A syntax error so Babel can’t parse this file.
+*
