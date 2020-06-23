@@ -33,6 +33,57 @@ Then run the script to find unused exports:
 npm run find-unused-exports
 ```
 
+## Ignoring unused exports
+
+`.gitignore` files are used to ignore whole files or directories. This is useful for ignoring:
+
+- Third party modules, e.g. `node_modules`.
+- Compiled files, e.g. `.next` or `dist`.
+
+Special comments can be used anywhere in a module to ignore all or specific unused exports. This is useful for ignoring intentionally unused exports intended to be imported from external code, e.g.
+
+- For published packages, the public exports.
+- For [Next.js](https://nextjs.org) projects, the `default` exports in `pages` directory modules.
+
+_How to ignore all unused exports._
+
+> ```js
+> // ignore unused exports
+> export const a = true;
+> export default true;
+> ```
+
+_How to ignore specific unused exports._
+
+> ```js
+> // ignore unused exports b, default
+> export const a = true;
+> export const b = true;
+> export default true;
+> ```
+
+_Multiple comments can be used._
+
+> ```js
+> // ignore unused exports a
+> export const a = true;
+>
+> // ignore unused exports b
+> export const b = true;
+> ```
+
+_Comments are case-insensitive, except for the export names._
+
+> ```js
+> // iGnOrE UnUsEd eXpOrTs default
+> ```
+
+_Line or block comments can be used._
+
+> ```js
+> /* ignore unused exports */
+> ```
+
 ## CLI
 
 ### Command find-unused-exports

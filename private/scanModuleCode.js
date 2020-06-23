@@ -173,5 +173,26 @@ module.exports = async function scanModuleCode(code, path) {
     },
   });
 
+  // Scan comments to determine the ignored exports.
+  for (const { value } of ast.comments) {
+    const comment = value.trim();
+
+    // Check if the comment matches an ignore exports comment.
+    const match = comment.match(/^ignore unused exports *(.*)?$/i);
+    if (match) {
+      const [, exportNameList] = match;
+      if (exportNameList) {
+        // Check the list of export names matches the required format (words
+        // separated by a comma and optional spaces).
+        if (exportNameList.match(/^\w+(?:, *\w+)*$/))
+          // Ignore all of the export names listed in the comment.
+          for (const name of exportNameList.split(','))
+            analysis.exports.delete(name.trim());
+      }
+      // No export names were provided, so ignore all the exports.
+      else analysis.exports.clear();
+    }
+  }
+
   return analysis;
 };

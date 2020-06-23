@@ -109,6 +109,26 @@ module.exports = (tests) => {
     );
   });
 
+  tests.add(
+    '`findUnusedExports` with ignore unused exports comments.',
+    async () => {
+      const fixtureProjectPath = resolve(
+        __dirname,
+        '../fixtures/ignore-unused-exports-comments'
+      );
+
+      deepStrictEqual(
+        await findUnusedExports({
+          cwd: fixtureProjectPath,
+        }),
+        {
+          [join(fixtureProjectPath, 'b.mjs')]: new Set(['a']),
+          [join(fixtureProjectPath, 'c.mjs')]: new Set(['default']),
+        }
+      );
+    }
+  );
+
   tests.add('`findUnusedExports` with option `moduleGlob`.', async () => {
     const fixtureProjectPath = resolve(__dirname, '../fixtures/moduleGlob');
 

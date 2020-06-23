@@ -242,4 +242,155 @@ module.exports = (tests) => {
       exports: new Set(['a']),
     });
   });
+
+  tests.add(
+    '`scanModuleCode` with an ignore unused exports comment, no names.',
+    async () => {
+      deepStrictEqual(
+        await scanModuleCode(`// ignore unused exports
+export const a = true;
+export default true;
+`),
+        {
+          imports: {},
+          exports: new Set(),
+        }
+      );
+    }
+  );
+
+  tests.add(
+    '`scanModuleCode` with an ignore unused exports comment, case insensitivity.',
+    async () => {
+      deepStrictEqual(
+        await scanModuleCode(`// iGnOrE UnUsEd eXpOrTs
+export const a = true;
+export default true;
+`),
+        {
+          imports: {},
+          exports: new Set(),
+        }
+      );
+    }
+  );
+
+  tests.add(
+    '`scanModuleCode` with an ignore unused exports comment, whitespace tolerance.',
+    async () => {
+      deepStrictEqual(
+        await scanModuleCode(
+          '//  ignore unused exports  a,  b,c ' +
+            `
+export const a = true;
+export const b = true;
+export const c = true;
+`
+        ),
+        {
+          imports: {},
+          exports: new Set(),
+        }
+      );
+    }
+  );
+
+  tests.add(
+    '`scanModuleCode` with an ignore unused exports comment, one name.',
+    async () => {
+      deepStrictEqual(
+        await scanModuleCode(`// ignore unused exports default
+export const a = true;
+export default true;
+`),
+        {
+          imports: {},
+          exports: new Set(['a']),
+        }
+      );
+    }
+  );
+
+  tests.add(
+    '`scanModuleCode` with an ignore unused exports comment, multiple names.',
+    async () => {
+      deepStrictEqual(
+        await scanModuleCode(`// ignore unused exports a, default
+export const a = true;
+export const b = true;
+export default true;
+`),
+        {
+          imports: {},
+          exports: new Set(['b']),
+        }
+      );
+    }
+  );
+
+  tests.add(
+    '`scanModuleCode` with an ignore unused exports comment, invalid names.',
+    async () => {
+      deepStrictEqual(
+        await scanModuleCode(`// ignore unused exports default,,
+export default true;
+`),
+        {
+          imports: {},
+          exports: new Set(['default']),
+        }
+      );
+    }
+  );
+
+  tests.add(
+    '`scanModuleCode` with multiple ignore unused exports comments, same name.',
+    async () => {
+      deepStrictEqual(
+        await scanModuleCode(`// ignore unused exports default
+// ignore unused exports default
+export const a = true;
+export default true;
+`),
+        {
+          imports: {},
+          exports: new Set(['a']),
+        }
+      );
+    }
+  );
+
+  tests.add(
+    '`scanModuleCode` with multiple ignore unused exports comments, different names.',
+    async () => {
+      deepStrictEqual(
+        await scanModuleCode(`// ignore unused exports a
+// ignore unused exports b
+export const a = true;
+export const b = true;
+export default true;
+`),
+        {
+          imports: {},
+          exports: new Set(['default']),
+        }
+      );
+    }
+  );
+
+  tests.add(
+    '`scanModuleCode` with an ignore unused comment block.',
+    async () => {
+      deepStrictEqual(
+        await scanModuleCode(`/* ignore unused exports a */
+export const a = true;
+export default true;
+`),
+        {
+          imports: {},
+          exports: new Set(['default']),
+        }
+      );
+    }
+  );
 };

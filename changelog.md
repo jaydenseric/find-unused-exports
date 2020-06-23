@@ -2,6 +2,10 @@
 
 ## Next
 
+### Minor
+
+- Support ignore unused exports comments.
+
 ### Patch
 
 - Updated dev dependencies.
