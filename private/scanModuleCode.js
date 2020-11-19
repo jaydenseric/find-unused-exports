@@ -113,9 +113,10 @@ module.exports = async function scanModuleCode(code, path) {
             //              ^^^^^^^^^^^^^^
             // E.g. `export var a, b, c = true`
             //              ^^^^^^^^^^^^^^^^^^
-            path.node.declaration.declarations.forEach(({ id: { name } }) => {
+            for (const {
+              id: { name },
+            } of path.node.declaration.declarations)
               analysis.exports.add(name);
-            });
             break;
         }
       else if (path.node.source) {
@@ -165,9 +166,10 @@ module.exports = async function scanModuleCode(code, path) {
       // E.g. `const a = true; export { a }`
       //                       ^^^^^^^^^^^^
       else
-        path.node.specifiers.forEach(({ exported: { name } }) => {
+        for (const {
+          exported: { name },
+        } of path.node.specifiers)
           analysis.exports.add(name);
-        });
 
       path.skip();
     },

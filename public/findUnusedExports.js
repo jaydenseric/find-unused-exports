@@ -82,18 +82,16 @@ module.exports = async function findUnusedExports({
         const specifierPossiblePaths = [specifierAbsolutePath];
 
         if (!extname(specifierAbsolutePath) && resolveFileExtensions) {
-          resolveFileExtensions.forEach((extension) => {
+          for (const extension of resolveFileExtensions)
             specifierPossiblePaths.push(
               `${specifierAbsolutePath}.${extension}`
             );
-          });
 
           if (resolveIndexFiles)
-            resolveFileExtensions.forEach((extension) => {
+            for (const extension of resolveFileExtensions)
               specifierPossiblePaths.push(
                 `${specifierAbsolutePath}${sep}index.${extension}`
               );
-            });
         }
 
         // If there’s no match for the imported module in the map of (so far)
