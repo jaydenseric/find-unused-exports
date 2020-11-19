@@ -1,5 +1,11 @@
 # find-unused-exports changelog
 
+## Next
+
+### Patch
+
+- Updated dependencies.
+
 ## 1.1.0
 
 ### Minor
