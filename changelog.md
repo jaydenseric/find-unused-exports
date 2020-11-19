@@ -5,6 +5,7 @@
 ### Patch
 
 - Updated dependencies.
+- Fix testing of CLI output colors, broken due to changes in non server major [`kleur`](https://npm.im/kleur) releases.
 
 ## 1.1.0
 

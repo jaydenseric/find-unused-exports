@@ -3,10 +3,10 @@ Error running find-unused-exports:
 [22m[39m
   SyntaxError: <path>/a.txt: Unexpected token (2:0)
   
-    1 | // A syntax error so Babel can’t parse this file.
-  > 2 | *
-      | ^
-    3 | 
+  [0m [90m 1 | [39m[90m// A syntax error so Babel can’t parse this file.[39m[0m
+  [0m[31m[1m>[22m[39m[90m 2 | [39m[33m*[39m[0m
+  [0m [90m   | [39m[31m[1m^[22m[39m[0m
+  [0m [90m 3 | [39m[0m
     loc: Position { line: 2, column: 0 },
     pos: 50,
     code: 'BABEL_PARSE_ERROR'

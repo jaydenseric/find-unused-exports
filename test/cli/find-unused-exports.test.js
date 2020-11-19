@@ -17,6 +17,7 @@ module.exports = (tests) => {
     );
     const { stdout, stderr, status, error } = spawnSync('node', [CLI_PATH], {
       cwd: fixtureProjectPath,
+      env: { ...process.env, FORCE_COLOR: 1 },
     });
 
     if (error) throw error;
@@ -39,6 +40,7 @@ module.exports = (tests) => {
     );
     const { stdout, stderr, status, error } = spawnSync('node', [CLI_PATH], {
       cwd: fixtureProjectPath,
+      env: { ...process.env, FORCE_COLOR: 1 },
     });
 
     if (error) throw error;
@@ -59,7 +61,10 @@ module.exports = (tests) => {
     const { stdout, stderr, status, error } = spawnSync(
       'node',
       [CLI_PATH, '--module-glob', '**/*.txt'],
-      { cwd: fixtureProjectPath }
+      {
+        cwd: fixtureProjectPath,
+        env: { ...process.env, FORCE_COLOR: 1 },
+      }
     );
 
     if (error) throw error;
@@ -85,7 +90,10 @@ module.exports = (tests) => {
       const { stdout, stderr, status, error } = spawnSync(
         'node',
         [CLI_PATH, '--resolve-file-extensions', 'mjs,a.mjs'],
-        { cwd: fixtureProjectPath }
+        {
+          cwd: fixtureProjectPath,
+          env: { ...process.env, FORCE_COLOR: 1 },
+        }
       );
 
       if (error) throw error;
@@ -117,7 +125,10 @@ module.exports = (tests) => {
           'mjs,a.mjs',
           '--resolve-index-files',
         ],
-        { cwd: fixtureProjectPath }
+        {
+          cwd: fixtureProjectPath,
+          env: { ...process.env, FORCE_COLOR: 1 },
+        }
       );
 
       if (error) throw error;
@@ -144,7 +155,10 @@ module.exports = (tests) => {
       const { stdout, stderr, status, error } = spawnSync(
         'node',
         [CLI_PATH, '--resolve-index-files'],
-        { cwd: fixtureProjectPath }
+        {
+          cwd: fixtureProjectPath,
+          env: { ...process.env, FORCE_COLOR: 1 },
+        }
       );
 
       if (error) throw error;
@@ -171,7 +185,10 @@ module.exports = (tests) => {
       const { stdout, stderr, status, error } = spawnSync(
         'node',
         [CLI_PATH, '--module-glob', '**/*.txt'],
-        { cwd: fixtureProjectPath }
+        {
+          cwd: fixtureProjectPath,
+          env: { ...process.env, FORCE_COLOR: 1 },
+        }
       );
 
       if (error) throw error;
