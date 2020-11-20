@@ -4,6 +4,7 @@ const { parseAsync, traverse } =
   // Use `@babel/core` instead of `@babel/parser` and `@babel/traverse` directly
   // so that project Babel config will be respected when parsing code.
   require('@babel/core');
+const getVariableDeclarationIdentifierNames = require('../private/getVariableDeclarationIdentifierNames');
 
 /**
  * Scans the module imports and exports in ECMAScript module code.
@@ -108,16 +109,12 @@ module.exports = async function scanModuleCode(code, path) {
             //              ^^^^^^^^^^^^^^^
             analysis.exports.add(path.node.declaration.id.name);
             break;
-          case 'VariableDeclaration':
+          case 'VariableDeclaration': {
             // E.g. `export const a = true`
             //              ^^^^^^^^^^^^^^
-            // E.g. `export var a, b, c = true`
-            //              ^^^^^^^^^^^^^^^^^^
-            for (const {
-              id: { name },
-            } of path.node.declaration.declarations)
+            for (const name of getVariableDeclarationIdentifierNames())
               analysis.exports.add(name);
-            break;
+          }
         }
       else if (path.node.source) {
         // E.g. `export { default } from 'a'`
