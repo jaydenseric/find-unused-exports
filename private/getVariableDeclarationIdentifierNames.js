@@ -15,7 +15,32 @@ module.exports = function getVariableDeclarationIdentifierNames(
 ) {
   const names = [];
 
-  // Recursive function and call to go here…
+  /**
+   * Recursively collects identifier names from variable declarations.
+   * @kind function
+   * @name collectIdentifierNames
+   * @param {object} node A Babel AST Node.
+   * @ignore
+   */
+  function collectIdentifierNames(node) {
+    if (node.type === 'Identifier') names.push(node.name);
+    else if (node.type === 'ObjectPattern')
+      for (const property of node.properties) {
+        if (property.type === 'ObjectProperty')
+          collectIdentifierNames(property.value);
+        else if (property.type === 'RestElement')
+          collectIdentifierNames(property.argument);
+      }
+    else if (node.type === 'ArrayPattern')
+      for (const element of node.elements)
+        if (element !== null)
+          if (element.type === 'RestElement')
+            collectIdentifierNames(element.argument);
+          else collectIdentifierNames(element);
+  }
+
+  for (const { id } of variableDeclaration.declarations)
+    collectIdentifierNames(id);
 
   return names;
 };

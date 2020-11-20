@@ -112,7 +112,9 @@ module.exports = async function scanModuleCode(code, path) {
           case 'VariableDeclaration': {
             // E.g. `export const a = true`
             //              ^^^^^^^^^^^^^^
-            for (const name of getVariableDeclarationIdentifierNames())
+            for (const name of getVariableDeclarationIdentifierNames(
+              path.node.declaration
+            ))
               analysis.exports.add(name);
           }
         }
