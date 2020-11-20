@@ -91,7 +91,7 @@ module.exports = (tests) => {
   });
 
   tests.add(
-    '`scanModuleCode` with a named export, ExportNamedDeclaration, FunctionDeclaration.',
+    '`scanModuleCode` with a named export, declaration, function declaration.',
     async () => {
       deepStrictEqual(await scanModuleCode('export function a() {}'), {
         imports: {},
@@ -101,7 +101,7 @@ module.exports = (tests) => {
   );
 
   tests.add(
-    '`scanModuleCode` with a named export, ExportNamedDeclaration, VariableDeclarator, one declaration.',
+    '`scanModuleCode` with a named export, declaration, variable declaration, single declaration, simple identifier.',
     async () => {
       deepStrictEqual(await scanModuleCode('export const a = true'), {
         imports: {},
@@ -111,17 +111,17 @@ module.exports = (tests) => {
   );
 
   tests.add(
-    '`scanModuleCode` with a named export, ExportNamedDeclaration, VariableDeclarator, multiple declarations.',
+    '`scanModuleCode` with a named export, declaration, variable declaration, multiple declarations.',
     async () => {
-      deepStrictEqual(await scanModuleCode('export var a, b, c = true'), {
+      deepStrictEqual(await scanModuleCode('export var a, b = true'), {
         imports: {},
-        exports: new Set(['a', 'b', 'c']),
+        exports: new Set(['a', 'b']),
       });
     }
   );
 
   tests.add(
-    '`scanModuleCode` with a named export, ExportNamedDeclaration, ExportSpecifier.',
+    '`scanModuleCode` with a named export, declaration, export specifier.',
     async () => {
       deepStrictEqual(await scanModuleCode('const a = true; export { a }'), {
         imports: {},
