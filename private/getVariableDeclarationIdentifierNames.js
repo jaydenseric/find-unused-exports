@@ -23,20 +23,27 @@ module.exports = function getVariableDeclarationIdentifierNames(
    * @ignore
    */
   function collectIdentifierNames(node) {
-    if (node.type === 'Identifier') names.push(node.name);
-    else if (node.type === 'ObjectPattern')
-      for (const property of node.properties) {
-        if (property.type === 'ObjectProperty')
-          collectIdentifierNames(property.value);
-        else if (property.type === 'RestElement')
-          collectIdentifierNames(property.argument);
-      }
-    else if (node.type === 'ArrayPattern')
-      for (const element of node.elements)
-        if (element !== null)
-          if (element.type === 'RestElement')
-            collectIdentifierNames(element.argument);
-          else collectIdentifierNames(element);
+    switch (node.type) {
+      case 'Identifier':
+        names.push(node.name);
+        break;
+      case 'ObjectPattern':
+        for (const property of node.properties)
+          switch (property.type) {
+            case 'ObjectProperty':
+              collectIdentifierNames(property.value);
+              break;
+            case 'RestElement':
+              collectIdentifierNames(property.argument);
+          }
+        break;
+      case 'ArrayPattern':
+        for (const element of node.elements)
+          if (element !== null)
+            if (element.type === 'RestElement')
+              collectIdentifierNames(element.argument);
+            else collectIdentifierNames(element);
+    }
   }
 
   for (const { id } of variableDeclaration.declarations)
