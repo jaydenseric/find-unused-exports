@@ -18,7 +18,7 @@ module.exports = function getVariableDeclarationIdentifierNames(
   /**
    * Recursively collects identifier names.
    * @kind function
-   * @name collectIdentifierNames
+   * @name getVariableDeclarationIdentifierNames~collectIdentifierNames
    * @param {object} node A Babel AST Node.
    * @ignore
    */
