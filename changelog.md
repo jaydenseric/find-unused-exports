@@ -5,6 +5,7 @@
 ### Patch
 
 - Updated dependencies.
+- Simplified the GitHub Actions CI config with the [`npm install-test`](https://docs.npmjs.com/cli/v7/commands/npm-install-test) command.
 - Fix testing of CLI output colors, broken due to changes in non server major [`kleur`](https://npm.im/kleur) releases.
 - Refactored `forEach` loops to `for…of` syntax.
 - Refactored some tests.
