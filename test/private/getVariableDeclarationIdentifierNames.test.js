@@ -8,7 +8,7 @@ module.exports = (tests) => {
   tests.add(
     '`getVariableDeclarationIdentifierNames` with a single declaration, simple identifier.',
     async () => {
-      const ast = await parseAsync('export const a = true');
+      const ast = await parseAsync('export const a = 1');
       const variableDeclaration = ast.program.body[0].declaration;
 
       deepStrictEqual(
@@ -21,9 +21,7 @@ module.exports = (tests) => {
   tests.add(
     '`getVariableDeclarationIdentifierNames` with a single declaration, object pattern, no renaming.',
     async () => {
-      const ast = await parseAsync(
-        'export const { a, b } = { a: true, b: true }'
-      );
+      const ast = await parseAsync('export const { a, b } = { a: 1, b: 1 }');
       const variableDeclaration = ast.program.body[0].declaration;
 
       deepStrictEqual(
@@ -36,9 +34,7 @@ module.exports = (tests) => {
   tests.add(
     '`getVariableDeclarationIdentifierNames` with a single declaration, object pattern, renaming.',
     async () => {
-      const ast = await parseAsync(
-        'export const { a, b: c } = { a: true, b: true }'
-      );
+      const ast = await parseAsync('export const { a, b: c } = { a: 1, b: 1 }');
       const variableDeclaration = ast.program.body[0].declaration;
 
       deepStrictEqual(
@@ -52,7 +48,7 @@ module.exports = (tests) => {
     '`getVariableDeclarationIdentifierNames` with a single declaration, object pattern, rest element.',
     async () => {
       const ast = await parseAsync(
-        'export const { a, ...b } = { a: true, b: true, c: true }'
+        'export const { a, ...b } = { a: 1, b: 1, c: 1 }'
       );
       const variableDeclaration = ast.program.body[0].declaration;
 
@@ -67,7 +63,7 @@ module.exports = (tests) => {
     '`getVariableDeclarationIdentifierNames` with a single declaration, object pattern, nested array pattern.',
     async () => {
       const ast = await parseAsync(
-        'export const { a, b: [c]} = { a: true, b: [1, 2] }'
+        'export const { a, b: [c]} = { a: 1, b: [1] }'
       );
       const variableDeclaration = ast.program.body[0].declaration;
 
@@ -82,7 +78,7 @@ module.exports = (tests) => {
     '`getVariableDeclarationIdentifierNames` with a single declaration, object pattern, nested object pattern.',
     async () => {
       const ast = await parseAsync(
-        'export const { a, b: { c }} = { a: true, b: { c: true } }'
+        'export const { a, b: { c }} = { a: 1, b: { c: 1 } }'
       );
       const variableDeclaration = ast.program.body[0].declaration;
 
@@ -148,9 +144,7 @@ module.exports = (tests) => {
   tests.add(
     '`getVariableDeclarationIdentifierNames` with a single declaration, array pattern, nested object pattern.',
     async () => {
-      const ast = await parseAsync(
-        'export const [a, { b }] = [1, { a: true, b: true }]'
-      );
+      const ast = await parseAsync('export const [a, { b }] = [1, { b: 1 }]');
       const variableDeclaration = ast.program.body[0].declaration;
 
       deepStrictEqual(
@@ -163,7 +157,7 @@ module.exports = (tests) => {
   tests.add(
     '`getVariableDeclarationIdentifierNames` with multiple declarations.',
     async () => {
-      const ast = await parseAsync('export var a, b = true');
+      const ast = await parseAsync('export var a, b = 1');
       const variableDeclaration = ast.program.body[0].declaration;
 
       deepStrictEqual(
