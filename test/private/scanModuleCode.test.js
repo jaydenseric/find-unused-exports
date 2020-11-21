@@ -103,7 +103,7 @@ module.exports = (tests) => {
   tests.add(
     '`scanModuleCode` with a named export, declaration, variable declaration, single declaration, simple identifier.',
     async () => {
-      deepStrictEqual(await scanModuleCode('export const a = true'), {
+      deepStrictEqual(await scanModuleCode('export const a = 1'), {
         imports: {},
         exports: new Set(['a']),
       });
@@ -111,9 +111,135 @@ module.exports = (tests) => {
   );
 
   tests.add(
+    '`scanModuleCode` with a named export, declaration, variable declaration, single declaration, object pattern, no renaming.',
+    async () => {
+      deepStrictEqual(
+        await scanModuleCode('export const { a, b } = { a: 1, b: 1 }'),
+        {
+          imports: {},
+          exports: new Set(['a', 'b']),
+        }
+      );
+    }
+  );
+
+  tests.add(
+    '`scanModuleCode` with a named export, declaration, variable declaration, single declaration, object pattern, renaming.',
+    async () => {
+      deepStrictEqual(
+        await scanModuleCode('export const { a, b: c } = { a: 1, b: 1 }'),
+        {
+          imports: {},
+          exports: new Set(['a', 'c']),
+        }
+      );
+    }
+  );
+
+  tests.add(
+    '`scanModuleCode` with a named export, declaration, variable declaration, single declaration, object pattern, rest element.',
+    async () => {
+      deepStrictEqual(
+        await scanModuleCode('export const { a, ...b } = { a: 1, b: 1, c: 1 }'),
+        {
+          imports: {},
+          exports: new Set(['a', 'b']),
+        }
+      );
+    }
+  );
+
+  tests.add(
+    '`scanModuleCode` with a named export, declaration, variable declaration, single declaration, object pattern, nested array pattern.',
+    async () => {
+      deepStrictEqual(
+        await scanModuleCode('export const { a, b: [c]} = { a: 1, b: [1] }'),
+        {
+          imports: {},
+          exports: new Set(['a', 'c']),
+        }
+      );
+    }
+  );
+
+  tests.add(
+    '`scanModuleCode` with a named export, declaration, variable declaration, single declaration, object pattern, nested object pattern.',
+    async () => {
+      deepStrictEqual(
+        await scanModuleCode(
+          'export const { a, b: { c }} = { a: 1, b: { c: 1 } }'
+        ),
+        {
+          imports: {},
+          exports: new Set(['a', 'c']),
+        }
+      );
+    }
+  );
+
+  tests.add(
+    '`scanModuleCode` with a named export, declaration, variable declaration, single declaration, array pattern, no skipping.',
+    async () => {
+      deepStrictEqual(await scanModuleCode('export const [a, b] = [1, 2]'), {
+        imports: {},
+        exports: new Set(['a', 'b']),
+      });
+    }
+  );
+
+  tests.add(
+    '`scanModuleCode` with a named export, declaration, variable declaration, single declaration, array pattern, skipping.',
+    async () => {
+      deepStrictEqual(await scanModuleCode('export const [, b] = [1, 2]'), {
+        imports: {},
+        exports: new Set(['b']),
+      });
+    }
+  );
+
+  tests.add(
+    '`scanModuleCode` with a named export, declaration, variable declaration, single declaration, array pattern, rest element.',
+    async () => {
+      deepStrictEqual(
+        await scanModuleCode('export const [a, ...b] = [1, 2, 3]'),
+        {
+          imports: {},
+          exports: new Set(['a', 'b']),
+        }
+      );
+    }
+  );
+
+  tests.add(
+    '`scanModuleCode` with a named export, declaration, variable declaration, single declaration, array pattern, nested array pattern.',
+    async () => {
+      deepStrictEqual(
+        await scanModuleCode('export const [a, [b]] = [1, [1, 2, 3]]'),
+        {
+          imports: {},
+          exports: new Set(['a', 'b']),
+        }
+      );
+    }
+  );
+
+  tests.add(
+    '`scanModuleCode` with a named export, declaration, variable declaration, single declaration, array pattern, nested object pattern.',
+    async () => {
+      deepStrictEqual(
+        await scanModuleCode('export const [a, { b }] = [1, { b: 1 }]'),
+        {
+          imports: {},
+          exports: new Set(['a', 'b']),
+        }
+      );
+    }
+  );
+
+  tests.add(
     '`scanModuleCode` with a named export, declaration, variable declaration, multiple declarations.',
     async () => {
-      deepStrictEqual(await scanModuleCode('export var a, b = true'), {
+      deepStrictEqual(await scanModuleCode('export var a, b = 1'), {
         imports: {},
         exports: new Set(['a', 'b']),
       });
