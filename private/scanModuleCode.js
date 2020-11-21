@@ -82,8 +82,8 @@ module.exports = async function scanModuleCode(code, path) {
       }
     },
     ExportDefaultDeclaration(path) {
-      // E.g. `export default true`
-      //       ^^^^^^^^^^^^^^^^^^^
+      // E.g. `export default 1`
+      //       ^^^^^^^^^^^^^^^^
       analysis.exports.add('default');
 
       path.skip();
@@ -110,8 +110,8 @@ module.exports = async function scanModuleCode(code, path) {
             analysis.exports.add(path.node.declaration.id.name);
             break;
           case 'VariableDeclaration': {
-            // E.g. `export const a = true`
-            //              ^^^^^^^^^^^^^^
+            // E.g. `export const a = 1`
+            //              ^^^^^^^^^^^
             for (const name of getVariableDeclarationIdentifierNames(
               path.node.declaration
             ))
@@ -162,8 +162,8 @@ module.exports = async function scanModuleCode(code, path) {
           else analysis.exports.add(specifier.exported.name);
         }
       }
-      // E.g. `const a = true; export { a }`
-      //                       ^^^^^^^^^^^^
+      // E.g. `const a = 1; export { a }`
+      //                    ^^^^^^^^^^^^
       else
         for (const {
           exported: { name },

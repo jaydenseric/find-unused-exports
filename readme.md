@@ -169,9 +169,9 @@ _How export statements translate._
 > These export statements:
 >
 > ```js
-> export const a = true;
-> export const b = true;
-> export default true;
+> export const a = 1;
+> export const b = 2;
+> export default 3;
 > ```
 >
 > Translate to:

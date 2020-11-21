@@ -1,2 +1,2 @@
-export const a = true;
-export default true;
+export const a = 1;
+export default 1;

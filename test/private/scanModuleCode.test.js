@@ -84,7 +84,7 @@ module.exports = (tests) => {
   });
 
   tests.add('`scanModuleCode` with a default export.', async () => {
-    deepStrictEqual(await scanModuleCode('export default true'), {
+    deepStrictEqual(await scanModuleCode('export default 1'), {
       imports: {},
       exports: new Set(['default']),
     });
@@ -249,7 +249,7 @@ module.exports = (tests) => {
   tests.add(
     '`scanModuleCode` with a named export, declaration, export specifier.',
     async () => {
-      deepStrictEqual(await scanModuleCode('const a = true; export { a }'), {
+      deepStrictEqual(await scanModuleCode('const a = 1; export { a }'), {
         imports: {},
         exports: new Set(['a']),
       });
@@ -258,7 +258,7 @@ module.exports = (tests) => {
 
   tests.add('`scanModuleCode` with a named and default export.', async () => {
     deepStrictEqual(
-      await scanModuleCode('export const a = true; export default true'),
+      await scanModuleCode('export const a = 1; export default 1'),
       {
         imports: {},
         exports: new Set(['default', 'a']),
@@ -374,8 +374,8 @@ module.exports = (tests) => {
     async () => {
       deepStrictEqual(
         await scanModuleCode(`// ignore unused exports
-export const a = true;
-export default true;
+export const a = 1;
+export default 1;
 `),
         {
           imports: {},
@@ -390,8 +390,8 @@ export default true;
     async () => {
       deepStrictEqual(
         await scanModuleCode(`// iGnOrE UnUsEd eXpOrTs
-export const a = true;
-export default true;
+export const a = 1;
+export default 1;
 `),
         {
           imports: {},
@@ -408,9 +408,9 @@ export default true;
         await scanModuleCode(
           '//  ignore unused exports  a,  b,c ' +
             `
-export const a = true;
-export const b = true;
-export const c = true;
+export const a = 1;
+export const b = 1;
+export const c = 1;
 `
         ),
         {
@@ -426,8 +426,8 @@ export const c = true;
     async () => {
       deepStrictEqual(
         await scanModuleCode(`// ignore unused exports default
-export const a = true;
-export default true;
+export const a = 1;
+export default 1;
 `),
         {
           imports: {},
@@ -442,9 +442,9 @@ export default true;
     async () => {
       deepStrictEqual(
         await scanModuleCode(`// ignore unused exports a, default
-export const a = true;
-export const b = true;
-export default true;
+export const a = 1;
+export const b = 1;
+export default 1;
 `),
         {
           imports: {},
@@ -459,7 +459,7 @@ export default true;
     async () => {
       deepStrictEqual(
         await scanModuleCode(`// ignore unused exports default,,
-export default true;
+export default 1;
 `),
         {
           imports: {},
@@ -475,8 +475,8 @@ export default true;
       deepStrictEqual(
         await scanModuleCode(`// ignore unused exports default
 // ignore unused exports default
-export const a = true;
-export default true;
+export const a = 1;
+export default 1;
 `),
         {
           imports: {},
@@ -492,9 +492,9 @@ export default true;
       deepStrictEqual(
         await scanModuleCode(`// ignore unused exports a
 // ignore unused exports b
-export const a = true;
-export const b = true;
-export default true;
+export const a = 1;
+export const b = 1;
+export default 1;
 `),
         {
           imports: {},
@@ -509,8 +509,8 @@ export default true;
     async () => {
       deepStrictEqual(
         await scanModuleCode(`/* ignore unused exports a */
-export const a = true;
-export default true;
+export const a = 1;
+export default 1;
 `),
         {
           imports: {},

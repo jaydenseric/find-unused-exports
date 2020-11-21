@@ -1,12 +1,12 @@
-export const a = true;
+export const a = 1;
 
 export var b,
-  c = true;
+  c = 1;
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export function d() {}
 
-const e = true;
+const e = 1;
 export { e };
 
-export default true;
+export default 1;

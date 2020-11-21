@@ -1,4 +1,4 @@
-export const a = true;
-export const b = true;
-export const c = true;
-export default true;
+export const a = 1;
+export const b = 1;
+export const c = 1;
+export default 1;
