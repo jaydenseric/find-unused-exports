@@ -4,7 +4,7 @@ const { strictEqual } = require('assert');
 const { spawnSync } = require('child_process');
 const { resolve } = require('path');
 const snapshot = require('snapshot-assertion');
-const stripStackTraces = require('../stripStackTraces');
+const replaceStackTraces = require('../replaceStackTraces');
 
 const CLI_PATH = resolve(__dirname, '../../cli/find-unused-exports.js');
 const [nodeVersionMajor] = process.versions.node.split('.');
@@ -195,7 +195,7 @@ module.exports = (tests) => {
 
       strictEqual(stdout.toString(), '');
       await snapshot(
-        stripStackTraces(
+        replaceStackTraces(
           stderr.toString().replace(fixtureProjectPath, '<path>')
         ),
         resolve(

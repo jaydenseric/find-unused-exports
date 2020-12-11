@@ -7,6 +7,7 @@ Error running find-unused-exports:
   [0m[31m[1m>[22m[39m[90m 2 | [39m[33m*[39m[0m
   [0m [90m   | [39m[31m[1m^[22m[39m[0m
   [0m [90m 3 | [39m[0m
+      <stack trace>
     loc: Position { line: 2, column: 0 },
     pos: 50,
     code: 'BABEL_PARSE_ERROR' } '\n'
