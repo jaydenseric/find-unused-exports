@@ -127,10 +127,10 @@ Finds unused ECMAScript module exports in a project. `.gitignore` files are used
 | `options` | object? | Options. |
 | `options.cwd` | string? | A directory path to scope the search for source and .gitignore files, defaulting to `process.cwd()`. |
 | `options.moduleGlob` | string? = `**/*.{mjs,js}` | ECMAScript module file glob pattern. |
-| `options.resolveFileExtensions` | Array&lt;string>? | File extensions (without the leading `.`, in preference order) to automatically resolve in extensionless import specifiers. [Import specifier file extensions are mandatory in Node.js](https://nodejs.org/api/esm.html#esm_mandatory_file_extensions); if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) `['mjs', 'js']` might be appropriate. |
+| `options.resolveFileExtensions` | Array<string>? | File extensions (without the leading `.`, in preference order) to automatically resolve in extensionless import specifiers. [Import specifier file extensions are mandatory in Node.js](https://nodejs.org/api/esm.html#esm_mandatory_file_extensions); if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) `['mjs', 'js']` might be appropriate. |
 | `options.resolveIndexFiles` | boolean? = `false` | Should directory index files be automatically resolved in extensionless import specifiers. Node.js doesn’t do this by default; if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) `true` might be appropriate. This option only works if the option `resolveFileExtensions` is used. |
 
-**Returns:** object&lt;string, [ModuleExports](#type-moduleexports)> — Map of module file paths and unused module exports.
+**Returns:** object\<string, [ModuleExports](#type-moduleexports)> — Map of module file paths and unused module exports.
 
 #### Examples
 
@@ -160,7 +160,7 @@ _Ways to `require`._
 
 List of ECMAScript module export names, including `default` if one is a default export.
 
-**Type:** Set&lt;string>
+**Type:** Set\<string>
 
 #### Examples
 

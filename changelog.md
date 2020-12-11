@@ -4,6 +4,7 @@
 
 ### Patch
 
+- Updated dependencies.
 - Removed `npm-debug.log` from the `.gitignore` file as npm [v4.2.0](https://github.com/npm/npm/releases/tag/v4.2.0)+ doesn’t create it in the current working directory.
 
 ## 1.1.1
