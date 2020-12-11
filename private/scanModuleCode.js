@@ -31,8 +31,6 @@ module.exports = async function scanModuleCode(code, path) {
       plugins: [
         'classProperties',
         ['decorators', { decoratorsBeforeExport: false }],
-        'dynamicImport',
-        'objectRestSpread',
       ],
     },
   });
