@@ -6,6 +6,7 @@
  * internal errors.
  * @kind class
  * @name CliError
+ * @param {string} message Error message.
  * @ignore
  */
 module.exports = class CliError extends Error {};
