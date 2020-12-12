@@ -1,6 +1,6 @@
 # find-unused-exports changelog
 
-## Next
+## 1.2.0
 
 ### Minor
 
