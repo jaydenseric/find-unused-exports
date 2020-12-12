@@ -26,7 +26,7 @@ module.exports = (tests) => {
       stdout.toString(),
       resolve(
         __dirname,
-        '../snapshots/find-unused-exports/no-unused-exports-stdout.txt'
+        '../snapshots/find-unused-exports/no-unused-exports-stdout.ans'
       )
     );
     strictEqual(stderr.toString(), '');
@@ -50,7 +50,7 @@ module.exports = (tests) => {
       stderr.toString(),
       resolve(
         __dirname,
-        '../snapshots/find-unused-exports/some-unused-exports-stderr.txt'
+        '../snapshots/find-unused-exports/some-unused-exports-stderr.ans'
       )
     );
     strictEqual(status, 1);
@@ -74,7 +74,7 @@ module.exports = (tests) => {
       stderr.toString(),
       resolve(
         __dirname,
-        '../snapshots/find-unused-exports/module-glob-stderr.txt'
+        '../snapshots/find-unused-exports/module-glob-stderr.ans'
       )
     );
     strictEqual(status, 1);
@@ -103,7 +103,7 @@ module.exports = (tests) => {
         stderr.toString(),
         resolve(
           __dirname,
-          '../snapshots/find-unused-exports/resolve-file-extensions-stderr.txt'
+          '../snapshots/find-unused-exports/resolve-file-extensions-stderr.ans'
         )
       );
       strictEqual(status, 1);
@@ -138,7 +138,7 @@ module.exports = (tests) => {
         stderr.toString(),
         resolve(
           __dirname,
-          '../snapshots/find-unused-exports/resolve-file-extensions-and-index-files-stderr.txt'
+          '../snapshots/find-unused-exports/resolve-file-extensions-and-index-files-stderr.ans'
         )
       );
       strictEqual(status, 1);
@@ -168,7 +168,7 @@ module.exports = (tests) => {
         stderr.toString(),
         resolve(
           __dirname,
-          '../snapshots/find-unused-exports/resolve-index-files-without-resolve-file-extensions-stderr.txt'
+          '../snapshots/find-unused-exports/resolve-index-files-without-resolve-file-extensions-stderr.ans'
         )
       );
       strictEqual(status, 1);
@@ -200,7 +200,7 @@ module.exports = (tests) => {
         ),
         resolve(
           __dirname,
-          `../snapshots/find-unused-exports/unparsable-module-stderr-node-v${nodeVersionMajor}.txt`
+          `../snapshots/find-unused-exports/unparsable-module-stderr-node-v${nodeVersionMajor}.ans`
         )
       );
       strictEqual(status, 1);

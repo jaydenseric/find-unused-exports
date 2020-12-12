@@ -7,6 +7,7 @@
 - Updated dependencies.
 - Removed `dynamicImport` and `objectRestSpread` plugins from the Babel parser config, as they are enabled by default nowadays.
 - Replaced the `stripStackTraces` test helper with a smarter `replaceStackTraces` helper that allows tests to detect a missing stack trace.
+- Use the `.ans` file extension for snapshot text files containing ANSI formatting.
 - Removed `npm-debug.log` from the `.gitignore` file as npm [v4.2.0](https://github.com/npm/npm/releases/tag/v4.2.0)+ doesn’t create it in the current working directory.
 - JSDoc improvements.
 
