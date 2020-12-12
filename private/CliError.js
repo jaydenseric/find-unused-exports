@@ -9,4 +9,9 @@
  * @param {string} message Error message.
  * @ignore
  */
-module.exports = class CliError extends Error {};
+module.exports = class CliError extends Error {
+  constructor(...args) {
+    super(...args);
+    this.name = this.constructor.name;
+  }
+};
