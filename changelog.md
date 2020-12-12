@@ -2,6 +2,10 @@
 
 ## Next
 
+### Minor
+
+- Improved console output for `find-unused-exports` CLI errors.
+
 ### Patch
 
 - Updated dependencies.

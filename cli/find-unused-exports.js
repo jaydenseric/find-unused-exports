@@ -7,6 +7,7 @@ const arg = require('arg');
 const kleur = require('kleur');
 const CliError = require('../private/CliError');
 const errorConsole = require('../private/errorConsole');
+const reportCliError = require('../private/reportCliError');
 const findUnusedExports = require('../public/findUnusedExports');
 
 /**
@@ -70,14 +71,8 @@ async function findUnusedExportsCli() {
       process.exitCode = 1;
     } else console.info(`\n${kleur.bold().green(`0 unused exports.`)}\n`);
   } catch (error) {
-    errorConsole.group(
-      kleur.bold().red('\nError running find-unused-exports:\n')
-    );
-    errorConsole.error(
-      error instanceof CliError ? kleur.red(error.message) : error,
-      '\n'
-    );
-    errorConsole.groupEnd();
+    reportCliError('find-unused-exports', error);
+
     process.exitCode = 1;
   }
 }
