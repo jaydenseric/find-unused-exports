@@ -17,7 +17,10 @@ export default (tests) => {
         cwd: fileURLToPath(
           new URL('../fixtures/no-unused-exports', import.meta.url)
         ),
-        env: { ...process.env, FORCE_COLOR: 1 },
+        env: {
+          ...process.env,
+          FORCE_COLOR: 1,
+        },
       }
     );
 
@@ -42,7 +45,10 @@ export default (tests) => {
         cwd: fileURLToPath(
           new URL('../fixtures/some-unused-exports', import.meta.url)
         ),
-        env: { ...process.env, FORCE_COLOR: 1 },
+        env: {
+          ...process.env,
+          FORCE_COLOR: 1,
+        },
       }
     );
 
@@ -65,7 +71,10 @@ export default (tests) => {
       [FIND_UNUSED_EXPORTS_CLI_PATH, '--module-glob', '**/*.txt'],
       {
         cwd: fileURLToPath(new URL('../fixtures/moduleGlob', import.meta.url)),
-        env: { ...process.env, FORCE_COLOR: 1 },
+        env: {
+          ...process.env,
+          FORCE_COLOR: 1,
+        },
       }
     );
 
@@ -99,7 +108,10 @@ export default (tests) => {
               import.meta.url
             )
           ),
-          env: { ...process.env, FORCE_COLOR: 1 },
+          env: {
+            ...process.env,
+            FORCE_COLOR: 1,
+          },
         }
       );
 
@@ -135,7 +147,10 @@ export default (tests) => {
               import.meta.url
             )
           ),
-          env: { ...process.env, FORCE_COLOR: 1 },
+          env: {
+            ...process.env,
+            FORCE_COLOR: 1,
+          },
         }
       );
 
@@ -166,7 +181,10 @@ export default (tests) => {
               import.meta.url
             )
           ),
-          env: { ...process.env, FORCE_COLOR: 1 },
+          env: {
+            ...process.env,
+            FORCE_COLOR: 1,
+          },
         }
       );
 
@@ -195,7 +213,10 @@ export default (tests) => {
         [FIND_UNUSED_EXPORTS_CLI_PATH, '--module-glob', '**/*.txt'],
         {
           cwd: fixtureProjectPath,
-          env: { ...process.env, FORCE_COLOR: 1 },
+          env: {
+            ...process.env,
+            FORCE_COLOR: 1,
+          },
         }
       );
 
