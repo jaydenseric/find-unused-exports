@@ -60,7 +60,6 @@
     "eslint-plugin-jsdoc": "^30.7.8",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^3.2.0",
-    "hard-rejection": "^2.1.0",
     "jsdoc-md": "^8.0.0",
     "prettier": "^2.2.1",
     "snapshot-assertion": "^2.0.0",
@@ -73,7 +72,7 @@
     "test": "npm run test:eslint && npm run test:prettier && npm run test:api",
     "test:eslint": "eslint .",
     "test:prettier": "prettier -c .",
-    "test:api": "coverage-node -r hard-rejection/register test",
+    "test:api": "coverage-node test",
     "prepublishOnly": "npm test"
   }
 }
