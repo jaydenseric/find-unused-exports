@@ -32,7 +32,7 @@
   "main": "./public/index.mjs",
   "exports": {
     ".": "./public/index.mjs",
-    "./public/": "./public/",
+    "./public/*": "./public/*",
     "./package": "./package.json",
     "./package.json": "./package.json"
   },
