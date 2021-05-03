@@ -17,6 +17,9 @@
   - Updated `actions/checkout` to v2.
   - Updated `actions/setup-node` to v2.
   - Don’t specify the `CI` environment variable as it’s set by default.
+- Updated the package scripts:
+  - Simpler JSDoc related scripts now that [`jsdoc-md`](https://npm.im/jsdoc-md) v10 automatically generates a Prettier formatted readme.
+  - Added a `test:jsdoc` script that checks the readme API docs are up to date with the source JSDoc.
 - Stop snapshot testing Node.js versions separately as now all supported versions result in the same CLI output.
 - Improved the test helper function `replaceStackTraces`.
 - Always use regex `u` mode.
