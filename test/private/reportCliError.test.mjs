@@ -1,13 +1,11 @@
-'use strict';
+import { strictEqual, throws } from 'assert';
+import { spawnSync } from 'child_process';
+import { fileURLToPath } from 'url';
+import snapshot from 'snapshot-assertion';
+import reportCliError from '../../private/reportCliError.mjs';
+import replaceStackTraces from '../replaceStackTraces.mjs';
 
-const { strictEqual, throws } = require('assert');
-const { spawnSync } = require('child_process');
-const { resolve } = require('path');
-const snapshot = require('snapshot-assertion');
-const reportCliError = require('../../private/reportCliError');
-const replaceStackTraces = require('../replaceStackTraces');
-
-module.exports = (tests) => {
+export default (tests) => {
   tests.add(
     '`reportCliError` with first argument `cliDescription` not a string.',
     () => {
@@ -23,9 +21,11 @@ module.exports = (tests) => {
       const { stdout, stderr, status, error } = spawnSync(
         'node',
         [
-          resolve(
-            __dirname,
-            '../fixtures/reportCliError/Error-instance-with-stack.js'
+          fileURLToPath(
+            new URL(
+              '../fixtures/reportCliError/Error-instance-with-stack.mjs',
+              import.meta.url
+            )
           ),
         ],
         {
@@ -42,9 +42,9 @@ module.exports = (tests) => {
 
       await snapshot(
         replaceStackTraces(stderr.toString()),
-        resolve(
-          __dirname,
-          '../snapshots/reportCliError/Error-instance-with-stack-stderr.ans'
+        new URL(
+          '../snapshots/reportCliError/Error-instance-with-stack-stderr.ans',
+          import.meta.url
         )
       );
 
@@ -58,9 +58,11 @@ module.exports = (tests) => {
       const { stdout, stderr, status, error } = spawnSync(
         'node',
         [
-          resolve(
-            __dirname,
-            '../fixtures/reportCliError/Error-instance-without-stack.js'
+          fileURLToPath(
+            new URL(
+              '../fixtures/reportCliError/Error-instance-without-stack.mjs',
+              import.meta.url
+            )
           ),
         ],
         {
@@ -77,9 +79,9 @@ module.exports = (tests) => {
 
       await snapshot(
         replaceStackTraces(stderr.toString()),
-        resolve(
-          __dirname,
-          '../snapshots/reportCliError/Error-instance-without-stack-stderr.ans'
+        new URL(
+          '../snapshots/reportCliError/Error-instance-without-stack-stderr.ans',
+          import.meta.url
         )
       );
 
@@ -90,7 +92,14 @@ module.exports = (tests) => {
   tests.add('`reportCliError` with a `CliError` instance.', async () => {
     const { stdout, stderr, status, error } = spawnSync(
       'node',
-      [resolve(__dirname, '../fixtures/reportCliError/CliError-instance.js')],
+      [
+        fileURLToPath(
+          new URL(
+            '../fixtures/reportCliError/CliError-instance.mjs',
+            import.meta.url
+          )
+        ),
+      ],
       {
         env: {
           ...process.env,
@@ -105,9 +114,9 @@ module.exports = (tests) => {
 
     await snapshot(
       replaceStackTraces(stderr.toString()),
-      resolve(
-        __dirname,
-        '../snapshots/reportCliError/CliError-instance-stderr.ans'
+      new URL(
+        '../snapshots/reportCliError/CliError-instance-stderr.ans',
+        import.meta.url
       )
     );
 
@@ -117,7 +126,14 @@ module.exports = (tests) => {
   tests.add('`reportCliError` with a primitive value.', async () => {
     const { stdout, stderr, status, error } = spawnSync(
       'node',
-      [resolve(__dirname, '../fixtures/reportCliError/primitive-value.js')],
+      [
+        fileURLToPath(
+          new URL(
+            '../fixtures/reportCliError/primitive-value.mjs',
+            import.meta.url
+          )
+        ),
+      ],
       {
         env: {
           ...process.env,
@@ -132,9 +148,9 @@ module.exports = (tests) => {
 
     await snapshot(
       replaceStackTraces(stderr.toString()),
-      resolve(
-        __dirname,
-        '../snapshots/reportCliError/primitive-value-stderr.ans'
+      new URL(
+        '../snapshots/reportCliError/primitive-value-stderr.ans',
+        import.meta.url
       )
     );
 

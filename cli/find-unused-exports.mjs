@@ -1,14 +1,12 @@
 #!/usr/bin/env node
 
-'use strict';
-
-const { relative } = require('path');
-const arg = require('arg');
-const kleur = require('kleur');
-const CliError = require('../private/CliError');
-const errorConsole = require('../private/errorConsole');
-const reportCliError = require('../private/reportCliError');
-const findUnusedExports = require('../public/findUnusedExports');
+import { relative } from 'path';
+import arg from 'arg';
+import kleur from 'kleur';
+import CliError from '../private/CliError.mjs';
+import errorConsole from '../private/errorConsole.mjs';
+import reportCliError from '../private/reportCliError.mjs';
+import findUnusedExports from '../public/findUnusedExports.mjs';
 
 /**
  * Runs the `find-unused-exports` CLI.

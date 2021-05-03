@@ -1,9 +1,7 @@
-'use strict';
+import { deepStrictEqual } from 'assert';
+import scanModuleCode from '../../private/scanModuleCode.mjs';
 
-const { deepStrictEqual } = require('assert');
-const scanModuleCode = require('../../private/scanModuleCode');
-
-module.exports = (tests) => {
+export default (tests) => {
   tests.add('`scanModuleCode` without imports or exports.', async () => {
     deepStrictEqual(await scanModuleCode(''), {
       imports: {},

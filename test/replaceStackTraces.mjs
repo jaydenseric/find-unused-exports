@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Replaces Node.js `Error` stack traces in a multiline string.
  * @kind function
@@ -9,7 +7,7 @@
  * @returns {string} The input string with stack traces replaced.
  * @ignore
  */
-module.exports = function replaceStackTraces(
+export default function replaceStackTraces(
   string,
   replacer = '$1<stack trace>'
 ) {
@@ -23,4 +21,4 @@ module.exports = function replaceStackTraces(
     /(^ {2,})at (?:(?! \{$).)+(?:\r?\n\1at (?:(?! \{$).)+)*/gmu,
     replacer
   );
-};
+}

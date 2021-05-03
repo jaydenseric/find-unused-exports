@@ -1,8 +1,6 @@
-'use strict';
-
-const { dirname, extname, resolve, sep } = require('path');
-const isDirectoryPath = require('../private/isDirectoryPath');
-const scanProject = require('../private/scanProject');
+import { dirname, extname, resolve, sep } from 'path';
+import isDirectoryPath from '../private/isDirectoryPath.mjs';
+import scanProject from '../private/scanProject.mjs';
 
 /**
  * Finds unused ECMAScript module exports in a project. `.gitignore` files are
@@ -21,18 +19,10 @@ const scanProject = require('../private/scanProject');
  * ```
  *
  * ```js
- * import findUnusedExports from 'find-unused-exports/public/findUnusedExports.js';
- * ```
- * @example <caption>Ways to `require`.</caption>
- * ```js
- * const { findUnusedExports } = require('find-unused-exports');
- * ```
- *
- * ```js
- * const findUnusedExports = require('find-unused-exports/public/findUnusedExports');
+ * import findUnusedExports from 'find-unused-exports/public/findUnusedExports.mjs';
  * ```
  */
-module.exports = async function findUnusedExports({
+export default async function findUnusedExports({
   cwd = process.cwd(),
   moduleGlob = '**/*.{mjs,js}',
   resolveFileExtensions,
@@ -125,4 +115,4 @@ module.exports = async function findUnusedExports({
       }
 
   return possiblyUnusedExports;
-};
+}

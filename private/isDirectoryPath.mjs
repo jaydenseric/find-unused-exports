@@ -1,6 +1,4 @@
-'use strict';
-
-const fs = require('fs');
+import fs from 'fs';
 
 /**
  * Tests if a path is a directory path.
@@ -10,7 +8,7 @@ const fs = require('fs');
  * @returns {Promise<boolean>} Resolves if the path is a directory path.
  * @ignore
  */
-module.exports = async function isDirectoryPath(path) {
+export default async function isDirectoryPath(path) {
   try {
     const stats = await fs.promises.lstat(path);
     if (!stats.isDirectory()) throw new TypeError('Not a directory.');
@@ -19,4 +17,4 @@ module.exports = async function isDirectoryPath(path) {
   }
 
   return true;
-};
+}

@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Gets identifier names from a Babel AST `VariableDeclaration` instance. Used
  * to find export names within a named export declaration that contains a
@@ -10,7 +8,7 @@
  * @returns {Array<string>} Identifier names.
  * @ignore
  */
-module.exports = function getVariableDeclarationIdentifierNames(
+export default function getVariableDeclarationIdentifierNames(
   variableDeclaration
 ) {
   const names = [];
@@ -104,4 +102,4 @@ module.exports = function getVariableDeclarationIdentifierNames(
     collectIdentifierNames(id);
 
   return names;
-};
+}

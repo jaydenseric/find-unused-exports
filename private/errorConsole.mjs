@@ -1,6 +1,4 @@
-'use strict';
-
-const { Console } = require('console');
+import { Console } from 'console';
 
 /**
  * The `console` API, but all output is to `stderr`. This allows `console.group`
@@ -9,7 +7,7 @@ const { Console } = require('console');
  * @name errorConsole
  * @ignore
  */
-module.exports = new Console({
+export default new Console({
   stdout: process.stderr,
   stderr: process.stderr,
 });

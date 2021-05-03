@@ -5,6 +5,8 @@
 ### Major
 
 - Updated Node.js support to `^12.20 || >= 14.13`.
+- Updated dependencies, some of which require newer Node.js versions than previously supported.
+- The API is now ESM in `.mjs` files instead of CJS in `.js` files, [accessible via `import` but not `require`](https://nodejs.org/dist/latest/docs/api/esm.html#esm_require).
 
 ### Patch
 

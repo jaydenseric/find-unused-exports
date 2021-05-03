@@ -1,9 +1,7 @@
-'use strict';
-
-const { inspect } = require('util');
-const kleur = require('kleur');
-const CliError = require('../private/CliError');
-const errorConsole = require('../private/errorConsole');
+import { inspect } from 'util';
+import kleur from 'kleur';
+import CliError from './CliError.mjs';
+import errorConsole from './errorConsole.mjs';
 
 /**
  * Reports a CLI error via the process `stderr`.
@@ -13,7 +11,7 @@ const errorConsole = require('../private/errorConsole');
  * @param {*} error Error to report.
  * @ignore
  */
-module.exports = function reportCliError(cliDescription, error) {
+export default function reportCliError(cliDescription, error) {
   if (typeof cliDescription !== 'string')
     throw new TypeError('First argument `cliDescription` must be a string.');
 
@@ -40,4 +38,4 @@ module.exports = function reportCliError(cliDescription, error) {
 
   // Whitespace blank line.
   errorConsole.error();
-};
+}

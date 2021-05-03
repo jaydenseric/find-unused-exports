@@ -1,10 +1,7 @@
-'use strict';
-
-const { parseAsync, traverse } =
-  // Use `@babel/core` instead of `@babel/parser` and `@babel/traverse` directly
-  // so that project Babel config will be respected when parsing code.
-  require('@babel/core');
-const getVariableDeclarationIdentifierNames = require('../private/getVariableDeclarationIdentifierNames');
+// Use `@babel/core` instead of `@babel/parser` and `@babel/traverse` directly
+// so that project Babel config will be respected when parsing code.
+import babel from '@babel/core';
+import getVariableDeclarationIdentifierNames from './getVariableDeclarationIdentifierNames.mjs';
 
 /**
  * Scans the module imports and exports in ECMAScript module code.
@@ -15,13 +12,13 @@ const getVariableDeclarationIdentifierNames = require('../private/getVariableDec
  * @returns {Promise<ModuleScan>} Resolves an analysis of the module’s imports and exports.
  * @ignore
  */
-module.exports = async function scanModuleCode(code, path) {
+export default async function scanModuleCode(code, path) {
   const analysis = {
     imports: {},
     exports: new Set(),
   };
 
-  const ast = await parseAsync(code, {
+  const ast = await babel.parseAsync(code, {
     // Provide the code file path for more useful Babel parse errors.
     filename: path,
 
@@ -35,7 +32,7 @@ module.exports = async function scanModuleCode(code, path) {
     },
   });
 
-  traverse(ast, {
+  babel.traverse(ast, {
     ImportDeclaration(path) {
       // There may be multiple statements for the same specifier.
       if (!analysis.imports[path.node.source.value])
@@ -194,4 +191,4 @@ module.exports = async function scanModuleCode(code, path) {
   }
 
   return analysis;
-};
+}

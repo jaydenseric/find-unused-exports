@@ -1,16 +1,16 @@
-'use strict';
+import { deepStrictEqual } from 'assert';
+import { fileURLToPath } from 'url';
+import scanModuleFile from '../../private/scanModuleFile.mjs';
 
-const { deepStrictEqual } = require('assert');
-const { resolve } = require('path');
-const scanModuleFile = require('../../private/scanModuleFile');
-
-module.exports = (tests) => {
+export default (tests) => {
   tests.add(
     '`scanModuleFile` with a file without imports or exports.',
     async () => {
       deepStrictEqual(
         await scanModuleFile(
-          resolve(__dirname, '../fixtures/no-imports-exports.mjs')
+          fileURLToPath(
+            new URL('../fixtures/no-imports-exports.mjs', import.meta.url)
+          )
         ),
         {
           imports: {},
@@ -22,7 +22,9 @@ module.exports = (tests) => {
 
   tests.add('`scanModuleFile` with a file with imports.', async () => {
     deepStrictEqual(
-      await scanModuleFile(resolve(__dirname, '../fixtures/imports.mjs')),
+      await scanModuleFile(
+        fileURLToPath(new URL('../fixtures/imports.mjs', import.meta.url))
+      ),
       {
         imports: {
           './exports.mjs': new Set(['default', 'a', 'b', 'c', 'd', 'e']),
@@ -34,7 +36,9 @@ module.exports = (tests) => {
 
   tests.add('`scanModuleFile` with a file with exports.', async () => {
     deepStrictEqual(
-      await scanModuleFile(resolve(__dirname, '../fixtures/exports.mjs')),
+      await scanModuleFile(
+        fileURLToPath(new URL('../fixtures/exports.mjs', import.meta.url))
+      ),
       {
         imports: {},
         exports: new Set(['default', 'a', 'b', 'c', 'd', 'e']),

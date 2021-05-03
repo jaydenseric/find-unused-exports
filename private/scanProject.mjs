@@ -1,7 +1,6 @@
-'use strict';
-const { join } = require('path');
-const globby = require('globby');
-const scanModuleFile = require('./scanModuleFile');
+import { join } from 'path';
+import globby from 'globby';
+import scanModuleFile from './scanModuleFile.mjs';
 
 /**
  * Scans the imports and exports of ECMAScript module files in a project directory.
@@ -13,7 +12,7 @@ const scanModuleFile = require('./scanModuleFile');
  * @returns {ModuleExports} Unused module exports.
  * @ignore
  */
-module.exports = async function scanProject({
+export default async function scanProject({
   cwd = process.cwd(),
   moduleGlob = '**/*.{mjs,js}',
 } = {}) {
@@ -26,4 +25,4 @@ module.exports = async function scanProject({
   }
 
   return projectAnalysis;
-};
+}

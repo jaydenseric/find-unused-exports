@@ -1,16 +1,20 @@
-'use strict';
+import { deepStrictEqual, rejects } from 'assert';
+import { join, resolve } from 'path';
+import { fileURLToPath } from 'url';
+import findUnusedExports from '../../public/findUnusedExports.mjs';
 
-const { deepStrictEqual, rejects } = require('assert');
-const { resolve, join } = require('path');
-const findUnusedExports = require('../../public/findUnusedExports');
-
-module.exports = (tests) => {
+export default (tests) => {
   tests.add(
     '`findUnusedExports` with files but no exports or imports.',
     async () => {
       deepStrictEqual(
         await findUnusedExports({
-          cwd: resolve(__dirname, '../fixtures/files-without-exports-imports'),
+          cwd: fileURLToPath(
+            new URL(
+              '../fixtures/files-without-exports-imports',
+              import.meta.url
+            )
+          ),
         }),
         {}
       );
@@ -22,9 +26,11 @@ module.exports = (tests) => {
     async () => {
       deepStrictEqual(
         await findUnusedExports({
-          cwd: resolve(
-            __dirname,
-            '../fixtures/multiple-files-importing-from-same-file'
+          cwd: fileURLToPath(
+            new URL(
+              '../fixtures/multiple-files-importing-from-same-file',
+              import.meta.url
+            )
           ),
         }),
         {}
@@ -35,16 +41,17 @@ module.exports = (tests) => {
   tests.add('`findUnusedExports` with no unused exports.', async () => {
     deepStrictEqual(
       await findUnusedExports({
-        cwd: resolve(__dirname, '../fixtures/no-unused-exports'),
+        cwd: fileURLToPath(
+          new URL('../fixtures/no-unused-exports', import.meta.url)
+        ),
       }),
       {}
     );
   });
 
   tests.add('`findUnusedExports` with some unused exports.', async () => {
-    const fixtureProjectPath = resolve(
-      __dirname,
-      '../fixtures/some-unused-exports'
+    const fixtureProjectPath = fileURLToPath(
+      new URL('../fixtures/some-unused-exports', import.meta.url)
     );
 
     deepStrictEqual(await findUnusedExports({ cwd: fixtureProjectPath }), {
@@ -56,21 +63,28 @@ module.exports = (tests) => {
   tests.add(
     '`findUnusedExports` with a namespace import and a default import.',
     async () => {
-      const fixtureProjectPath = resolve(
-        __dirname,
-        '../fixtures/namespace-import-and-default-import'
+      deepStrictEqual(
+        await findUnusedExports({
+          cwd: fileURLToPath(
+            new URL(
+              '../fixtures/namespace-import-and-default-import',
+              import.meta.url
+            )
+          ),
+        }),
+        {}
       );
-
-      deepStrictEqual(await findUnusedExports({ cwd: fixtureProjectPath }), {});
     }
   );
 
   tests.add(
     '`findUnusedExports` with a namespace import without a default import.',
     async () => {
-      const fixtureProjectPath = resolve(
-        __dirname,
-        '../fixtures/namespace-import-without-default-import'
+      const fixtureProjectPath = fileURLToPath(
+        new URL(
+          '../fixtures/namespace-import-without-default-import',
+          import.meta.url
+        )
       );
 
       deepStrictEqual(await findUnusedExports({ cwd: fixtureProjectPath }), {
@@ -82,7 +96,9 @@ module.exports = (tests) => {
   tests.add('`findUnusedExports` with a bare import specifier.', async () => {
     deepStrictEqual(
       await findUnusedExports({
-        cwd: resolve(__dirname, '../fixtures/bare-import-specifier'),
+        cwd: fileURLToPath(
+          new URL('../fixtures/bare-import-specifier', import.meta.url)
+        ),
       }),
       {}
     );
@@ -93,7 +109,12 @@ module.exports = (tests) => {
     async () => {
       deepStrictEqual(
         await findUnusedExports({
-          cwd: resolve(__dirname, '../fixtures/unresolvable-import-specifier'),
+          cwd: fileURLToPath(
+            new URL(
+              '../fixtures/unresolvable-import-specifier',
+              import.meta.url
+            )
+          ),
         }),
         {}
       );
@@ -103,7 +124,7 @@ module.exports = (tests) => {
   tests.add('`findUnusedExports` with a .gitignore file.', async () => {
     deepStrictEqual(
       await findUnusedExports({
-        cwd: resolve(__dirname, '../fixtures/gitignore'),
+        cwd: fileURLToPath(new URL('../fixtures/gitignore', import.meta.url)),
       }),
       {}
     );
@@ -112,9 +133,8 @@ module.exports = (tests) => {
   tests.add(
     '`findUnusedExports` with ignore unused exports comments.',
     async () => {
-      const fixtureProjectPath = resolve(
-        __dirname,
-        '../fixtures/ignore-unused-exports-comments'
+      const fixtureProjectPath = fileURLToPath(
+        new URL('../fixtures/ignore-unused-exports-comments', import.meta.url)
       );
 
       deepStrictEqual(
@@ -130,7 +150,9 @@ module.exports = (tests) => {
   );
 
   tests.add('`findUnusedExports` with option `moduleGlob`.', async () => {
-    const fixtureProjectPath = resolve(__dirname, '../fixtures/moduleGlob');
+    const fixtureProjectPath = fileURLToPath(
+      new URL('../fixtures/moduleGlob', import.meta.url)
+    );
 
     deepStrictEqual(
       await findUnusedExports({
@@ -146,9 +168,8 @@ module.exports = (tests) => {
   tests.add(
     '`findUnusedExports` with option `resolveFileExtensions`.',
     async () => {
-      const fixtureProjectPath = resolve(
-        __dirname,
-        '../fixtures/extensionless-import-specifiers'
+      const fixtureProjectPath = fileURLToPath(
+        new URL('../fixtures/extensionless-import-specifiers', import.meta.url)
       );
 
       deepStrictEqual(
@@ -166,9 +187,11 @@ module.exports = (tests) => {
   tests.add(
     '`findUnusedExports` with options `resolveFileExtensions` and `resolveIndexFiles`.',
     async () => {
-      const fixtureProjectPath = resolve(
-        __dirname,
-        '../fixtures/extensionless-import-specifiers-and-index-files'
+      const fixtureProjectPath = fileURLToPath(
+        new URL(
+          '../fixtures/extensionless-import-specifiers-and-index-files',
+          import.meta.url
+        )
       );
 
       deepStrictEqual(
@@ -195,7 +218,9 @@ module.exports = (tests) => {
     '`findUnusedExports` with option `cwd` an inaccessible directory path.',
     async () => {
       await rejects(
-        findUnusedExports({ cwd: join(__dirname, 'nonexistent') }),
+        findUnusedExports({
+          cwd: fileURLToPath(new URL('nonexistent', import.meta.url)),
+        }),
         new TypeError('Option `cwd` must be an accessible directory path.')
       );
     }

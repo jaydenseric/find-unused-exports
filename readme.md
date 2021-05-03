@@ -141,17 +141,7 @@ _Ways to `import`._
 > ```
 >
 > ```js
-> import findUnusedExports from 'find-unused-exports/public/findUnusedExports.js';
-> ```
-
-_Ways to `require`._
-
-> ```js
-> const { findUnusedExports } = require('find-unused-exports');
-> ```
->
-> ```js
-> const findUnusedExports = require('find-unused-exports/public/findUnusedExports');
+> import findUnusedExports from 'find-unused-exports/public/findUnusedExports.mjs';
 > ```
 
 ---
