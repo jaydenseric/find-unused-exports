@@ -7,7 +7,6 @@ const snapshot = require('snapshot-assertion');
 const replaceStackTraces = require('../replaceStackTraces');
 
 const CLI_PATH = resolve(__dirname, '../../cli/find-unused-exports.js');
-const [nodeVersionMajor] = process.versions.node.split('.');
 
 module.exports = (tests) => {
   tests.add('`find-unused-exports` CLI with no unused exports.', async () => {
@@ -200,7 +199,7 @@ module.exports = (tests) => {
         ),
         resolve(
           __dirname,
-          `../snapshots/find-unused-exports/unparsable-module-stderr-node-v${nodeVersionMajor}.ans`
+          '../snapshots/find-unused-exports/unparsable-module-stderr.ans'
         )
       );
       strictEqual(status, 1);

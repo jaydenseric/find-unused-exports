@@ -14,6 +14,7 @@
   - Updated `actions/checkout` to v2.
   - Updated `actions/setup-node` to v2.
   - Don’t specify the `CI` environment variable as it’s set by default.
+- Stop snapshot testing Node.js versions separately as now all supported versions result in the same CLI output.
 
 ## 1.2.0
 
