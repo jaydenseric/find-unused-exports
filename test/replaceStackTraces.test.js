@@ -1,9 +1,27 @@
 'use strict';
 
-const { strictEqual } = require('assert');
+const { strictEqual, throws } = require('assert');
 const replaceStackTraces = require('./replaceStackTraces');
 
 module.exports = (tests) => {
+  tests.add(
+    '`replaceStackTraces` with argument 1 `string` not a string.',
+    () => {
+      throws(() => {
+        replaceStackTraces(true);
+      }, new TypeError('Argument 1 `string` must be a string.'));
+    }
+  );
+
+  tests.add(
+    '`replaceStackTraces` with argument 2 `replacer` not a string or function.',
+    () => {
+      throws(() => {
+        replaceStackTraces('', true);
+      }, new TypeError('Argument 2 `replacer` must be a string or function.'));
+    }
+  );
+
   tests.add('`replaceStackTraces` with a non stack trace.', () => {
     const value = `Unrelated.
 at Unrelated.
