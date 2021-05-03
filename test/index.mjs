@@ -4,7 +4,6 @@ import testGetVariableDeclarationIdentifierNames from './private/getVariableDecl
 import testIsDirectoryPath from './private/isDirectoryPath.test.mjs';
 import testReportCliError from './private/reportCliError.test.mjs';
 import testScanModuleCode from './private/scanModuleCode.test.mjs';
-import testScanModuleFile from './private/scanModuleFile.test.mjs';
 import testFindUnusedExports from './public/findUnusedExports.test.mjs';
 import testReplaceStackTraces from './replaceStackTraces.test.mjs';
 
@@ -16,7 +15,6 @@ testGetVariableDeclarationIdentifierNames(tests);
 testIsDirectoryPath(tests);
 testReportCliError(tests);
 testScanModuleCode(tests);
-testScanModuleFile(tests);
 testFindUnusedExports(tests);
 
 tests.run();

@@ -1,6 +1,8 @@
-import { dirname, extname, resolve, sep } from 'path';
+import fs from 'fs';
+import { dirname, extname, join, resolve, sep } from 'path';
+import globby from 'globby';
 import isDirectoryPath from '../private/isDirectoryPath.mjs';
-import scanProject from '../private/scanProject.mjs';
+import scanModuleCode from '../private/scanModuleCode.mjs';
 
 /**
  * Finds unused ECMAScript module exports in a project. `.gitignore` files are
@@ -55,17 +57,40 @@ export default async function findUnusedExports({
       'Option `resolveIndexFiles` can only be `true` if the option `resolveFileExtensions` is used.'
     );
 
-  const scannedFiles = await scanProject({ cwd, moduleGlob });
+  // These paths are relative to the given `cwd`.
+  const moduleFileRelativePaths = (
+    await globby(moduleGlob, {
+      cwd,
+      gitignore: true,
+    })
+  )
+    // Sort the list so that the results will be deterministic (important for
+    // snapshot tests) and tidy (for readable CLI output).
+    .sort();
+
+  const scannedModules = {};
+
+  await Promise.all(
+    moduleFileRelativePaths.map(async (moduleFileRelativePath) => {
+      const moduleFilePath = join(cwd, moduleFileRelativePath);
+      const code = await fs.promises.readFile(moduleFilePath, 'utf8');
+
+      scannedModules[moduleFilePath] = await scanModuleCode(
+        code,
+        moduleFilePath
+      );
+    })
+  );
 
   // All possibly unused exports are mapped by module absolute file paths, then
   // any found to have been imported in project files are eliminated.
   const possiblyUnusedExports = {};
 
-  for (const [path, { exports }] of Object.entries(scannedFiles))
+  for (const [path, { exports }] of Object.entries(scannedModules))
     if (exports.size) possiblyUnusedExports[path] = exports;
 
   // Bail if the specifier is bare; this tool only scans project files.
-  for (const [path, { imports }] of Object.entries(scannedFiles))
+  for (const [path, { imports }] of Object.entries(scannedModules))
     for (const [specifier, moduleImports] of Object.entries(imports))
       if (specifier.startsWith('.')) {
         const specifierAbsolutePath = resolve(dirname(path), specifier);

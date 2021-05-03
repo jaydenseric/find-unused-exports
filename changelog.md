@@ -9,6 +9,11 @@
 - The API is now ESM in `.mjs` files instead of CJS in `.js` files, [accessible via `import` but not `require`](https://nodejs.org/dist/latest/docs/api/esm.html#esm_require).
 - Replaced the the `package.json` `exports` field public [subpath folder mapping](https://nodejs.org/api/packages.html#packages_subpath_folder_mappings) (deprecated by Node.js) with a [subpath pattern](https://nodejs.org/api/packages.html#packages_subpath_patterns).
 
+### Minor
+
+- Process module files in parallel.
+- Alphabetically sort ECMAScript module file paths in results.
+
 ### Patch
 
 - Stop using [`hard-rejection`](https://npm.im/hard-rejection) to detect unhandled `Promise` rejections in tests, as Node.js v15+ does this natively.
@@ -22,8 +27,8 @@
   - Added a `test:jsdoc` script that checks the readme API docs are up to date with the source JSDoc.
 - Stop snapshot testing Node.js versions separately as now all supported versions result in the same CLI output.
 - Improved the test helper function `replaceStackTraces`.
+- Eliminated the private helper functions `scanModuleFile` and `scanProject`.
 - Always use regex `u` mode.
-- Fixed the JSDoc and name of the private function `scanModuleFile`.
 - JSDoc tweaks.
 - Test tweaks.
 
