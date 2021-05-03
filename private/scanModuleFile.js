@@ -4,14 +4,14 @@ const fs = require('fs');
 const scanModuleCode = require('./scanModuleCode');
 
 /**
- * Gets exports from a ECMAScript module file.
+ * Scans the module imports and exports in an ECMAScript module file.
  * @kind function
- * @name scanFileExports
+ * @name scanModuleFile
  * @param {string} path ECMAScript module file path.
- * @returns {Promise<ModuleExportAnalysis>} Resolves the module export analysis.
+ * @returns {Promise<ModuleScan>} Resolves an analysis of the module’s imports and exports.
  * @ignore
  */
-module.exports = async function scanFileExports(path) {
+module.exports = async function scanModuleFile(path) {
   const code = await fs.promises.readFile(path, { encoding: 'utf8' });
   return scanModuleCode(code, path);
 };
