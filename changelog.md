@@ -25,6 +25,7 @@
 - Always use regex `u` mode.
 - Fixed the JSDoc and name of the private function `scanModuleFile`.
 - JSDoc tweaks.
+- Test tweaks.
 
 ## 1.2.0
 

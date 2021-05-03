@@ -4,18 +4,22 @@ import { fileURLToPath } from 'url';
 import snapshot from 'snapshot-assertion';
 import replaceStackTraces from '../replaceStackTraces.mjs';
 
-const CLI_PATH = fileURLToPath(
+const FIND_UNUSED_EXPORTS_CLI_PATH = fileURLToPath(
   new URL('../../cli/find-unused-exports.mjs', import.meta.url)
 );
 
 export default (tests) => {
   tests.add('`find-unused-exports` CLI with no unused exports.', async () => {
-    const { stdout, stderr, status, error } = spawnSync('node', [CLI_PATH], {
-      cwd: fileURLToPath(
-        new URL('../fixtures/no-unused-exports', import.meta.url)
-      ),
-      env: { ...process.env, FORCE_COLOR: 1 },
-    });
+    const { stdout, stderr, status, error } = spawnSync(
+      'node',
+      [FIND_UNUSED_EXPORTS_CLI_PATH],
+      {
+        cwd: fileURLToPath(
+          new URL('../fixtures/no-unused-exports', import.meta.url)
+        ),
+        env: { ...process.env, FORCE_COLOR: 1 },
+      }
+    );
 
     if (error) throw error;
 
@@ -31,12 +35,16 @@ export default (tests) => {
   });
 
   tests.add('`find-unused-exports` CLI with some unused exports.', async () => {
-    const { stdout, stderr, status, error } = spawnSync('node', [CLI_PATH], {
-      cwd: fileURLToPath(
-        new URL('../fixtures/some-unused-exports', import.meta.url)
-      ),
-      env: { ...process.env, FORCE_COLOR: 1 },
-    });
+    const { stdout, stderr, status, error } = spawnSync(
+      'node',
+      [FIND_UNUSED_EXPORTS_CLI_PATH],
+      {
+        cwd: fileURLToPath(
+          new URL('../fixtures/some-unused-exports', import.meta.url)
+        ),
+        env: { ...process.env, FORCE_COLOR: 1 },
+      }
+    );
 
     if (error) throw error;
 
@@ -54,7 +62,7 @@ export default (tests) => {
   tests.add('`find-unused-exports` CLI with arg `--module-glob`.', async () => {
     const { stdout, stderr, status, error } = spawnSync(
       'node',
-      [CLI_PATH, '--module-glob', '**/*.txt'],
+      [FIND_UNUSED_EXPORTS_CLI_PATH, '--module-glob', '**/*.txt'],
       {
         cwd: fileURLToPath(new URL('../fixtures/moduleGlob', import.meta.url)),
         env: { ...process.env, FORCE_COLOR: 1 },
@@ -79,7 +87,11 @@ export default (tests) => {
     async () => {
       const { stdout, stderr, status, error } = spawnSync(
         'node',
-        [CLI_PATH, '--resolve-file-extensions', 'mjs,a.mjs'],
+        [
+          FIND_UNUSED_EXPORTS_CLI_PATH,
+          '--resolve-file-extensions',
+          'mjs,a.mjs',
+        ],
         {
           cwd: fileURLToPath(
             new URL(
@@ -111,7 +123,7 @@ export default (tests) => {
       const { stdout, stderr, status, error } = spawnSync(
         'node',
         [
-          CLI_PATH,
+          FIND_UNUSED_EXPORTS_CLI_PATH,
           '--resolve-file-extensions',
           'mjs,a.mjs',
           '--resolve-index-files',
@@ -146,7 +158,7 @@ export default (tests) => {
     async () => {
       const { stdout, stderr, status, error } = spawnSync(
         'node',
-        [CLI_PATH, '--resolve-index-files'],
+        [FIND_UNUSED_EXPORTS_CLI_PATH, '--resolve-index-files'],
         {
           cwd: fileURLToPath(
             new URL(
@@ -180,7 +192,7 @@ export default (tests) => {
       );
       const { stdout, stderr, status, error } = spawnSync(
         'node',
-        [CLI_PATH, '--module-glob', '**/*.txt'],
+        [FIND_UNUSED_EXPORTS_CLI_PATH, '--module-glob', '**/*.txt'],
         {
           cwd: fixtureProjectPath,
           env: { ...process.env, FORCE_COLOR: 1 },
