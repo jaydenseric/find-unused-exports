@@ -20,7 +20,7 @@ module.exports = function replaceStackTraces(
     throw new TypeError('Argument 2 `replacer` must be a string or function.');
 
   return string.replace(
-    /(^ {2,})at (?:(?! {$).)+(?:\r?\n\1at (?:(?! {$).)+)*/gm,
+    /(^ {2,})at (?:(?! \{$).)+(?:\r?\n\1at (?:(?! \{$).)+)*/gmu,
     replacer
   );
 };

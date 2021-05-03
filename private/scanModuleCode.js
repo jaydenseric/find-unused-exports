@@ -177,13 +177,13 @@ module.exports = async function scanModuleCode(code, path) {
     const comment = value.trim();
 
     // Check if the comment matches an ignore exports comment.
-    const match = comment.match(/^ignore unused exports *(.*)?$/i);
+    const match = comment.match(/^ignore unused exports *(.*)?$/iu);
     if (match) {
       const [, exportNameList] = match;
       if (exportNameList) {
         // Check the list of export names matches the required format (words
         // separated by a comma and optional spaces).
-        if (exportNameList.match(/^\w+(?:, *\w+)*$/))
+        if (exportNameList.match(/^\w+(?:, *\w+)*$/u))
           // Ignore all of the export names listed in the comment.
           for (const name of exportNameList.split(','))
             analysis.exports.delete(name.trim());
