@@ -14,7 +14,7 @@ const scanProject = require('../private/scanProject');
  * @param {string} [options.moduleGlob='**\/*.{mjs,js}'] ECMAScript module file glob pattern.
  * @param {Array<string>} [options.resolveFileExtensions] File extensions (without the leading `.`, in preference order) to automatically resolve in extensionless import specifiers. [Import specifier file extensions are mandatory in Node.js](https://nodejs.org/api/esm.html#esm_mandatory_file_extensions); if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) `['mjs', 'js']` might be appropriate.
  * @param {boolean} [options.resolveIndexFiles=false] Should directory index files be automatically resolved in extensionless import specifiers. Node.js doesn’t do this by default; if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) `true` might be appropriate. This option only works if the option `resolveFileExtensions` is used.
- * @returns {object.<string, ModuleExports>} Map of module file paths and unused module exports.
+ * @returns {object<string, ModuleExports>} Map of module file paths and unused module exports.
  * @example <caption>Ways to `import`.</caption>
  * ```js
  * import { findUnusedExports } from 'find-unused-exports';

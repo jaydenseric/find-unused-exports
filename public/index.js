@@ -36,7 +36,7 @@ exports.findUnusedExports = require('./findUnusedExports');
  * @kind typedef
  * @name ModuleScan
  * @type {object}
- * @prop {object.<string, ModuleImports>} imports Map of import specifiers and the imports used.
+ * @prop {object<string, ModuleImports>} imports Map of import specifiers and the imports used.
  * @prop {ModuleExports} exports Declared exports.
  * @ignore
  */

@@ -18,6 +18,7 @@
 - Improved the test helper function `replaceStackTraces`.
 - Always use regex `u` mode.
 - Fixed the JSDoc and name of the private function `scanModuleFile`.
+- JSDoc tweaks.
 
 ## 1.2.0
 
