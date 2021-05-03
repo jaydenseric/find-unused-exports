@@ -1,5 +1,14 @@
 # find-unused-exports changelog
 
+## Next
+
+### Patch
+
+- Updated GitHub Actions CI config:
+  - Updated `actions/checkout` to v2.
+  - Updated `actions/setup-node` to v2.
+  - Don’t specify the `CI` environment variable as it’s set by default.
+
 ## 1.2.0
 
 ### Minor
