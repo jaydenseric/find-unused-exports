@@ -31,6 +31,8 @@ Special comments can be used anywhere in a module to ignore all or specific unus
 - For published packages, the public exports.
 - For [Next.js](https://nextjs.org) projects, the `default` exports in `pages` directory modules.
 
+#### Examples
+
 _How to ignore all unused exports._
 
 > ```js
