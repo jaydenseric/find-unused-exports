@@ -4,11 +4,14 @@ import babel from '@babel/core';
 import getVariableDeclarationIdentifierNames from './getVariableDeclarationIdentifierNames.mjs';
 
 /**
- * Scans the module imports and exports in ECMAScript module code.
+ * Scans a JavaScript module’s code for ECMAScript module imports and exports.
+ * An ECMAScript module may contain all kinds of imports and exports. A CommonJS
+ * module may only contain dynamic imports, but because it might be source code
+ * to be bundled or transpiled, regular imports and exports are still analysed.
  * @kind function
  * @name scanModuleCode
- * @param {string} code ECMAScript module code.
- * @param {string} [path] Path to the ECMAScript module file the code is from, for more useful Babel parse errors.
+ * @param {string} code JavaScript code.
+ * @param {string} [path] Path to the file the code is from, for more useful Babel parse errors.
  * @returns {Promise<ModuleScan>} Resolves an analysis of the module’s imports and exports.
  * @ignore
  */
