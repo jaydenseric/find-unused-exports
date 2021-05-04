@@ -8,8 +8,12 @@
  * @ignore
  */
 export default class CliError extends Error {
-  constructor(...args) {
-    super(...args);
+  constructor(message) {
+    if (typeof message !== 'string')
+      throw new TypeError('Argument 1 `message` must be a string.');
+
+    super(message);
+
     this.name = this.constructor.name;
   }
 }

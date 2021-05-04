@@ -28,6 +28,7 @@
 - Stop snapshot testing Node.js versions separately as now all supported versions result in the same CLI output.
 - Improved the test helper function `replaceStackTraces`.
 - Eliminated the private helper functions `scanModuleFile` and `scanProject`.
+- Test the private `CliError` class.
 - Always use regex `u` mode.
 - Improved runtime argument type checking.
 - JSDoc tweaks.
