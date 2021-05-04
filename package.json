@@ -29,6 +29,7 @@
     "private",
     "public"
   ],
+  "sideEffects": false,
   "main": "./public/index.mjs",
   "exports": {
     ".": "./public/index.mjs",

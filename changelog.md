@@ -1,5 +1,11 @@
 # find-unused-exports changelog
 
+## Next
+
+### Minor
+
+- Added a package `sideEffects` field.
+
 ## 2.0.0
 
 ### Major
