@@ -1,3 +1,5 @@
+import babel from '@babel/core';
+
 /**
  * Gets identifier names from a Babel AST `VariableDeclaration` instance. Used
  * to find export names within a named export declaration that contains a
@@ -11,6 +13,11 @@
 export default function getVariableDeclarationIdentifierNames(
   variableDeclaration
 ) {
+  if (!babel.types.isVariableDeclaration(variableDeclaration))
+    throw new TypeError(
+      'Argument 1 `variableDeclaration` must be a `VariableDeclaration` Babel AST node.'
+    );
+
   const names = [];
 
   /**

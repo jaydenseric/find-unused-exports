@@ -13,7 +13,7 @@ import errorConsole from './errorConsole.mjs';
  */
 export default function reportCliError(cliDescription, error) {
   if (typeof cliDescription !== 'string')
-    throw new TypeError('First argument `cliDescription` must be a string.');
+    throw new TypeError('Argument 1 `cliDescription` must be a string.');
 
   errorConsole.group(
     // Whitespace blank lines shouldn’t have redundant indentation or color.

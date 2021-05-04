@@ -1,7 +1,27 @@
-import { deepStrictEqual } from 'assert';
+import { deepStrictEqual, rejects } from 'assert';
 import scanModuleCode from '../../private/scanModuleCode.mjs';
 
 export default (tests) => {
+  tests.add(
+    '`scanModuleCode` with argument 1 `code` not a string.',
+    async () => {
+      await rejects(
+        scanModuleCode(true),
+        new TypeError('Argument 1 `code` must be a string.')
+      );
+    }
+  );
+
+  tests.add(
+    '`scanModuleCode` with argument 2 `path` not a string.',
+    async () => {
+      await rejects(
+        scanModuleCode('', true),
+        new TypeError('Argument 2 `path` must be a string.')
+      );
+    }
+  );
+
   tests.add('`scanModuleCode` without imports or exports.', async () => {
     deepStrictEqual(await scanModuleCode(''), {
       imports: {},

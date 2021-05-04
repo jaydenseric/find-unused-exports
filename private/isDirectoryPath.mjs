@@ -9,6 +9,9 @@ import fs from 'fs';
  * @ignore
  */
 export default async function isDirectoryPath(path) {
+  if (typeof path !== 'string')
+    throw new TypeError('Argument 1 `path` must be a string.');
+
   try {
     const stats = await fs.promises.lstat(path);
     if (!stats.isDirectory()) throw new TypeError('Not a directory.');

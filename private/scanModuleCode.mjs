@@ -13,6 +13,12 @@ import getVariableDeclarationIdentifierNames from './getVariableDeclarationIdent
  * @ignore
  */
 export default async function scanModuleCode(code, path) {
+  if (typeof code !== 'string')
+    throw new TypeError('Argument 1 `code` must be a string.');
+
+  if (path !== undefined && typeof path !== 'string')
+    throw new TypeError('Argument 2 `path` must be a string.');
+
   const analysis = {
     imports: {},
     exports: new Set(),

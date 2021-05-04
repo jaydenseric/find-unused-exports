@@ -1,8 +1,20 @@
-import { deepStrictEqual } from 'assert';
+import { deepStrictEqual, throws } from 'assert';
 import babel from '@babel/core';
 import getVariableDeclarationIdentifierNames from '../../private/getVariableDeclarationIdentifierNames.mjs';
 
 export default (tests) => {
+  tests.add(
+    '`getVariableDeclarationIdentifierNames` with argument 1 `variableDeclaration` not a `VariableDeclaration` Babel AST node.',
+    () => {
+      throws(
+        () => getVariableDeclarationIdentifierNames(true),
+        new TypeError(
+          'Argument 1 `variableDeclaration` must be a `VariableDeclaration` Babel AST node.'
+        )
+      );
+    }
+  );
+
   tests.add(
     '`getVariableDeclarationIdentifierNames` with a single declaration, simple identifier.',
     async () => {
