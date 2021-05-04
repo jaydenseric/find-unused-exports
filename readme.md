@@ -86,6 +86,7 @@ It implements the function [`findUnusedExports`](#function-findunusedexports).
 | :-- | :-- | :-- |
 | `--module-glob` | `**/*.{mjs,cjs,js}` | JavaScript file glob pattern. |
 | `--resolve-file-extensions` |  | File extensions (without the leading `.`, multiple separated with `,` in preference order) to automatically resolve in extensionless import specifiers. [Import specifier file extensions are mandatory in Node.js](https://nodejs.org/api/esm.html#esm_mandatory_file_extensions); if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) `mjs,js` might be appropriate. |
+| `--resolve-index-files` |  | Should directory index files be automatically resolved in extensionless import specifiers. [Node.js doesn’t do this by default](https://nodejs.org/api/esm.html#esm_mandatory_file_extensions); if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) this argument might be appropriate. This argument only works if the argument `--resolve-file-extensions` is used. |
 
 #### Examples
 
@@ -134,7 +135,7 @@ Finds unused [ECMAScript module exports](https://developer.mozilla.org/en-US/doc
 | `options.cwd` | string? | A directory path to scope the search for source and `.gitignore` files, defaulting to `process.cwd()`. |
 | `options.moduleGlob` | string? = `**/*.{mjs,cjs,js}` | JavaScript file glob pattern. |
 | `options.resolveFileExtensions` | Array<string>? | File extensions (without the leading `.`, in preference order) to automatically resolve in extensionless import specifiers. [Import specifier file extensions are mandatory in Node.js](https://nodejs.org/api/esm.html#esm_mandatory_file_extensions); if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) `['mjs', 'js']` might be appropriate. |
-| `options.resolveIndexFiles` | boolean? = `false` | Should directory index files be automatically resolved in extensionless import specifiers. Node.js doesn’t do this by default; if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) `true` might be appropriate. This option only works if the option `resolveFileExtensions` is used. |
+| `options.resolveIndexFiles` | boolean? = `false` | Should directory index files be automatically resolved in extensionless import specifiers. [Node.js doesn’t do this by default](https://nodejs.org/api/esm.html#esm_mandatory_file_extensions); if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) `true` might be appropriate. This option only works if the option `resolveFileExtensions` is used. |
 
 **Returns:** object\<string, [ModuleExports](#type-moduleexports)> — Map of module file paths and unused module exports.
 
