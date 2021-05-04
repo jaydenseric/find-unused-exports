@@ -11,7 +11,7 @@ import scanModuleCode from '../private/scanModuleCode.mjs';
  * @name findUnusedExports
  * @param {object} [options] Options.
  * @param {string} [options.cwd] A directory path to scope the search for source and .gitignore files, defaulting to `process.cwd()`.
- * @param {string} [options.moduleGlob='**\/*.{mjs,js}'] ECMAScript module file glob pattern.
+ * @param {string} [options.moduleGlob='**\/*.{mjs,cjs,js}'] ECMAScript module file glob pattern.
  * @param {Array<string>} [options.resolveFileExtensions] File extensions (without the leading `.`, in preference order) to automatically resolve in extensionless import specifiers. [Import specifier file extensions are mandatory in Node.js](https://nodejs.org/api/esm.html#esm_mandatory_file_extensions); if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) `['mjs', 'js']` might be appropriate.
  * @param {boolean} [options.resolveIndexFiles=false] Should directory index files be automatically resolved in extensionless import specifiers. Node.js doesn’t do this by default; if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) `true` might be appropriate. This option only works if the option `resolveFileExtensions` is used.
  * @returns {object<string, ModuleExports>} Map of module file paths and unused module exports.
@@ -26,7 +26,7 @@ import scanModuleCode from '../private/scanModuleCode.mjs';
  */
 export default async function findUnusedExports({
   cwd = process.cwd(),
-  moduleGlob = '**/*.{mjs,js}',
+  moduleGlob = '**/*.{mjs,cjs,js}',
   resolveFileExtensions,
   resolveIndexFiles = false,
 } = {}) {
