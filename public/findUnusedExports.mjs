@@ -5,8 +5,9 @@ import isDirectoryPath from '../private/isDirectoryPath.mjs';
 import scanModuleCode from '../private/scanModuleCode.mjs';
 
 /**
- * Finds unused ECMAScript module exports in a project. `.gitignore` files are
- * used to ignore files.
+ * Finds unused
+ * [ECMAScript module exports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export)
+ * in a project. `.gitignore` files are used to ignore files.
  * @kind function
  * @name findUnusedExports
  * @param {object} [options] Options.

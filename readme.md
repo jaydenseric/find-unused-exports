@@ -74,7 +74,7 @@ _Line or block comments can be used._
 
 ### Command `find-unused-exports`
 
-Finds unused ECMAScript module exports in a project. If some are found, it reports them to `stderr` and exits with a `1` error status. `.gitignore` files are used to ignore files.
+Finds unused [ECMAScript module exports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export) in a project. If some are found, it reports them to `stderr` and exits with a `1` error status. `.gitignore` files are used to ignore files.
 
 It implements the function [`findUnusedExports`](#function-findunusedexports).
 
@@ -124,7 +124,7 @@ _Using package scripts._
 
 ### function findUnusedExports
 
-Finds unused ECMAScript module exports in a project. `.gitignore` files are used to ignore files.
+Finds unused [ECMAScript module exports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export) in a project. `.gitignore` files are used to ignore files.
 
 | Parameter | Type | Description |
 | :-- | :-- | :-- |
