@@ -11,7 +11,7 @@
 
 ### Minor
 
-- Process module files in parallel.
+- Process ECMAScript module files in parallel.
 - Alphabetically sort ECMAScript module file paths in results.
 
 ### Patch

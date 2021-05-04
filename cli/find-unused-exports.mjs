@@ -40,16 +40,22 @@ async function findUnusedExportsCli() {
       resolveIndexFiles,
     });
 
-    const countUnusedExportsModules = Object.keys(unusedExports).length;
+    // Sort the list so that the results will be deterministic (important for
+    // snapshot tests) and tidy (for output readability).
+    const unusedExportsModulePaths = Object.keys(unusedExports).sort();
+    const countUnusedExportsModules = unusedExportsModulePaths.length;
 
     let countUnusedExports = 0;
 
     if (countUnusedExportsModules) {
-      for (const [path, exports] of Object.entries(unusedExports)) {
+      const cwd = process.cwd();
+
+      for (const path of unusedExportsModulePaths) {
+        const exports = unusedExports[path];
+
         countUnusedExports += exports.size;
-        errorConsole.group(
-          `\n${kleur.underline().red(relative(process.cwd(), path))}`
-        );
+
+        errorConsole.group(`\n${kleur.underline().red(relative(cwd, path))}`);
         errorConsole.error(kleur.dim().red(Array.from(exports).join(', ')));
         errorConsole.groupEnd();
       }
