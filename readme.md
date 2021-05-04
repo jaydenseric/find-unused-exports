@@ -7,31 +7,17 @@ A [Node.js](https://nodejs.org) [CLI](#cli) and equivalent JS [API](#api) to fin
 To achieve this the whole project is analyzed at once, something [ESLint](https://eslint.org) can’t do as it lints files in isolation.
 
 - The `npx find-unused-exports` script is handy for finding redundant code to remove in legacy projects.
-- Use the `find-unused-exports` [CLI](#cli) in package test scripts, so that [CI](https://en.wikipedia.org/wiki/Continuous_integration) can prevent the addition of redundant code.
+- Use the [CLI](#cli) command [`find-unused-exports`](#command-find-unused-exports) in package test scripts, so that [CI](https://en.wikipedia.org/wiki/Continuous_integration) can prevent the addition of redundant code.
 
 ## Setup
 
-To install from [npm](https://npmjs.com) run:
+To install with [npm](https://npmjs.com/get-npm), run:
 
 ```sh
 npm install find-unused-exports --save-dev
 ```
 
-Add a [`package.json` script](https://docs.npmjs.com/files/package.json#scripts):
-
-```json
-{
-  "scripts": {
-    "find-unused-exports": "find-unused-exports"
-  }
-}
-```
-
-Then run the script to find unused exports:
-
-```sh
-npm run find-unused-exports
-```
+Then, use either the [CLI](#cli) command [`find-unused-exports`](#command-find-unused-exports) or the JS [API](#api) function [`findUnusedExports`](#function-findunusedexports).
 
 ## Ignoring unused exports
 
@@ -86,29 +72,47 @@ _Line or block comments can be used._
 
 ## CLI
 
-### Command find-unused-exports
+### Command `find-unused-exports`
 
-The `find-unused-exports` command finds unused ECMAScript module exports in a project. If some are found, it reports them to `stderr` and exits with a `1` error status. `.gitignore` files are used to ignore files.
+Finds unused ECMAScript module exports in a project. If some are found, it reports them to `stderr` and exits with a `1` error status. `.gitignore` files are used to ignore files.
 
-It implements the function [`findUnusedExports`](#function-findunusedexports) and has the following arguments:
+It implements the function [`findUnusedExports`](#function-findunusedexports).
 
-| Option | Default | Description |
+#### Arguments
+
+| Argument | Default | Description |
 | :-- | :-- | :-- |
 | `--module-glob` | `**/*.{mjs,js}` | ECMAScript module file glob pattern. |
 | `--resolve-file-extensions` |  | File extensions (without the leading `.`, multiple separated with `,` in preference order) to automatically resolve in extensionless import specifiers. [Import specifier file extensions are mandatory in Node.js](https://nodejs.org/api/esm.html#esm_mandatory_file_extensions); if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) `mjs,js` might be appropriate. |
 
 #### Examples
 
-_Using [`npx`](https://npm.im/npx) in a standard [Node.js](https://nodejs.org) project:_
+_Using [`npx`](https://docs.npmjs.com/cli/v7/commands/npx) in a standard [Node.js](https://nodejs.org) project:_
 
 > ```sh
 > npx find-unused-exports
 > ```
 
-_Using [`npx`](https://npm.im/npx) in a typical [webpack](https://webpack.js.org) project that has ESM in `.js` files, extensionless import specifiers, and `index.js` files:_
+_Using [`npx`](https://docs.npmjs.com/cli/v7/commands/npx) in a typical [webpack](https://webpack.js.org) project that has ESM in `.js` files, extensionless import specifiers, and `index.js` files:_
 
 > ```sh
 > npx find-unused-exports --module-glob "**/*.js" --resolve-file-extensions js --resolve-index-files
+> ```
+
+_Using package scripts._
+
+> [`package.json` scripts](https://docs.npmjs.com/cli/v7/using-npm/scripts) for a project that also uses [`eslint`](https://npm.im/eslint) and [`prettier`](https://npm.im/prettier):
+>
+> ```json
+> {
+>   "scripts": {
+>     "test": "npm run test:eslint && npm run test:prettier && npm run test:unused-exports",
+>     "test:eslint": "eslint .",
+>     "test:prettier": "prettier -c .",
+>     "test:unused-exports": "find-unused-exports",
+>     "prepublishOnly": "npm test"
+>   }
+> }
 > ```
 
 ## API
@@ -190,7 +194,7 @@ Using `*` to [re-export](https://developer.mozilla.org/en-US/docs/Web/JavaScript
 
 #### Examples
 
-_It can’t be determined if all of these exports are imported somewhere else:_
+_It can’t be determined if all of these exports are imported somewhere else._
 
 > ```js
 > export * from './b.mjs';

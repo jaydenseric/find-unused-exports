@@ -33,6 +33,7 @@
 - Improved runtime argument type checking.
 - JSDoc tweaks.
 - Test tweaks.
+- Readme tweaks.
 
 ## 1.2.0
 
