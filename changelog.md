@@ -6,6 +6,10 @@
 
 - Added a package `sideEffects` field.
 
+### Patch
+
+- Updated dependencies.
+
 ## 2.0.0
 
 ### Major

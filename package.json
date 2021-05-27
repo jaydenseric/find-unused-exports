@@ -44,22 +44,22 @@
     "node": "^12.20 || >= 14.13"
   },
   "dependencies": {
-    "@babel/core": "^7.14.0",
+    "@babel/core": "^7.14.3",
     "arg": "^5.0.0",
     "globby": "^11.0.3",
     "kleur": "^4.1.4"
   },
   "devDependencies": {
     "coverage-node": "^5.0.1",
-    "eslint": "^7.25.0",
-    "eslint-config-env": "^19.0.2",
+    "eslint": "^7.27.0",
+    "eslint-config-env": "^20.0.1",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsdoc": "^33.0.0",
+    "eslint-plugin-import": "^2.23.3",
+    "eslint-plugin-jsdoc": "^35.0.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "jsdoc-md": "^10.1.0",
-    "prettier": "^2.2.1",
+    "jsdoc-md": "^11.0.0",
+    "prettier": "^2.3.0",
     "snapshot-assertion": "^3.0.0",
     "test-director": "^6.0.0"
   },

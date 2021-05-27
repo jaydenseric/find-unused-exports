@@ -120,8 +120,6 @@ _Using package scripts._
 
 ## API
 
-### Table of contents
-
 - [function findUnusedExports](#function-findunusedexports)
 - [type ModuleExports](#type-moduleexports)
 
