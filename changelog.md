@@ -9,6 +9,7 @@
 ### Patch
 
 - Updated dependencies.
+- Renamed imports in the test index module.
 
 ## 2.0.0
 
