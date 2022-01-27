@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
-import { relative } from 'path';
-import arg from 'arg';
-import kleur from 'kleur';
-import CliError from '../private/CliError.mjs';
-import errorConsole from '../private/errorConsole.mjs';
-import reportCliError from '../private/reportCliError.mjs';
-import findUnusedExports from '../public/findUnusedExports.mjs';
+import { relative } from "path";
+import arg from "arg";
+import kleur from "kleur";
+import CliError from "../private/CliError.mjs";
+import errorConsole from "../private/errorConsole.mjs";
+import reportCliError from "../private/reportCliError.mjs";
+import findUnusedExports from "../public/findUnusedExports.mjs";
 
 /**
  * Runs the `find-unused-exports` CLI.
@@ -18,24 +18,24 @@ import findUnusedExports from '../public/findUnusedExports.mjs';
 async function findUnusedExportsCli() {
   try {
     const {
-      '--module-glob': moduleGlob,
-      '--resolve-file-extensions': resolveFileExtensionsList,
-      '--resolve-index-files': resolveIndexFiles,
+      "--module-glob": moduleGlob,
+      "--resolve-file-extensions": resolveFileExtensionsList,
+      "--resolve-index-files": resolveIndexFiles,
     } = arg({
-      '--module-glob': String,
-      '--resolve-file-extensions': String,
-      '--resolve-index-files': Boolean,
+      "--module-glob": String,
+      "--resolve-file-extensions": String,
+      "--resolve-index-files": Boolean,
     });
 
     if (resolveIndexFiles && !resolveFileExtensionsList)
       throw new CliError(
-        'The `--resolve-index-files` flag can only be used with the `--resolve-file-extensions` argument.'
+        "The `--resolve-index-files` flag can only be used with the `--resolve-file-extensions` argument."
       );
 
     const unusedExports = await findUnusedExports({
       moduleGlob,
       resolveFileExtensions: resolveFileExtensionsList
-        ? resolveFileExtensionsList.split(',')
+        ? resolveFileExtensionsList.split(",")
         : undefined,
       resolveIndexFiles,
     });
@@ -56,7 +56,7 @@ async function findUnusedExportsCli() {
         countUnusedExports += exports.size;
 
         errorConsole.group(`\n${kleur.underline().red(relative(cwd, path))}`);
-        errorConsole.error(kleur.dim().red(Array.from(exports).join(', ')));
+        errorConsole.error(kleur.dim().red(Array.from(exports).join(", ")));
         errorConsole.groupEnd();
       }
 
@@ -65,9 +65,9 @@ async function findUnusedExportsCli() {
           .bold()
           .red(
             `${countUnusedExports} unused export${
-              countUnusedExports === 1 ? '' : 's'
+              countUnusedExports === 1 ? "" : "s"
             } in ${countUnusedExportsModules} module${
-              countUnusedExportsModules === 1 ? '' : 's'
+              countUnusedExportsModules === 1 ? "" : "s"
             }.`
           )}\n`
       );
@@ -75,7 +75,7 @@ async function findUnusedExportsCli() {
       process.exitCode = 1;
     } else console.info(`\n${kleur.bold().green(`0 unused exports.`)}\n`);
   } catch (error) {
-    reportCliError('find-unused-exports', error);
+    reportCliError("find-unused-exports", error);
 
     process.exitCode = 1;
   }

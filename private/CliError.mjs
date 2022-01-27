@@ -9,8 +9,8 @@
  */
 export default class CliError extends Error {
   constructor(message) {
-    if (typeof message !== 'string')
-      throw new TypeError('Argument 1 `message` must be a string.');
+    if (typeof message !== "string")
+      throw new TypeError("Argument 1 `message` must be a string.");
 
     super(message);
 

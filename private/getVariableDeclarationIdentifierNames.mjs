@@ -1,4 +1,4 @@
-import babel from '@babel/core';
+import babel from "@babel/core";
 
 /**
  * Gets identifier names from a Babel AST `VariableDeclaration` instance. Used
@@ -15,7 +15,7 @@ export default function getVariableDeclarationIdentifierNames(
 ) {
   if (!babel.types.isVariableDeclaration(variableDeclaration))
     throw new TypeError(
-      'Argument 1 `variableDeclaration` must be a `VariableDeclaration` Babel AST node.'
+      "Argument 1 `variableDeclaration` must be a `VariableDeclaration` Babel AST node."
     );
 
   const names = [];
@@ -29,7 +29,7 @@ export default function getVariableDeclarationIdentifierNames(
    */
   function collectIdentifierNames(node) {
     switch (node.type) {
-      case 'Identifier':
+      case "Identifier":
         // E.g. `export const a = 1`
         //                    ^
         // E.g. `export var a, b, c = 1`
@@ -40,12 +40,12 @@ export default function getVariableDeclarationIdentifierNames(
         //                     ^
         names.push(node.name);
         break;
-      case 'ObjectPattern':
+      case "ObjectPattern":
         // E.g. `export const { a } = { a: 1 }`
         //                    ^^^^^
         for (const property of node.properties)
           switch (property.type) {
-            case 'ObjectProperty':
+            case "ObjectProperty":
               // E.g. `export const { a } = { a: 1 }`
               //                      ^
               // E.g. `export const { a: { b } } = { a: { b: 1 } }`
@@ -60,13 +60,13 @@ export default function getVariableDeclarationIdentifierNames(
                 property.value
               );
               break;
-            case 'RestElement':
+            case "RestElement":
               // E.g. `export const { a, ...b } = { a: 1, b: 1, c: 1 }`
               //                         ^^^^
               collectIdentifierNames(property.argument);
           }
         break;
-      case 'ArrayPattern':
+      case "ArrayPattern":
         // E.g. `export const [a, b] = [1, 2]`
         //                    ^^^^^^
         for (const element of node.elements)
@@ -76,7 +76,7 @@ export default function getVariableDeclarationIdentifierNames(
             //                     ^
             element !== null
           )
-            if (element.type === 'RestElement')
+            if (element.type === "RestElement")
               // E.g. `export const [a, ...b] = [1, 2, 3]`
               //                        ^^^^
               // E.g. `export const [a, ...[b]] = [1, 2, 3]`

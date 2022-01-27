@@ -1,4 +1,4 @@
-export { default as findUnusedExports } from './findUnusedExports.mjs';
+export { default as findUnusedExports } from "./findUnusedExports.mjs";
 
 /**
  * List of ECMAScript module export names, including `default` if one is a default export.
@@ -17,7 +17,7 @@ export { default as findUnusedExports } from './findUnusedExports.mjs';
  * Translate to:
  *
  * ```js
- * new Set(['a', 'b', 'default']);
+ * new Set(["a", "b", "default"]);
  * ```
  */
 

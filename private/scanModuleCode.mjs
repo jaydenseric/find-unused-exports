@@ -1,7 +1,7 @@
 // Use `@babel/core` instead of `@babel/parser` and `@babel/traverse` directly
 // so that project Babel config will be respected when parsing code.
-import babel from '@babel/core';
-import getVariableDeclarationIdentifierNames from './getVariableDeclarationIdentifierNames.mjs';
+import babel from "@babel/core";
+import getVariableDeclarationIdentifierNames from "./getVariableDeclarationIdentifierNames.mjs";
 
 /**
  * Scans a JavaScript module’s code for ECMAScript module imports and exports.
@@ -16,11 +16,11 @@ import getVariableDeclarationIdentifierNames from './getVariableDeclarationIdent
  * @ignore
  */
 export default async function scanModuleCode(code, path) {
-  if (typeof code !== 'string')
-    throw new TypeError('Argument 1 `code` must be a string.');
+  if (typeof code !== "string")
+    throw new TypeError("Argument 1 `code` must be a string.");
 
-  if (path !== undefined && typeof path !== 'string')
-    throw new TypeError('Argument 2 `path` must be a string.');
+  if (path !== undefined && typeof path !== "string")
+    throw new TypeError("Argument 2 `path` must be a string.");
 
   const analysis = {
     imports: {},
@@ -35,8 +35,8 @@ export default async function scanModuleCode(code, path) {
     // have Babel config to handle it.
     parserOpts: {
       plugins: [
-        'classProperties',
-        ['decorators', { decoratorsBeforeExport: false }],
+        "classProperties",
+        ["decorators", { decoratorsBeforeExport: false }],
       ],
     },
   });
@@ -49,18 +49,18 @@ export default async function scanModuleCode(code, path) {
 
       for (const specifier of path.node.specifiers)
         switch (specifier.type) {
-          case 'ImportDefaultSpecifier':
-            // E.g. `import a from 'a'`
+          case "ImportDefaultSpecifier":
+            // E.g. `import a from "a"`
             //              ^
-            analysis.imports[path.node.source.value].add('default');
+            analysis.imports[path.node.source.value].add("default");
             break;
-          case 'ImportNamespaceSpecifier':
-            // E.g. `import * as a from 'a'`
+          case "ImportNamespaceSpecifier":
+            // E.g. `import * as a from "a"`
             //              ^^^^^^
-            analysis.imports[path.node.source.value].add('*');
+            analysis.imports[path.node.source.value].add("*");
             break;
-          case 'ImportSpecifier':
-            // E.g. `import { a as b } from 'a'`
+          case "ImportSpecifier":
+            // E.g. `import { a as b } from "a"`
             //                ^^^^^^
             analysis.imports[path.node.source.value].add(
               specifier.imported.name
@@ -71,35 +71,35 @@ export default async function scanModuleCode(code, path) {
       path.skip();
     },
     Import(path) {
-      // E.g. `import('a')`
+      // E.g. `import("a")`
       //       ^^^^^^
       const [specifier] = path.parent.arguments;
-      if (specifier && specifier.type === 'StringLiteral') {
+      if (specifier && specifier.type === "StringLiteral") {
         // There may be multiple statements for the same specifier.
         if (!analysis.imports[specifier.value])
           analysis.imports[specifier.value] = new Set();
 
         // A dynamic import pulls in everything. It’s not feasible for this tool
         // to figure out exactly the default or named imports used at runtime.
-        analysis.imports[specifier.value].add('default');
-        analysis.imports[specifier.value].add('*');
+        analysis.imports[specifier.value].add("default");
+        analysis.imports[specifier.value].add("*");
       }
     },
     ExportDefaultDeclaration(path) {
       // E.g. `export default 1`
       //       ^^^^^^^^^^^^^^^^
-      analysis.exports.add('default');
+      analysis.exports.add("default");
 
       path.skip();
     },
     ExportAllDeclaration(path) {
-      // E.g. `export * from 'a'`
+      // E.g. `export * from "a"`
       //       ^^^^^^^^^^^^^^^^^
       // This is a special case as the export names are unknown.
       // There may be multiple statements for the same specifier.
       if (!analysis.imports[path.node.source.value])
-        analysis.imports[path.node.source.value] = new Set(['*']);
-      else analysis.imports[path.node.source.value].add('*');
+        analysis.imports[path.node.source.value] = new Set(["*"]);
+      else analysis.imports[path.node.source.value].add("*");
 
       path.skip();
     },
@@ -108,12 +108,12 @@ export default async function scanModuleCode(code, path) {
       // either exporting an existing declaration or is “export from” syntax.
       if (path.node.declaration)
         switch (path.node.declaration.type) {
-          case 'FunctionDeclaration':
+          case "FunctionDeclaration":
             // E.g. `export function a() {}`
             //              ^^^^^^^^^^^^^^^
             analysis.exports.add(path.node.declaration.id.name);
             break;
-          case 'VariableDeclaration': {
+          case "VariableDeclaration": {
             // E.g. `export const a = 1`
             //              ^^^^^^^^^^^
             for (const name of getVariableDeclarationIdentifierNames(
@@ -123,11 +123,11 @@ export default async function scanModuleCode(code, path) {
           }
         }
       else if (path.node.source) {
-        // E.g. `export { default } from 'a'`
+        // E.g. `export { default } from "a"`
         //       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        // E.g. `export { default as a, a as b } from 'a'`
+        // E.g. `export { default as a, a as b } from "a"`
         //       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        // E.g. `export * as a, { a as b } from 'a'`
+        // E.g. `export * as a, { a as b } from "a"`
         //       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         // There may be multiple statements for the same specifier.
         if (!analysis.imports[path.node.source.value])
@@ -136,17 +136,17 @@ export default async function scanModuleCode(code, path) {
         for (const specifier of path.node.specifiers) {
           // Process the import.
           switch (specifier.type) {
-            case 'ExportNamespaceSpecifier':
-              // E.g. `export * as a from 'a'`
+            case "ExportNamespaceSpecifier":
+              // E.g. `export * as a from "a"`
               //              ^^^^^^
-              analysis.imports[path.node.source.value].add('*');
+              analysis.imports[path.node.source.value].add("*");
               break;
-            case 'ExportSpecifier': {
-              if (specifier.local.name === 'default')
-                // E.g. `export { default as a } from 'a'`
+            case "ExportSpecifier": {
+              if (specifier.local.name === "default")
+                // E.g. `export { default as a } from "a"`
                 //                ^^^^^^^
-                analysis.imports[path.node.source.value].add('default');
-              // E.g. `export { a as b } from 'a'`
+                analysis.imports[path.node.source.value].add("default");
+              // E.g. `export { a as b } from "a"`
               //                ^
               else
                 analysis.imports[path.node.source.value].add(
@@ -157,11 +157,11 @@ export default async function scanModuleCode(code, path) {
           }
 
           // Process the export.
-          if (specifier.exported.name === 'default')
-            // E.g. `export { a as default } from 'a'`
+          if (specifier.exported.name === "default")
+            // E.g. `export { a as default } from "a"`
             //                     ^^^^^^^
-            analysis.exports.add('default');
-          // E.g. `export { a as b } from 'a'`
+            analysis.exports.add("default");
+          // E.g. `export { a as b } from "a"`
           //                     ^
           else analysis.exports.add(specifier.exported.name);
         }
@@ -191,7 +191,7 @@ export default async function scanModuleCode(code, path) {
         // separated by a comma and optional spaces).
         if (exportNameList.match(/^\w+(?:, *\w+)*$/u))
           // Ignore all of the export names listed in the comment.
-          for (const name of exportNameList.split(','))
+          for (const name of exportNameList.split(","))
             analysis.exports.delete(name.trim());
       }
       // No export names were provided, so ignore all the exports.

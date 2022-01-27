@@ -1,8 +1,8 @@
-import fs from 'fs';
-import { dirname, extname, join, resolve, sep } from 'path';
-import { globby } from 'globby';
-import isDirectoryPath from '../private/isDirectoryPath.mjs';
-import scanModuleCode from '../private/scanModuleCode.mjs';
+import fs from "fs";
+import { dirname, extname, join, resolve, sep } from "path";
+import { globby } from "globby";
+import isDirectoryPath from "../private/isDirectoryPath.mjs";
+import scanModuleCode from "../private/scanModuleCode.mjs";
 
 /**
  * Finds unused
@@ -12,50 +12,50 @@ import scanModuleCode from '../private/scanModuleCode.mjs';
  * @name findUnusedExports
  * @param {object} [options] Options.
  * @param {string} [options.cwd] A directory path to scope the search for source and `.gitignore` files, defaulting to `process.cwd()`.
- * @param {string} [options.moduleGlob='**\/*.{mjs,cjs,js}'] JavaScript file glob pattern.
- * @param {Array<string>} [options.resolveFileExtensions] File extensions (without the leading `.`, in preference order) to automatically resolve in extensionless import specifiers. [Import specifier file extensions are mandatory in Node.js](https://nodejs.org/api/esm.html#esm_mandatory_file_extensions); if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) `['mjs', 'js']` might be appropriate.
+ * @param {string} [options.moduleGlob="**\/*.{mjs,cjs,js}"] JavaScript file glob pattern.
+ * @param {Array<string>} [options.resolveFileExtensions] File extensions (without the leading `.`, in preference order) to automatically resolve in extensionless import specifiers. [Import specifier file extensions are mandatory in Node.js](https://nodejs.org/api/esm.html#esm_mandatory_file_extensions); if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) `["mjs", "js"]` might be appropriate.
  * @param {boolean} [options.resolveIndexFiles=false] Should directory index files be automatically resolved in extensionless import specifiers. [Node.js doesn’t do this by default](https://nodejs.org/api/esm.html#esm_mandatory_file_extensions); if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) `true` might be appropriate. This option only works if the option `resolveFileExtensions` is used.
  * @returns {object<string, ModuleExports>} Map of module file paths and unused module exports.
  * @example <caption>Ways to `import`.</caption>
  * ```js
- * import { findUnusedExports } from 'find-unused-exports';
+ * import { findUnusedExports } from "find-unused-exports";
  * ```
  *
  * ```js
- * import findUnusedExports from 'find-unused-exports/public/findUnusedExports.mjs';
+ * import findUnusedExports from "find-unused-exports/public/findUnusedExports.mjs";
  * ```
  */
 export default async function findUnusedExports({
   cwd = process.cwd(),
-  moduleGlob = '**/*.{mjs,cjs,js}',
+  moduleGlob = "**/*.{mjs,cjs,js}",
   resolveFileExtensions,
   resolveIndexFiles = false,
 } = {}) {
-  if (typeof cwd !== 'string')
-    throw new TypeError('Option `cwd` must be a string.');
+  if (typeof cwd !== "string")
+    throw new TypeError("Option `cwd` must be a string.");
 
   if (!(await isDirectoryPath(cwd)))
-    throw new TypeError('Option `cwd` must be an accessible directory path.');
+    throw new TypeError("Option `cwd` must be an accessible directory path.");
 
-  if (typeof moduleGlob !== 'string')
-    throw new TypeError('Option `moduleGlob` must be a string.');
+  if (typeof moduleGlob !== "string")
+    throw new TypeError("Option `moduleGlob` must be a string.");
 
-  if (typeof resolveFileExtensions !== 'undefined')
+  if (typeof resolveFileExtensions !== "undefined")
     if (
       !Array.isArray(resolveFileExtensions) ||
       !resolveFileExtensions.length ||
-      !resolveFileExtensions.every((x) => typeof x === 'string')
+      !resolveFileExtensions.every((x) => typeof x === "string")
     )
       throw new TypeError(
-        'Option `resolveFileExtensions` must be an array of strings.'
+        "Option `resolveFileExtensions` must be an array of strings."
       );
 
-  if (typeof resolveIndexFiles !== 'boolean')
-    throw new TypeError('Option `resolveIndexFiles` must be a boolean.');
+  if (typeof resolveIndexFiles !== "boolean")
+    throw new TypeError("Option `resolveIndexFiles` must be a boolean.");
 
   if (!resolveFileExtensions && resolveIndexFiles)
     throw new TypeError(
-      'Option `resolveIndexFiles` can only be `true` if the option `resolveFileExtensions` is used.'
+      "Option `resolveIndexFiles` can only be `true` if the option `resolveFileExtensions` is used."
     );
 
   // These paths are relative to the given `cwd`.
@@ -68,7 +68,7 @@ export default async function findUnusedExports({
   await Promise.all(
     moduleFileRelativePaths.map(async (moduleFileRelativePath) => {
       const moduleFilePath = join(cwd, moduleFileRelativePath);
-      const code = await fs.promises.readFile(moduleFilePath, 'utf8');
+      const code = await fs.promises.readFile(moduleFilePath, "utf8");
 
       scannedModules[moduleFilePath] = await scanModuleCode(
         code,
@@ -87,7 +87,7 @@ export default async function findUnusedExports({
   // Bail if the specifier is bare; this tool only scans project files.
   for (const [path, { imports }] of Object.entries(scannedModules))
     for (const [specifier, moduleImports] of Object.entries(imports))
-      if (specifier.startsWith('.')) {
+      if (specifier.startsWith(".")) {
         const specifierAbsolutePath = resolve(dirname(path), specifier);
         const specifierPossiblePaths = [specifierAbsolutePath];
 
@@ -113,16 +113,16 @@ export default async function findUnusedExports({
         );
 
         if (importedModulePath) {
-          if (moduleImports.has('*')) {
+          if (moduleImports.has("*")) {
             // Delete all the named exports from the unused exports set.
             for (const name of possiblyUnusedExports[importedModulePath])
-              if (name !== 'default')
+              if (name !== "default")
                 possiblyUnusedExports[importedModulePath].delete(name);
 
             // Check if a default import also needs to be deleted from the unused
             // exports set.
-            if (moduleImports.has('default'))
-              possiblyUnusedExports[importedModulePath].delete('default');
+            if (moduleImports.has("default"))
+              possiblyUnusedExports[importedModulePath].delete("default");
           } else
             for (const name of moduleImports)
               possiblyUnusedExports[importedModulePath].delete(name);

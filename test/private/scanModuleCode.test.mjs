@@ -1,51 +1,51 @@
-import { deepStrictEqual, rejects } from 'assert';
-import scanModuleCode from '../../private/scanModuleCode.mjs';
+import { deepStrictEqual, rejects } from "assert";
+import scanModuleCode from "../../private/scanModuleCode.mjs";
 
 export default (tests) => {
   tests.add(
-    '`scanModuleCode` with argument 1 `code` not a string.',
+    "`scanModuleCode` with argument 1 `code` not a string.",
     async () => {
       await rejects(
         scanModuleCode(true),
-        new TypeError('Argument 1 `code` must be a string.')
+        new TypeError("Argument 1 `code` must be a string.")
       );
     }
   );
 
   tests.add(
-    '`scanModuleCode` with argument 2 `path` not a string.',
+    "`scanModuleCode` with argument 2 `path` not a string.",
     async () => {
       await rejects(
-        scanModuleCode('', true),
-        new TypeError('Argument 2 `path` must be a string.')
+        scanModuleCode("", true),
+        new TypeError("Argument 2 `path` must be a string.")
       );
     }
   );
 
-  tests.add('`scanModuleCode` without imports or exports.', async () => {
-    deepStrictEqual(await scanModuleCode(''), {
+  tests.add("`scanModuleCode` without imports or exports.", async () => {
+    deepStrictEqual(await scanModuleCode(""), {
       imports: {},
       exports: new Set(),
     });
   });
 
-  tests.add('`scanModuleCode` with a default import.', async () => {
-    deepStrictEqual(await scanModuleCode("import a from 'a'"), {
+  tests.add("`scanModuleCode` with a default import.", async () => {
+    deepStrictEqual(await scanModuleCode('import a from "a"'), {
       imports: {
-        a: new Set(['default']),
+        a: new Set(["default"]),
       },
       exports: new Set(),
     });
   });
 
   tests.add(
-    '`scanModuleCode` with a default import, existing specifier.',
+    "`scanModuleCode` with a default import, existing specifier.",
     async () => {
       deepStrictEqual(
-        await scanModuleCode("import { a } from 'a'; import b from 'a'"),
+        await scanModuleCode('import { a } from "a"; import b from "a"'),
         {
           imports: {
-            a: new Set(['default', 'a']),
+            a: new Set(["default", "a"]),
           },
           exports: new Set(),
         }
@@ -53,306 +53,306 @@ export default (tests) => {
     }
   );
 
-  tests.add('`scanModuleCode` with named imports.', async () => {
-    deepStrictEqual(await scanModuleCode("import { a, b } from 'a'"), {
+  tests.add("`scanModuleCode` with named imports.", async () => {
+    deepStrictEqual(await scanModuleCode('import { a, b } from "a"'), {
       imports: {
-        a: new Set(['a', 'b']),
+        a: new Set(["a", "b"]),
       },
       exports: new Set(),
     });
   });
 
-  tests.add('`scanModuleCode` with a namespace import.', async () => {
-    deepStrictEqual(await scanModuleCode("import * as a from 'a'"), {
+  tests.add("`scanModuleCode` with a namespace import.", async () => {
+    deepStrictEqual(await scanModuleCode('import * as a from "a"'), {
       imports: {
-        a: new Set(['*']),
+        a: new Set(["*"]),
       },
       exports: new Set(),
     });
   });
 
   tests.add(
-    '`scanModuleCode` with a default and namespace import.',
+    "`scanModuleCode` with a default and namespace import.",
     async () => {
-      deepStrictEqual(await scanModuleCode("import a, * as b from 'a'"), {
+      deepStrictEqual(await scanModuleCode('import a, * as b from "a"'), {
         imports: {
-          a: new Set(['default', '*']),
+          a: new Set(["default", "*"]),
         },
         exports: new Set(),
       });
     }
   );
 
-  tests.add('`scanModuleCode` with a default and named imports.', async () => {
-    deepStrictEqual(await scanModuleCode("import a, { b, c } from 'a'"), {
+  tests.add("`scanModuleCode` with a default and named imports.", async () => {
+    deepStrictEqual(await scanModuleCode('import a, { b, c } from "a"'), {
       imports: {
-        a: new Set(['default', 'b', 'c']),
+        a: new Set(["default", "b", "c"]),
       },
       exports: new Set(),
     });
   });
 
-  tests.add('`scanModuleCode` with a dynamic import.', async () => {
-    deepStrictEqual(await scanModuleCode("import('a')"), {
+  tests.add("`scanModuleCode` with a dynamic import.", async () => {
+    deepStrictEqual(await scanModuleCode('import("a")'), {
       imports: {
-        a: new Set(['default', '*']),
+        a: new Set(["default", "*"]),
       },
       exports: new Set(),
     });
   });
 
-  tests.add('`scanModuleCode` with a default export.', async () => {
-    deepStrictEqual(await scanModuleCode('export default 1'), {
+  tests.add("`scanModuleCode` with a default export.", async () => {
+    deepStrictEqual(await scanModuleCode("export default 1"), {
       imports: {},
-      exports: new Set(['default']),
+      exports: new Set(["default"]),
     });
   });
 
   tests.add(
-    '`scanModuleCode` with a named export, declaration, function declaration.',
+    "`scanModuleCode` with a named export, declaration, function declaration.",
     async () => {
-      deepStrictEqual(await scanModuleCode('export function a() {}'), {
+      deepStrictEqual(await scanModuleCode("export function a() {}"), {
         imports: {},
-        exports: new Set(['a']),
+        exports: new Set(["a"]),
       });
     }
   );
 
   tests.add(
-    '`scanModuleCode` with a named export, declaration, variable declaration, single declaration, simple identifier.',
+    "`scanModuleCode` with a named export, declaration, variable declaration, single declaration, simple identifier.",
     async () => {
-      deepStrictEqual(await scanModuleCode('export const a = 1'), {
+      deepStrictEqual(await scanModuleCode("export const a = 1"), {
         imports: {},
-        exports: new Set(['a']),
+        exports: new Set(["a"]),
       });
     }
   );
 
   tests.add(
-    '`scanModuleCode` with a named export, declaration, variable declaration, single declaration, object pattern, no renaming.',
+    "`scanModuleCode` with a named export, declaration, variable declaration, single declaration, object pattern, no renaming.",
     async () => {
       deepStrictEqual(
-        await scanModuleCode('export const { a, b } = { a: 1, b: 1 }'),
+        await scanModuleCode("export const { a, b } = { a: 1, b: 1 }"),
         {
           imports: {},
-          exports: new Set(['a', 'b']),
+          exports: new Set(["a", "b"]),
         }
       );
     }
   );
 
   tests.add(
-    '`scanModuleCode` with a named export, declaration, variable declaration, single declaration, object pattern, renaming.',
+    "`scanModuleCode` with a named export, declaration, variable declaration, single declaration, object pattern, renaming.",
     async () => {
       deepStrictEqual(
-        await scanModuleCode('export const { a, b: c } = { a: 1, b: 1 }'),
+        await scanModuleCode("export const { a, b: c } = { a: 1, b: 1 }"),
         {
           imports: {},
-          exports: new Set(['a', 'c']),
+          exports: new Set(["a", "c"]),
         }
       );
     }
   );
 
   tests.add(
-    '`scanModuleCode` with a named export, declaration, variable declaration, single declaration, object pattern, rest element.',
+    "`scanModuleCode` with a named export, declaration, variable declaration, single declaration, object pattern, rest element.",
     async () => {
       deepStrictEqual(
-        await scanModuleCode('export const { a, ...b } = { a: 1, b: 1, c: 1 }'),
+        await scanModuleCode("export const { a, ...b } = { a: 1, b: 1, c: 1 }"),
         {
           imports: {},
-          exports: new Set(['a', 'b']),
+          exports: new Set(["a", "b"]),
         }
       );
     }
   );
 
   tests.add(
-    '`scanModuleCode` with a named export, declaration, variable declaration, single declaration, object pattern, nested array pattern.',
+    "`scanModuleCode` with a named export, declaration, variable declaration, single declaration, object pattern, nested array pattern.",
     async () => {
       deepStrictEqual(
-        await scanModuleCode('export const { a, b: [c]} = { a: 1, b: [1] }'),
+        await scanModuleCode("export const { a, b: [c]} = { a: 1, b: [1] }"),
         {
           imports: {},
-          exports: new Set(['a', 'c']),
+          exports: new Set(["a", "c"]),
         }
       );
     }
   );
 
   tests.add(
-    '`scanModuleCode` with a named export, declaration, variable declaration, single declaration, object pattern, nested object pattern.',
+    "`scanModuleCode` with a named export, declaration, variable declaration, single declaration, object pattern, nested object pattern.",
     async () => {
       deepStrictEqual(
         await scanModuleCode(
-          'export const { a, b: { c }} = { a: 1, b: { c: 1 } }'
+          "export const { a, b: { c }} = { a: 1, b: { c: 1 } }"
         ),
         {
           imports: {},
-          exports: new Set(['a', 'c']),
+          exports: new Set(["a", "c"]),
         }
       );
     }
   );
 
   tests.add(
-    '`scanModuleCode` with a named export, declaration, variable declaration, single declaration, array pattern, no skipping.',
+    "`scanModuleCode` with a named export, declaration, variable declaration, single declaration, array pattern, no skipping.",
     async () => {
-      deepStrictEqual(await scanModuleCode('export const [a, b] = [1, 2]'), {
+      deepStrictEqual(await scanModuleCode("export const [a, b] = [1, 2]"), {
         imports: {},
-        exports: new Set(['a', 'b']),
+        exports: new Set(["a", "b"]),
       });
     }
   );
 
   tests.add(
-    '`scanModuleCode` with a named export, declaration, variable declaration, single declaration, array pattern, skipping.',
+    "`scanModuleCode` with a named export, declaration, variable declaration, single declaration, array pattern, skipping.",
     async () => {
-      deepStrictEqual(await scanModuleCode('export const [, b] = [1, 2]'), {
+      deepStrictEqual(await scanModuleCode("export const [, b] = [1, 2]"), {
         imports: {},
-        exports: new Set(['b']),
+        exports: new Set(["b"]),
       });
     }
   );
 
   tests.add(
-    '`scanModuleCode` with a named export, declaration, variable declaration, single declaration, array pattern, rest element.',
+    "`scanModuleCode` with a named export, declaration, variable declaration, single declaration, array pattern, rest element.",
     async () => {
       deepStrictEqual(
-        await scanModuleCode('export const [a, ...b] = [1, 2, 3]'),
+        await scanModuleCode("export const [a, ...b] = [1, 2, 3]"),
         {
           imports: {},
-          exports: new Set(['a', 'b']),
+          exports: new Set(["a", "b"]),
         }
       );
     }
   );
 
   tests.add(
-    '`scanModuleCode` with a named export, declaration, variable declaration, single declaration, array pattern, nested array pattern.',
+    "`scanModuleCode` with a named export, declaration, variable declaration, single declaration, array pattern, nested array pattern.",
     async () => {
       deepStrictEqual(
-        await scanModuleCode('export const [a, [b]] = [1, [1, 2, 3]]'),
+        await scanModuleCode("export const [a, [b]] = [1, [1, 2, 3]]"),
         {
           imports: {},
-          exports: new Set(['a', 'b']),
+          exports: new Set(["a", "b"]),
         }
       );
     }
   );
 
   tests.add(
-    '`scanModuleCode` with a named export, declaration, variable declaration, single declaration, array pattern, nested object pattern.',
+    "`scanModuleCode` with a named export, declaration, variable declaration, single declaration, array pattern, nested object pattern.",
     async () => {
       deepStrictEqual(
-        await scanModuleCode('export const [a, { b }] = [1, { b: 1 }]'),
+        await scanModuleCode("export const [a, { b }] = [1, { b: 1 }]"),
         {
           imports: {},
-          exports: new Set(['a', 'b']),
+          exports: new Set(["a", "b"]),
         }
       );
     }
   );
 
   tests.add(
-    '`scanModuleCode` with a named export, declaration, variable declaration, multiple declarations.',
+    "`scanModuleCode` with a named export, declaration, variable declaration, multiple declarations.",
     async () => {
-      deepStrictEqual(await scanModuleCode('export var a, b = 1'), {
+      deepStrictEqual(await scanModuleCode("export var a, b = 1"), {
         imports: {},
-        exports: new Set(['a', 'b']),
+        exports: new Set(["a", "b"]),
       });
     }
   );
 
   tests.add(
-    '`scanModuleCode` with a named export, declaration, export specifier.',
+    "`scanModuleCode` with a named export, declaration, export specifier.",
     async () => {
-      deepStrictEqual(await scanModuleCode('const a = 1; export { a }'), {
+      deepStrictEqual(await scanModuleCode("const a = 1; export { a }"), {
         imports: {},
-        exports: new Set(['a']),
+        exports: new Set(["a"]),
       });
     }
   );
 
-  tests.add('`scanModuleCode` with a named and default export.', async () => {
+  tests.add("`scanModuleCode` with a named and default export.", async () => {
     deepStrictEqual(
-      await scanModuleCode('export const a = 1; export default 1'),
+      await scanModuleCode("export const a = 1; export default 1"),
       {
         imports: {},
-        exports: new Set(['default', 'a']),
+        exports: new Set(["default", "a"]),
       }
     );
   });
 
-  tests.add('`scanModuleCode` with an import and export.', async () => {
-    deepStrictEqual(await scanModuleCode("import a from 'a'; export { a }"), {
+  tests.add("`scanModuleCode` with an import and export.", async () => {
+    deepStrictEqual(await scanModuleCode('import a from "a"; export { a }'), {
       imports: {
-        a: new Set(['default']),
+        a: new Set(["default"]),
       },
-      exports: new Set(['a']),
+      exports: new Set(["a"]),
     });
   });
 
-  tests.add('`scanModuleCode` with an export default from.', async () => {
-    deepStrictEqual(await scanModuleCode("export { default } from 'a'"), {
+  tests.add("`scanModuleCode` with an export default from.", async () => {
+    deepStrictEqual(await scanModuleCode('export { default } from "a"'), {
       imports: {
-        a: new Set(['default']),
+        a: new Set(["default"]),
       },
-      exports: new Set(['default']),
+      exports: new Set(["default"]),
     });
   });
 
   tests.add(
-    '`scanModuleCode` with an export default from, existing specifier.',
+    "`scanModuleCode` with an export default from, existing specifier.",
     async () => {
       deepStrictEqual(
         await scanModuleCode(
-          "import { a } from 'a'; export { default } from 'a'"
+          'import { a } from "a"; export { default } from "a"'
         ),
         {
           imports: {
-            a: new Set(['default', 'a']),
+            a: new Set(["default", "a"]),
           },
-          exports: new Set(['default']),
+          exports: new Set(["default"]),
         }
       );
     }
   );
 
   tests.add(
-    '`scanModuleCode` with an export default as name from.',
+    "`scanModuleCode` with an export default as name from.",
     async () => {
       deepStrictEqual(
-        await scanModuleCode("export { default as a } from 'a'"),
+        await scanModuleCode('export { default as a } from "a"'),
         {
           imports: {
-            a: new Set(['default']),
+            a: new Set(["default"]),
           },
-          exports: new Set(['a']),
+          exports: new Set(["a"]),
         }
       );
     }
   );
 
   tests.add(
-    '`scanModuleCode` with an export name as default from.',
+    "`scanModuleCode` with an export name as default from.",
     async () => {
       deepStrictEqual(
-        await scanModuleCode("export { a as default } from 'a'"),
+        await scanModuleCode('export { a as default } from "a"'),
         {
           imports: {
-            a: new Set(['a']),
+            a: new Set(["a"]),
           },
-          exports: new Set(['default']),
+          exports: new Set(["default"]),
         }
       );
     }
   );
 
-  tests.add('`scanModuleCode` with an export all from.', async () => {
-    deepStrictEqual(await scanModuleCode("export * from 'a'"), {
+  tests.add("`scanModuleCode` with an export all from.", async () => {
+    deepStrictEqual(await scanModuleCode('export * from "a"'), {
       imports: {
-        a: new Set(['*']),
+        a: new Set(["*"]),
       },
       exports: new Set([
         // All export names are unknown.
@@ -361,16 +361,16 @@ export default (tests) => {
   });
 
   tests.add(
-    '`scanModuleCode` with an export all from, existing specifier.',
+    "`scanModuleCode` with an export all from, existing specifier.",
     async () => {
       deepStrictEqual(
-        await scanModuleCode("export { a } from 'a'; export * from 'a'"),
+        await scanModuleCode('export { a } from "a"; export * from "a"'),
         {
           imports: {
-            a: new Set(['*', 'a']),
+            a: new Set(["*", "a"]),
           },
           exports: new Set([
-            'a',
+            "a",
             // All export names are unknown.
           ]),
         }
@@ -378,17 +378,17 @@ export default (tests) => {
     }
   );
 
-  tests.add('`scanModuleCode` with an export namespace from.', async () => {
-    deepStrictEqual(await scanModuleCode("export * as a from 'a'"), {
+  tests.add("`scanModuleCode` with an export namespace from.", async () => {
+    deepStrictEqual(await scanModuleCode('export * as a from "a"'), {
       imports: {
-        a: new Set(['*']),
+        a: new Set(["*"]),
       },
-      exports: new Set(['a']),
+      exports: new Set(["a"]),
     });
   });
 
   tests.add(
-    '`scanModuleCode` with an ignore unused exports comment, no names.',
+    "`scanModuleCode` with an ignore unused exports comment, no names.",
     async () => {
       deepStrictEqual(
         await scanModuleCode(`// ignore unused exports
@@ -404,7 +404,7 @@ export default 1;
   );
 
   tests.add(
-    '`scanModuleCode` with an ignore unused exports comment, case insensitivity.',
+    "`scanModuleCode` with an ignore unused exports comment, case insensitivity.",
     async () => {
       deepStrictEqual(
         await scanModuleCode(`// iGnOrE UnUsEd eXpOrTs
@@ -420,11 +420,11 @@ export default 1;
   );
 
   tests.add(
-    '`scanModuleCode` with an ignore unused exports comment, whitespace tolerance.',
+    "`scanModuleCode` with an ignore unused exports comment, whitespace tolerance.",
     async () => {
       deepStrictEqual(
         await scanModuleCode(
-          '//  ignore unused exports  a,  b,c ' +
+          "//  ignore unused exports  a,  b,c " +
             `
 export const a = 1;
 export const b = 1;
@@ -440,7 +440,7 @@ export const c = 1;
   );
 
   tests.add(
-    '`scanModuleCode` with an ignore unused exports comment, one name.',
+    "`scanModuleCode` with an ignore unused exports comment, one name.",
     async () => {
       deepStrictEqual(
         await scanModuleCode(`// ignore unused exports default
@@ -449,14 +449,14 @@ export default 1;
 `),
         {
           imports: {},
-          exports: new Set(['a']),
+          exports: new Set(["a"]),
         }
       );
     }
   );
 
   tests.add(
-    '`scanModuleCode` with an ignore unused exports comment, multiple names.',
+    "`scanModuleCode` with an ignore unused exports comment, multiple names.",
     async () => {
       deepStrictEqual(
         await scanModuleCode(`// ignore unused exports a, default
@@ -466,14 +466,14 @@ export default 1;
 `),
         {
           imports: {},
-          exports: new Set(['b']),
+          exports: new Set(["b"]),
         }
       );
     }
   );
 
   tests.add(
-    '`scanModuleCode` with an ignore unused exports comment, invalid names.',
+    "`scanModuleCode` with an ignore unused exports comment, invalid names.",
     async () => {
       deepStrictEqual(
         await scanModuleCode(`// ignore unused exports default,,
@@ -481,14 +481,14 @@ export default 1;
 `),
         {
           imports: {},
-          exports: new Set(['default']),
+          exports: new Set(["default"]),
         }
       );
     }
   );
 
   tests.add(
-    '`scanModuleCode` with multiple ignore unused exports comments, same name.',
+    "`scanModuleCode` with multiple ignore unused exports comments, same name.",
     async () => {
       deepStrictEqual(
         await scanModuleCode(`// ignore unused exports default
@@ -498,14 +498,14 @@ export default 1;
 `),
         {
           imports: {},
-          exports: new Set(['a']),
+          exports: new Set(["a"]),
         }
       );
     }
   );
 
   tests.add(
-    '`scanModuleCode` with multiple ignore unused exports comments, different names.',
+    "`scanModuleCode` with multiple ignore unused exports comments, different names.",
     async () => {
       deepStrictEqual(
         await scanModuleCode(`// ignore unused exports a
@@ -516,14 +516,14 @@ export default 1;
 `),
         {
           imports: {},
-          exports: new Set(['default']),
+          exports: new Set(["default"]),
         }
       );
     }
   );
 
   tests.add(
-    '`scanModuleCode` with an ignore unused comment block.',
+    "`scanModuleCode` with an ignore unused comment block.",
     async () => {
       deepStrictEqual(
         await scanModuleCode(`/* ignore unused exports a */
@@ -532,7 +532,7 @@ export default 1;
 `),
         {
           imports: {},
-          exports: new Set(['default']),
+          exports: new Set(["default"]),
         }
       );
     }

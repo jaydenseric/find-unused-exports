@@ -1,26 +1,26 @@
-import { strictEqual, throws } from 'assert';
-import replaceStackTraces from './replaceStackTraces.mjs';
+import { strictEqual, throws } from "assert";
+import replaceStackTraces from "./replaceStackTraces.mjs";
 
 export default (tests) => {
   tests.add(
-    '`replaceStackTraces` with argument 1 `string` not a string.',
+    "`replaceStackTraces` with argument 1 `string` not a string.",
     () => {
       throws(() => {
         replaceStackTraces(true);
-      }, new TypeError('Argument 1 `string` must be a string.'));
+      }, new TypeError("Argument 1 `string` must be a string."));
     }
   );
 
   tests.add(
-    '`replaceStackTraces` with argument 2 `replacer` not a string or function.',
+    "`replaceStackTraces` with argument 2 `replacer` not a string or function.",
     () => {
       throws(() => {
-        replaceStackTraces('', true);
-      }, new TypeError('Argument 2 `replacer` must be a string or function.'));
+        replaceStackTraces("", true);
+      }, new TypeError("Argument 2 `replacer` must be a string or function."));
     }
   );
 
-  tests.add('`replaceStackTraces` with a non stack trace.', () => {
+  tests.add("`replaceStackTraces` with a non stack trace.", () => {
     const value = `Unrelated.
 at Unrelated.
 at Unrelated.
@@ -30,7 +30,7 @@ Unrelated.`;
   });
 
   tests.add(
-    '`replaceStackTraces` with an Error stack trace, not extra indented.',
+    "`replaceStackTraces` with an Error stack trace, not extra indented.",
     () => {
       strictEqual(
         replaceStackTraces(`Unrelated.
@@ -51,7 +51,7 @@ Unrelated.`
   );
 
   tests.add(
-    '`replaceStackTraces` with an Error stack trace, extra indented.',
+    "`replaceStackTraces` with an Error stack trace, extra indented.",
     () => {
       strictEqual(
         replaceStackTraces(`Unrelated.
@@ -72,7 +72,7 @@ Unrelated.`
   );
 
   tests.add(
-    '`replaceStackTraces` with a Node.js MODULE_NOT_FOUND Error stack trace.',
+    "`replaceStackTraces` with a Node.js MODULE_NOT_FOUND Error stack trace.",
     () => {
       strictEqual(
         replaceStackTraces(`Error: Cannot find module '<file path>'
