@@ -34,7 +34,6 @@
   "exports": {
     ".": "./public/index.mjs",
     "./public/*": "./public/*",
-    "./package": "./package.json",
     "./package.json": "./package.json"
   },
   "bin": {
