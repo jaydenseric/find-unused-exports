@@ -1,8 +1,8 @@
 import fs from "fs";
 import { dirname, extname, join, resolve, sep } from "path";
 import { globby } from "globby";
-import isDirectoryPath from "../private/isDirectoryPath.mjs";
-import scanModuleCode from "../private/scanModuleCode.mjs";
+import isDirectoryPath from "./isDirectoryPath.mjs";
+import scanModuleCode from "./scanModuleCode.mjs";
 
 /**
  * Finds unused
@@ -22,7 +22,7 @@ import scanModuleCode from "../private/scanModuleCode.mjs";
  * ```
  *
  * ```js
- * import findUnusedExports from "find-unused-exports/public/findUnusedExports.mjs";
+ * import findUnusedExports from "find-unused-exports/findUnusedExports.mjs";
  * ```
  */
 export default async function findUnusedExports({

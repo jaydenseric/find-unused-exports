@@ -1,4 +1,4 @@
-import CliError from "../../../private/CliError.mjs";
-import reportCliError from "../../../private/reportCliError.mjs";
+import CliError from "../../../CliError.mjs";
+import reportCliError from "../../../reportCliError.mjs";
 
 reportCliError("CLI", new CliError("Message."));

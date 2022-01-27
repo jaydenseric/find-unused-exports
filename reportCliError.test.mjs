@@ -2,8 +2,8 @@ import { strictEqual, throws } from "assert";
 import { spawnSync } from "child_process";
 import { fileURLToPath } from "url";
 import snapshot from "snapshot-assertion";
-import reportCliError from "../../private/reportCliError.mjs";
-import replaceStackTraces from "../replaceStackTraces.mjs";
+import reportCliError from "./reportCliError.mjs";
+import replaceStackTraces from "./test/replaceStackTraces.mjs";
 
 export default (tests) => {
   tests.add(
@@ -23,7 +23,7 @@ export default (tests) => {
         [
           fileURLToPath(
             new URL(
-              "../fixtures/reportCliError/Error-instance-with-stack.mjs",
+              "./test/fixtures/reportCliError/Error-instance-with-stack.mjs",
               import.meta.url
             )
           ),
@@ -43,7 +43,7 @@ export default (tests) => {
       await snapshot(
         replaceStackTraces(stderr.toString()),
         new URL(
-          "../snapshots/reportCliError/Error-instance-with-stack-stderr.ans",
+          "./test/snapshots/reportCliError/Error-instance-with-stack-stderr.ans",
           import.meta.url
         )
       );
@@ -60,7 +60,7 @@ export default (tests) => {
         [
           fileURLToPath(
             new URL(
-              "../fixtures/reportCliError/Error-instance-without-stack.mjs",
+              "./test/fixtures/reportCliError/Error-instance-without-stack.mjs",
               import.meta.url
             )
           ),
@@ -80,7 +80,7 @@ export default (tests) => {
       await snapshot(
         replaceStackTraces(stderr.toString()),
         new URL(
-          "../snapshots/reportCliError/Error-instance-without-stack-stderr.ans",
+          "./test/snapshots/reportCliError/Error-instance-without-stack-stderr.ans",
           import.meta.url
         )
       );
@@ -95,7 +95,7 @@ export default (tests) => {
       [
         fileURLToPath(
           new URL(
-            "../fixtures/reportCliError/CliError-instance.mjs",
+            "./test/fixtures/reportCliError/CliError-instance.mjs",
             import.meta.url
           )
         ),
@@ -115,7 +115,7 @@ export default (tests) => {
     await snapshot(
       replaceStackTraces(stderr.toString()),
       new URL(
-        "../snapshots/reportCliError/CliError-instance-stderr.ans",
+        "./test/snapshots/reportCliError/CliError-instance-stderr.ans",
         import.meta.url
       )
     );
@@ -129,7 +129,7 @@ export default (tests) => {
       [
         fileURLToPath(
           new URL(
-            "../fixtures/reportCliError/primitive-value.mjs",
+            "./test/fixtures/reportCliError/primitive-value.mjs",
             import.meta.url
           )
         ),
@@ -149,7 +149,7 @@ export default (tests) => {
     await snapshot(
       replaceStackTraces(stderr.toString()),
       new URL(
-        "../snapshots/reportCliError/primitive-value-stderr.ans",
+        "./test/snapshots/reportCliError/primitive-value-stderr.ans",
         import.meta.url
       )
     );

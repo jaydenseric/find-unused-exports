@@ -1,6 +1,6 @@
 import { deepStrictEqual, throws } from "assert";
 import babel from "@babel/core";
-import getVariableDeclarationIdentifierNames from "../../private/getVariableDeclarationIdentifierNames.mjs";
+import getVariableDeclarationIdentifierNames from "./getVariableDeclarationIdentifierNames.mjs";
 
 export default (tests) => {
   tests.add(

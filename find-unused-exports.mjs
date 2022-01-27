@@ -3,10 +3,10 @@
 import { relative } from "path";
 import arg from "arg";
 import kleur from "kleur";
-import CliError from "../private/CliError.mjs";
-import errorConsole from "../private/errorConsole.mjs";
-import reportCliError from "../private/reportCliError.mjs";
-import findUnusedExports from "../public/findUnusedExports.mjs";
+import CliError from "./CliError.mjs";
+import errorConsole from "./errorConsole.mjs";
+import findUnusedExports from "./findUnusedExports.mjs";
+import reportCliError from "./reportCliError.mjs";
 
 /**
  * Runs the `find-unused-exports` CLI.

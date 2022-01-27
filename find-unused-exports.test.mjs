@@ -2,10 +2,10 @@ import { strictEqual } from "assert";
 import { spawnSync } from "child_process";
 import { fileURLToPath } from "url";
 import snapshot from "snapshot-assertion";
-import replaceStackTraces from "../replaceStackTraces.mjs";
+import replaceStackTraces from "./test/replaceStackTraces.mjs";
 
 const FIND_UNUSED_EXPORTS_CLI_PATH = fileURLToPath(
-  new URL("../../cli/find-unused-exports.mjs", import.meta.url)
+  new URL("./find-unused-exports.mjs", import.meta.url)
 );
 
 export default (tests) => {
@@ -15,7 +15,7 @@ export default (tests) => {
       [FIND_UNUSED_EXPORTS_CLI_PATH],
       {
         cwd: fileURLToPath(
-          new URL("../fixtures/no-unused-exports", import.meta.url)
+          new URL("./test/fixtures/no-unused-exports", import.meta.url)
         ),
         env: {
           ...process.env,
@@ -29,7 +29,7 @@ export default (tests) => {
     await snapshot(
       stdout.toString(),
       new URL(
-        "../snapshots/find-unused-exports/no-unused-exports-stdout.ans",
+        "./test/snapshots/find-unused-exports/no-unused-exports-stdout.ans",
         import.meta.url
       )
     );
@@ -43,7 +43,7 @@ export default (tests) => {
       [FIND_UNUSED_EXPORTS_CLI_PATH],
       {
         cwd: fileURLToPath(
-          new URL("../fixtures/some-unused-exports", import.meta.url)
+          new URL("./test/fixtures/some-unused-exports", import.meta.url)
         ),
         env: {
           ...process.env,
@@ -58,7 +58,7 @@ export default (tests) => {
     await snapshot(
       stderr.toString(),
       new URL(
-        "../snapshots/find-unused-exports/some-unused-exports-stderr.ans",
+        "./test/snapshots/find-unused-exports/some-unused-exports-stderr.ans",
         import.meta.url
       )
     );
@@ -70,7 +70,9 @@ export default (tests) => {
       "node",
       [FIND_UNUSED_EXPORTS_CLI_PATH, "--module-glob", "**/*.txt"],
       {
-        cwd: fileURLToPath(new URL("../fixtures/moduleGlob", import.meta.url)),
+        cwd: fileURLToPath(
+          new URL("./test/fixtures/moduleGlob", import.meta.url)
+        ),
         env: {
           ...process.env,
           FORCE_COLOR: 1,
@@ -84,7 +86,7 @@ export default (tests) => {
     await snapshot(
       stderr.toString(),
       new URL(
-        "../snapshots/find-unused-exports/module-glob-stderr.ans",
+        "./test/snapshots/find-unused-exports/module-glob-stderr.ans",
         import.meta.url
       )
     );
@@ -104,7 +106,7 @@ export default (tests) => {
         {
           cwd: fileURLToPath(
             new URL(
-              "../fixtures/extensionless-import-specifiers",
+              "./test/fixtures/extensionless-import-specifiers",
               import.meta.url
             )
           ),
@@ -121,7 +123,7 @@ export default (tests) => {
       await snapshot(
         stderr.toString(),
         new URL(
-          "../snapshots/find-unused-exports/resolve-file-extensions-stderr.ans",
+          "./test/snapshots/find-unused-exports/resolve-file-extensions-stderr.ans",
           import.meta.url
         )
       );
@@ -143,7 +145,7 @@ export default (tests) => {
         {
           cwd: fileURLToPath(
             new URL(
-              "../fixtures/extensionless-import-specifiers-and-index-files",
+              "./test/fixtures/extensionless-import-specifiers-and-index-files",
               import.meta.url
             )
           ),
@@ -160,7 +162,7 @@ export default (tests) => {
       await snapshot(
         stderr.toString(),
         new URL(
-          "../snapshots/find-unused-exports/resolve-file-extensions-and-index-files-stderr.ans",
+          "./test/snapshots/find-unused-exports/resolve-file-extensions-and-index-files-stderr.ans",
           import.meta.url
         )
       );
@@ -177,7 +179,7 @@ export default (tests) => {
         {
           cwd: fileURLToPath(
             new URL(
-              "../fixtures/extensionless-import-specifiers-and-index-files",
+              "./test/fixtures/extensionless-import-specifiers-and-index-files",
               import.meta.url
             )
           ),
@@ -194,7 +196,7 @@ export default (tests) => {
       await snapshot(
         stderr.toString(),
         new URL(
-          "../snapshots/find-unused-exports/resolve-index-files-without-resolve-file-extensions-stderr.ans",
+          "./test/snapshots/find-unused-exports/resolve-index-files-without-resolve-file-extensions-stderr.ans",
           import.meta.url
         )
       );
@@ -206,7 +208,7 @@ export default (tests) => {
     "`find-unused-exports` CLI with a module Babel can’t parse.",
     async () => {
       const fixtureProjectPath = fileURLToPath(
-        new URL("../fixtures/unparsable-module", import.meta.url)
+        new URL("./test/fixtures/unparsable-module", import.meta.url)
       );
       const { stdout, stderr, status, error } = spawnSync(
         "node",
@@ -228,7 +230,7 @@ export default (tests) => {
           stderr.toString().replace(fixtureProjectPath, "<path>")
         ),
         new URL(
-          "../snapshots/find-unused-exports/unparsable-module-stderr.ans",
+          "./test/snapshots/find-unused-exports/unparsable-module-stderr.ans",
           import.meta.url
         )
       );

@@ -25,19 +25,25 @@
     "mjs"
   ],
   "files": [
-    "cli",
-    "private",
-    "public"
+    "CliError.mjs",
+    "errorConsole.mjs",
+    "find-unused-exports.mjs",
+    "findUnusedExports.mjs",
+    "getVariableDeclarationIdentifierNames.mjs",
+    "index.mjs",
+    "isDirectoryPath.mjs",
+    "reportCliError.mjs",
+    "scanModuleCode.mjs"
   ],
   "sideEffects": false,
-  "main": "./public/index.mjs",
+  "main": "./index.mjs",
   "exports": {
-    ".": "./public/index.mjs",
-    "./public/*": "./public/*",
+    ".": "./index.mjs",
+    "./findUnusedExports.mjs": "./findUnusedExports.mjs",
     "./package.json": "./package.json"
   },
   "bin": {
-    "find-unused-exports": "cli/find-unused-exports.mjs"
+    "find-unused-exports": "find-unused-exports.mjs"
   },
   "engines": {
     "node": "^12.22.0 || ^14.17.0 || >= 16.0.0"
@@ -67,7 +73,7 @@
     "docs-check": "jsdoc-md -c",
     "eslint": "eslint .",
     "prettier": "prettier -c .",
-    "tests": "coverage-node test/index.mjs",
+    "tests": "coverage-node test.mjs",
     "test": "npm run eslint && npm run prettier && npm run docs-check && npm run tests",
     "prepublishOnly": "npm test"
   }

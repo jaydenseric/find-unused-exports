@@ -146,7 +146,7 @@ _Ways to `import`._
 > ```
 >
 > ```js
-> import findUnusedExports from "find-unused-exports/public/findUnusedExports.mjs";
+> import findUnusedExports from "find-unused-exports/findUnusedExports.mjs";
 > ```
 
 ---
