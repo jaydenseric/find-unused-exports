@@ -7,7 +7,6 @@ import test_getVariableDeclarationIdentifierNames from "./getVariableDeclaration
 import test_isDirectoryPath from "./isDirectoryPath.test.mjs";
 import test_reportCliError from "./reportCliError.test.mjs";
 import test_scanModuleCode from "./scanModuleCode.test.mjs";
-import test_replaceStackTraces from "./test/replaceStackTraces.test.mjs";
 
 const tests = new TestDirector();
 
@@ -18,6 +17,5 @@ test_getVariableDeclarationIdentifierNames(tests);
 test_isDirectoryPath(tests);
 test_reportCliError(tests);
 test_scanModuleCode(tests);
-test_replaceStackTraces(tests);
 
 tests.run();

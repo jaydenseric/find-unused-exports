@@ -19,6 +19,7 @@
 - Simplified dev dependencies and config for ESLint.
 - Simplified package scripts.
 - Also run GitHub Actions CI with Node.js v17, and drop v15.
+- Use a new [`replace-stack-traces`](https://npm.im/replace-stack-traces) dev dependency in tests.
 - Reorganized the test file structure.
 - Renamed imports in the test index module.
 - Configured Prettier option `singleQuote` to the default, `false`.

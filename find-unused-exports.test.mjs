@@ -1,9 +1,8 @@
 import { strictEqual } from "assert";
 import { spawnSync } from "child_process";
+import replaceStackTraces from "replace-stack-traces";
 import snapshot from "snapshot-assertion";
 import { fileURLToPath } from "url";
-
-import replaceStackTraces from "./test/replaceStackTraces.mjs";
 
 const FIND_UNUSED_EXPORTS_CLI_PATH = fileURLToPath(
   new URL("./find-unused-exports.mjs", import.meta.url)

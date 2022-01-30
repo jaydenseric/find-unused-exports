@@ -60,6 +60,7 @@
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "jsdoc-md": "^11.0.2",
     "prettier": "^2.5.1",
+    "replace-stack-traces": "^1.0.0",
     "snapshot-assertion": "^4.0.1",
     "test-director": "^8.0.1"
   },
