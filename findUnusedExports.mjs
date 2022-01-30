@@ -1,6 +1,7 @@
 import fs from "fs";
-import { dirname, extname, join, resolve, sep } from "path";
 import { globby } from "globby";
+import { dirname, extname, join, resolve, sep } from "path";
+
 import isDirectoryPath from "./isDirectoryPath.mjs";
 import scanModuleCode from "./scanModuleCode.mjs";
 

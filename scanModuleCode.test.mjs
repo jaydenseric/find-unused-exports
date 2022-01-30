@@ -1,4 +1,5 @@
 import { deepStrictEqual, rejects } from "assert";
+
 import scanModuleCode from "./scanModuleCode.mjs";
 
 export default (tests) => {

@@ -16,6 +16,7 @@
 
 ### Patch
 
+- Simplified dev dependencies and config for ESLint.
 - Simplified package scripts.
 - Also run GitHub Actions CI with Node.js v17, and drop v15.
 - Reorganized the test file structure.

@@ -1,5 +1,6 @@
-import { inspect } from "util";
 import kleur from "kleur";
+import { inspect } from "util";
+
 import CliError from "./CliError.mjs";
 import errorConsole from "./errorConsole.mjs";
 

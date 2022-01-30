@@ -1,5 +1,6 @@
 import { rejects, strictEqual } from "assert";
 import { fileURLToPath } from "url";
+
 import isDirectoryPath from "./isDirectoryPath.mjs";
 
 export default (tests) => {

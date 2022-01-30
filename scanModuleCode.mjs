@@ -1,6 +1,7 @@
 // Use `@babel/core` instead of `@babel/parser` and `@babel/traverse` directly
 // so that project Babel config will be respected when parsing code.
 import babel from "@babel/core";
+
 import getVariableDeclarationIdentifierNames from "./getVariableDeclarationIdentifierNames.mjs";
 
 /**

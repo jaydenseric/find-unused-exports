@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
-import { relative } from "path";
 import arg from "arg";
 import kleur from "kleur";
+import { relative } from "path";
+
 import CliError from "./CliError.mjs";
 import errorConsole from "./errorConsole.mjs";
 import findUnusedExports from "./findUnusedExports.mjs";

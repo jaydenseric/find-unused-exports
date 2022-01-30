@@ -57,12 +57,7 @@
   "devDependencies": {
     "coverage-node": "^6.0.0",
     "eslint": "^8.7.0",
-    "eslint-config-env": "^23.0.2",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-import": "^2.25.4",
-    "eslint-plugin-jsdoc": "^37.7.0",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
     "jsdoc-md": "^11.0.2",
     "prettier": "^2.5.1",
     "snapshot-assertion": "^4.0.1",

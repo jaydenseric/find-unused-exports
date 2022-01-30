@@ -1,6 +1,7 @@
 import { deepStrictEqual, rejects } from "assert";
 import { join, resolve } from "path";
 import { fileURLToPath } from "url";
+
 import findUnusedExports from "./findUnusedExports.mjs";
 
 export default (tests) => {
