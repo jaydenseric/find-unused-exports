@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import arg from "arg";
-import kleur from "kleur";
+import { bold, dim, green, red, underline } from "kleur/colors";
 import { relative } from "path";
 
 import CliError from "./CliError.mjs";
@@ -56,25 +56,25 @@ async function findUnusedExportsCli() {
 
         countUnusedExports += exports.size;
 
-        errorConsole.group(`\n${kleur.underline().red(relative(cwd, path))}`);
-        errorConsole.error(kleur.dim().red(Array.from(exports).join(", ")));
+        errorConsole.group(`\n${underline(red(relative(cwd, path)))}`);
+        errorConsole.error(dim(red(Array.from(exports).join(", "))));
         errorConsole.groupEnd();
       }
 
       errorConsole.error(
-        `\n${kleur
-          .bold()
-          .red(
+        `\n${bold(
+          red(
             `${countUnusedExports} unused export${
               countUnusedExports === 1 ? "" : "s"
             } in ${countUnusedExportsModules} module${
               countUnusedExportsModules === 1 ? "" : "s"
             }.`
-          )}\n`
+          )
+        )}\n`
       );
 
       process.exitCode = 1;
-    } else console.info(`\n${kleur.bold().green(`0 unused exports.`)}\n`);
+    } else console.info(`\n${bold(green(`0 unused exports.`))}\n`);
   } catch (error) {
     reportCliError("find-unused-exports", error);
 

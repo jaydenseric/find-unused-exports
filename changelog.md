@@ -22,6 +22,7 @@
 - Use a new [`replace-stack-traces`](https://npm.im/replace-stack-traces) dev dependency in tests.
 - Reorganized the test file structure.
 - Renamed imports in the test index module.
+- Stopped using the [`kleur`](https://npm.im/kleur) chaining API.
 - Configured Prettier option `singleQuote` to the default, `false`.
 
 ## 2.0.0
