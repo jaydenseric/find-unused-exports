@@ -9,7 +9,7 @@ To achieve this the whole project is analyzed at once, something [ESLint](https:
 - The `npx find-unused-exports` script is handy for finding redundant code to remove in legacy projects.
 - Use the [CLI](#cli) command [`find-unused-exports`](#command-find-unused-exports) in package test scripts, so that [CI](https://en.wikipedia.org/wiki/Continuous_integration) can prevent the addition of redundant code.
 
-## Setup
+## Installation
 
 To install with [npm](https://npmjs.com/get-npm), run:
 
@@ -33,44 +33,44 @@ Special comments can be used anywhere in a module to ignore all or specific unus
 
 #### Examples
 
-_How to ignore all unused exports._
+How to ignore all unused exports:
 
-> ```js
-> // ignore unused exports
-> export const a = true;
-> export default true;
-> ```
+```js
+// ignore unused exports
+export const a = true;
+export default true;
+```
 
-_How to ignore specific unused exports._
+How to ignore specific unused exports:
 
-> ```js
-> // ignore unused exports b, default
-> export const a = true;
-> export const b = true;
-> export default true;
-> ```
+```js
+// ignore unused exports b, default
+export const a = true;
+export const b = true;
+export default true;
+```
 
-_Multiple comments can be used._
+Multiple comments can be used:
 
-> ```js
-> // ignore unused exports a
-> export const a = true;
->
-> // ignore unused exports b
-> export const b = true;
-> ```
+```js
+// ignore unused exports a
+export const a = true;
 
-_Comments are case-insensitive, except for the export names._
+// ignore unused exports b
+export const b = true;
+```
 
-> ```js
-> // iGnOrE UnUsEd eXpOrTs default
-> ```
+Comments are case-insensitive, except for the export names:
 
-_Line or block comments can be used._
+```js
+// iGnOrE UnUsEd eXpOrTs default
+```
 
-> ```js
-> /* ignore unused exports */
-> ```
+Line or block comments can be used:
+
+```js
+/* ignore unused exports */
+```
 
 ## CLI
 
@@ -78,45 +78,43 @@ _Line or block comments can be used._
 
 Finds unused [ECMAScript module exports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export) in a project. If some are found, it reports them to `stderr` and exits with a `1` error status. `.gitignore` files are used to ignore files.
 
-It implements the function `findUnusedExports`.
+It implements the JS [API](#exports) function `findUnusedExports`.
 
 #### Arguments
 
 | Argument | Default | Description |
 | :-- | :-- | :-- |
 | `--module-glob` | `**/*.{mjs,cjs,js}` | JavaScript file glob pattern. |
-| `--resolve-file-extensions` |  | File extensions (without the leading `.`, multiple separated with `,` in preference order) to automatically resolve in extensionless import specifiers. [Import specifier file extensions are mandatory in Node.js](https://nodejs.org/api/esm.html#esm_mandatory_file_extensions); if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) `mjs,js` might be appropriate. |
-| `--resolve-index-files` |  | Should directory index files be automatically resolved in extensionless import specifiers. [Node.js doesn’t do this by default](https://nodejs.org/api/esm.html#esm_mandatory_file_extensions); if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) this argument might be appropriate. This argument only works if the argument `--resolve-file-extensions` is used. |
+| `--resolve-file-extensions` |  | File extensions (without the leading `.`, multiple separated with `,` in preference order) to automatically resolve in extensionless import specifiers. [Import specifier file extensions are mandatory in Node.js](https://nodejs.org/api/esm.html#mandatory-file-extensions); if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) `mjs,js` might be appropriate. |
+| `--resolve-index-files` |  | Should directory index files be automatically resolved in extensionless import specifiers. [Node.js doesn’t do this by default](https://nodejs.org/api/esm.html#mandatory-file-extensions); if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) this argument might be appropriate. This argument only works if the argument `--resolve-file-extensions` is used. |
 
 #### Examples
 
-_Using [`npx`](https://docs.npmjs.com/cli/v7/commands/npx) in a standard [Node.js](https://nodejs.org) project:_
+Using [`npx`](https://docs.npmjs.com/cli/v8/commands/npx) in a standard [Node.js](https://nodejs.org) project:
 
-> ```sh
-> npx find-unused-exports
-> ```
+```sh
+npx find-unused-exports
+```
 
-_Using [`npx`](https://docs.npmjs.com/cli/v7/commands/npx) in a typical [webpack](https://webpack.js.org) project that has ESM in `.js` files, extensionless import specifiers, and `index.js` files:_
+Using [`npx`](https://docs.npmjs.com/cli/v8/commands/npx) in a typical [webpack](https://webpack.js.org) project that has ESM in `.js` files, extensionless import specifiers, and `index.js` files:
 
-> ```sh
-> npx find-unused-exports --module-glob "**/*.js" --resolve-file-extensions js --resolve-index-files
-> ```
+```sh
+npx find-unused-exports --module-glob "**/*.js" --resolve-file-extensions js --resolve-index-files
+```
 
-_Using package scripts._
+[`package.json` scripts](https://docs.npmjs.com/cli/v8/using-npm/scripts) for a project that also uses [`eslint`](https://npm.im/eslint) and [`prettier`](https://npm.im/prettier):
 
-> [`package.json` scripts](https://docs.npmjs.com/cli/v7/using-npm/scripts) for a project that also uses [`eslint`](https://npm.im/eslint) and [`prettier`](https://npm.im/prettier):
->
-> ```json
-> {
->   "scripts": {
->     "test": "npm run test:eslint && npm run test:prettier && npm run test:unused-exports",
->     "test:eslint": "eslint .",
->     "test:prettier": "prettier -c .",
->     "test:unused-exports": "find-unused-exports",
->     "prepublishOnly": "npm test"
->   }
-> }
-> ```
+```json
+{
+  "scripts": {
+    "eslint": "eslint .",
+    "prettier": "prettier -c .",
+    "find-unused-exports": "find-unused-exports",
+    "test": "npm run eslint && npm run prettier && npm run find-unused-exports",
+    "prepublishOnly": "npm test"
+  }
+}
+```
 
 ## Exports
 

@@ -30,6 +30,7 @@
 - Stopped using the [`kleur`](https://npm.im/kleur) chaining API.
 - Configured Prettier option `singleQuote` to the default, `false`.
 - Added a `license.md` MIT License file.
+- Improved documentation.
 
 ## 2.0.0
 
