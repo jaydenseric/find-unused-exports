@@ -8,6 +8,7 @@
 - Updated dependencies, some of which require newer Node.js versions than previously supported.
 - Public modules are now individually listed in the package `files` and `exports` fields.
 - Removed `./package` from the package `exports` field; the full `package.json` filename must be used in a `require` path.
+- Removed the package main index module; deep imports must be used.
 - Shortened public module deep import paths, removing the `/public/`.
 - Implemented TypeScript types via JSDoc comments.
 

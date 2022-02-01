@@ -30,15 +30,12 @@
     "find-unused-exports.mjs",
     "findUnusedExports.mjs",
     "getVariableDeclarationIdentifierNames.mjs",
-    "index.mjs",
     "isDirectoryPath.mjs",
     "reportCliError.mjs",
     "scanModuleCode.mjs"
   ],
   "sideEffects": false,
-  "main": "./index.mjs",
   "exports": {
-    ".": "./index.mjs",
     "./findUnusedExports.mjs": "./findUnusedExports.mjs",
     "./package.json": "./package.json"
   },
