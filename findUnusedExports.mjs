@@ -1,3 +1,5 @@
+// @ts-check
+
 import fs from "fs";
 import { globby } from "globby";
 import { dirname, extname, join, resolve, sep } from "path";
@@ -9,22 +11,28 @@ import scanModuleCode from "./scanModuleCode.mjs";
  * Finds unused
  * [ECMAScript module exports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export)
  * in a project. `.gitignore` files are used to ignore files.
- * @kind function
- * @name findUnusedExports
  * @param {object} [options] Options.
- * @param {string} [options.cwd] A directory path to scope the search for source and `.gitignore` files, defaulting to `process.cwd()`.
- * @param {string} [options.moduleGlob="**\/*.{mjs,cjs,js}"] JavaScript file glob pattern.
- * @param {Array<string>} [options.resolveFileExtensions] File extensions (without the leading `.`, in preference order) to automatically resolve in extensionless import specifiers. [Import specifier file extensions are mandatory in Node.js](https://nodejs.org/api/esm.html#esm_mandatory_file_extensions); if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) `["mjs", "js"]` might be appropriate.
- * @param {boolean} [options.resolveIndexFiles=false] Should directory index files be automatically resolved in extensionless import specifiers. [Node.js doesn’t do this by default](https://nodejs.org/api/esm.html#esm_mandatory_file_extensions); if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) `true` might be appropriate. This option only works if the option `resolveFileExtensions` is used.
- * @returns {object<string, ModuleExports>} Map of module file paths and unused module exports.
- * @example <caption>Ways to `import`.</caption>
- * ```js
- * import { findUnusedExports } from "find-unused-exports";
- * ```
- *
- * ```js
- * import findUnusedExports from "find-unused-exports/findUnusedExports.mjs";
- * ```
+ * @param {string} [options.cwd] A directory path to scope the search for source
+ *   and `.gitignore` files, defaulting to `process.cwd()`.
+ * @param {string} [options.moduleGlob] JavaScript file glob pattern. By default
+ *   `.mjs`, `.cjs`, and `.js` files are recursively matched.
+ * @param {Array<string>} [options.resolveFileExtensions] File extensions
+ *   (without the leading `.`, in preference order) to automatically resolve in
+ *   extensionless import specifiers.
+ *   [Import specifier file extensions are mandatory in Node.js](https://nodejs.org/api/esm.html#esm_mandatory_file_extensions);
+ *   if your project resolves extensionless imports at build time (e.g.
+ *   [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org))
+ *   `["mjs", "js"]` might be appropriate.
+ * @param {boolean} [options.resolveIndexFiles] Should directory index files be
+ *   automatically resolved in extensionless import specifiers.
+ *   [Node.js doesn’t do this by default](https://nodejs.org/api/esm.html#esm_mandatory_file_extensions);
+ *   if your project resolves extensionless imports at build time (e.g.
+ *   [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org))
+ *   `true` might be appropriate. This option only works if the option
+ *   `resolveFileExtensions` is used. Defaults to `false`.
+ * @returns {Promise<
+ *   Record<string, import("./scanModuleCode.mjs").ModuleExports>
+ * >} Map of module file paths and unused module exports.
  */
 export default async function findUnusedExports({
   cwd = process.cwd(),
@@ -64,6 +72,8 @@ export default async function findUnusedExports({
     cwd,
     gitignore: true,
   });
+
+  /** @type {Record<string, import("./scanModuleCode.mjs").ModuleScan>} */
   const scannedModules = {};
 
   await Promise.all(
@@ -80,6 +90,8 @@ export default async function findUnusedExports({
 
   // All possibly unused exports are mapped by module absolute file paths, then
   // any found to have been imported in project files are eliminated.
+
+  /** @type {Record<string, import("./scanModuleCode.mjs").ModuleExports>} */
   const possiblyUnusedExports = {};
 
   for (const [path, { exports }] of Object.entries(scannedModules))

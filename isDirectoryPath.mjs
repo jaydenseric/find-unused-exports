@@ -1,12 +1,11 @@
+// @ts-check
+
 import fs from "fs";
 
 /**
- * Tests if a path is a directory path.
- * @kind function
- * @name isDirectoryPath
- * @param {string} path Filesystem path to test.
- * @returns {Promise<boolean>} Resolves if the path is a directory path.
- * @ignore
+ * Checks if a filesystem path is a directory path.
+ * @param {string} path Filesystem path to check.
+ * @returns {Promise<boolean>} Resolves if it’s a directory path.
  */
 export default async function isDirectoryPath(path) {
   if (typeof path !== "string")

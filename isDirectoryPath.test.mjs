@@ -1,14 +1,23 @@
+// @ts-check
+
 import { rejects, strictEqual } from "assert";
 import { fileURLToPath } from "url";
 
 import isDirectoryPath from "./isDirectoryPath.mjs";
 
+/**
+ * Adds `isDirectoryPath` tests.
+ * @param {import("test-director").default} tests Test director.
+ */
 export default (tests) => {
   tests.add(
     "`isDirectoryPath` with argument 1 `path` not a string.",
     async () => {
       await rejects(
-        isDirectoryPath(true),
+        isDirectoryPath(
+          // @ts-expect-error Testing invalid.
+          true
+        ),
         new TypeError("Argument 1 `path` must be a string.")
       );
     }

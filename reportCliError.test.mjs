@@ -1,3 +1,5 @@
+// @ts-check
+
 import { strictEqual, throws } from "assert";
 import { spawnSync } from "child_process";
 import replaceStackTraces from "replace-stack-traces";
@@ -6,12 +8,20 @@ import { fileURLToPath } from "url";
 
 import reportCliError from "./reportCliError.mjs";
 
+/**
+ * Adds `reportCliError` tests.
+ * @param {import("test-director").default} tests Test director.
+ */
 export default (tests) => {
   tests.add(
     "`reportCliError` with argument 1 `cliDescription` not a string.",
     () => {
       throws(() => {
-        reportCliError(true);
+        reportCliError(
+          // @ts-expect-error Testing invalid.
+          true,
+          new Error("Message.")
+        );
       }, new TypeError("Argument 1 `cliDescription` must be a string."));
     }
   );
@@ -32,7 +42,7 @@ export default (tests) => {
         {
           env: {
             ...process.env,
-            FORCE_COLOR: 1,
+            FORCE_COLOR: "1",
           },
         }
       );
@@ -69,7 +79,7 @@ export default (tests) => {
         {
           env: {
             ...process.env,
-            FORCE_COLOR: 1,
+            FORCE_COLOR: "1",
           },
         }
       );
@@ -104,7 +114,7 @@ export default (tests) => {
       {
         env: {
           ...process.env,
-          FORCE_COLOR: 1,
+          FORCE_COLOR: "1",
         },
       }
     );
@@ -138,7 +148,7 @@ export default (tests) => {
       {
         env: {
           ...process.env,
-          FORCE_COLOR: 1,
+          FORCE_COLOR: "1",
         },
       }
     );

@@ -1,13 +1,22 @@
+// @ts-check
+
 import { deepStrictEqual, rejects } from "assert";
 
 import scanModuleCode from "./scanModuleCode.mjs";
 
+/**
+ * Adds `scanModuleCode` tests.
+ * @param {import("test-director").default} tests Test director.
+ */
 export default (tests) => {
   tests.add(
     "`scanModuleCode` with argument 1 `code` not a string.",
     async () => {
       await rejects(
-        scanModuleCode(true),
+        scanModuleCode(
+          // @ts-expect-error Testing invalid.
+          true
+        ),
         new TypeError("Argument 1 `code` must be a string.")
       );
     }
@@ -17,7 +26,11 @@ export default (tests) => {
     "`scanModuleCode` with argument 2 `path` not a string.",
     async () => {
       await rejects(
-        scanModuleCode("", true),
+        scanModuleCode(
+          "",
+          // @ts-expect-error Testing invalid.
+          true
+        ),
         new TypeError("Argument 2 `path` must be a string.")
       );
     }

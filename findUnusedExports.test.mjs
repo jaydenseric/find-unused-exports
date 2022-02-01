@@ -1,9 +1,15 @@
+// @ts-check
+
 import { deepStrictEqual, rejects } from "assert";
 import { join, resolve } from "path";
 import { fileURLToPath } from "url";
 
 import findUnusedExports from "./findUnusedExports.mjs";
 
+/**
+ * Adds `findUnusedExports` tests.
+ * @param {import("test-director").default} tests Test director.
+ */
 export default (tests) => {
   tests.add(
     "`findUnusedExports` with files but no exports or imports.",
@@ -218,7 +224,10 @@ export default (tests) => {
 
   tests.add("`findUnusedExports` with option `cwd` not a string.", async () => {
     await rejects(
-      findUnusedExports({ cwd: true }),
+      findUnusedExports({
+        // @ts-expect-error Testing invalid.
+        cwd: true,
+      }),
       new TypeError("Option `cwd` must be a string.")
     );
   });
@@ -239,7 +248,10 @@ export default (tests) => {
     "`findUnusedExports` with option `moduleGlob` not a string.",
     async () => {
       await rejects(
-        findUnusedExports({ moduleGlob: true }),
+        findUnusedExports({
+          // @ts-expect-error Testing invalid.
+          moduleGlob: true,
+        }),
         new TypeError("Option `moduleGlob` must be a string.")
       );
     }
@@ -249,7 +261,10 @@ export default (tests) => {
     "`findUnusedExports` with option `resolveFileExtensions` not an array.",
     async () => {
       await rejects(
-        findUnusedExports({ resolveFileExtensions: true }),
+        findUnusedExports({
+          // @ts-expect-error Testing invalid.
+          resolveFileExtensions: true,
+        }),
         new TypeError(
           "Option `resolveFileExtensions` must be an array of strings."
         )
@@ -273,7 +288,14 @@ export default (tests) => {
     "`findUnusedExports` with option `resolveFileExtensions` an array with an item not a string.",
     async () => {
       await rejects(
-        findUnusedExports({ resolveFileExtensions: ["a", true, "b"] }),
+        findUnusedExports({
+          resolveFileExtensions: [
+            "a",
+            // @ts-expect-error Testing invalid.
+            true,
+            "b",
+          ],
+        }),
         new TypeError(
           "Option `resolveFileExtensions` must be an array of strings."
         )
@@ -287,6 +309,7 @@ export default (tests) => {
       await rejects(
         findUnusedExports({
           resolveFileExtensions: ["js"],
+          // @ts-expect-error Testing invalid.
           resolveIndexFiles: "",
         }),
         new TypeError("Option `resolveIndexFiles` must be a boolean.")

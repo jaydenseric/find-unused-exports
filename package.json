@@ -50,6 +50,8 @@
   },
   "dependencies": {
     "@babel/core": "^7.16.12",
+    "@types/babel__core": "^7.1.18",
+    "@types/node": "*",
     "arg": "^5.0.1",
     "globby": "^13.1.0",
     "kleur": "^4.1.4"
@@ -58,19 +60,18 @@
     "coverage-node": "^6.0.0",
     "eslint": "^8.7.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
-    "jsdoc-md": "^11.0.2",
     "prettier": "^2.5.1",
     "replace-stack-traces": "^1.0.0",
     "snapshot-assertion": "^4.0.1",
-    "test-director": "^8.0.1"
+    "test-director": "^8.0.1",
+    "typescript": "^4.6.0-dev.20220130"
   },
   "scripts": {
-    "docs-update": "jsdoc-md",
-    "docs-check": "jsdoc-md -c",
     "eslint": "eslint .",
     "prettier": "prettier -c .",
+    "types": "tsc -p jsconfig.json",
     "tests": "coverage-node test.mjs",
-    "test": "npm run eslint && npm run prettier && npm run docs-check && npm run tests",
+    "test": "npm run eslint && npm run prettier && npm run types && npm run tests",
     "prepublishOnly": "npm test"
   }
 }

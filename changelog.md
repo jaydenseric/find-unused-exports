@@ -9,6 +9,7 @@
 - Public modules are now individually listed in the package `files` and `exports` fields.
 - Removed `./package` from the package `exports` field; the full `package.json` filename must be used in a `require` path.
 - Shortened public module deep import paths, removing the `/public/`.
+- Implemented TypeScript types via JSDoc comments.
 
 ### Minor
 
@@ -18,6 +19,9 @@
 
 - Simplified dev dependencies and config for ESLint.
 - Simplified package scripts.
+- Removed the [`jsdoc-md`](https://npm.im/jsdoc-md) dev dependency and the related package scripts, replacing the readme “API” section with a manually written “Exports” section.
+- Check TypeScript types via a new package `types` script.
+- Various type safety improvements.
 - Also run GitHub Actions CI with Node.js v17, and drop v15.
 - Use a new [`replace-stack-traces`](https://npm.im/replace-stack-traces) dev dependency in tests.
 - Reorganized the test file structure.

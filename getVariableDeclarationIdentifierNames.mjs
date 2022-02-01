@@ -1,14 +1,14 @@
+// @ts-check
+
 import babel from "@babel/core";
 
 /**
- * Gets identifier names from a Babel AST `VariableDeclaration` instance. Used
- * to find export names within a named export declaration that contains a
- * variable declaration.
- * @kind function
- * @name getVariableDeclarationIdentifierNames
- * @param {VariableDeclaration} variableDeclaration A Babel AST `VariableDeclaration` instance.
+ * Gets identifier names from a variable declaration Babel AST node. Used to
+ * find export names within a named export declaration that contains a variable
+ * declaration.
+ * @param {babel.types.VariableDeclaration} variableDeclaration Variable
+ *   declaration Babel AST node.
  * @returns {Array<string>} Identifier names.
- * @ignore
  */
 export default function getVariableDeclarationIdentifierNames(
   variableDeclaration
@@ -18,14 +18,12 @@ export default function getVariableDeclarationIdentifierNames(
       "Argument 1 `variableDeclaration` must be a `VariableDeclaration` Babel AST node."
     );
 
+  /** @type {Array<string>} */
   const names = [];
 
   /**
    * Recursively collects identifier names.
-   * @kind function
-   * @name getVariableDeclarationIdentifierNames~collectIdentifierNames
-   * @param {object} node A Babel AST Node.
-   * @ignore
+   * @param {babel.types.Node} node Babel AST node.
    */
   function collectIdentifierNames(node) {
     switch (node.type) {

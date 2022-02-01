@@ -2,7 +2,7 @@
 
 [![npm version](https://badgen.net/npm/v/find-unused-exports)](https://npm.im/find-unused-exports) [![CI status](https://github.com/jaydenseric/find-unused-exports/workflows/CI/badge.svg)](https://github.com/jaydenseric/find-unused-exports/actions)
 
-A [Node.js](https://nodejs.org) [CLI](#cli) and equivalent JS [API](#api) to find unused [ECMAScript module exports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export) in a project.
+A [Node.js](https://nodejs.org) [CLI](#cli) and equivalent JS [API](#exports) to find unused [ECMAScript module exports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export) in a project.
 
 To achieve this the whole project is analyzed at once, something [ESLint](https://eslint.org) can’t do as it lints files in isolation.
 
@@ -17,7 +17,7 @@ To install with [npm](https://npmjs.com/get-npm), run:
 npm install find-unused-exports --save-dev
 ```
 
-Then, use either the [CLI](#cli) command [`find-unused-exports`](#command-find-unused-exports) or the JS [API](#api) function [`findUnusedExports`](#function-findunusedexports).
+Then, use either the [CLI](#cli) command [`find-unused-exports`](#command-find-unused-exports) or the JS [API](#exports) function `findUnusedExports`.
 
 ## Ignoring unused exports
 
@@ -78,7 +78,7 @@ _Line or block comments can be used._
 
 Finds unused [ECMAScript module exports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export) in a project. If some are found, it reports them to `stderr` and exits with a `1` error status. `.gitignore` files are used to ignore files.
 
-It implements the function [`findUnusedExports`](#function-findunusedexports).
+It implements the function `findUnusedExports`.
 
 #### Arguments
 
@@ -118,85 +118,8 @@ _Using package scripts._
 > }
 > ```
 
-## API
+## Exports
 
-- [function findUnusedExports](#function-findunusedexports)
-- [type ModuleExports](#type-moduleexports)
+These ECMAScript modules are published to [npm](https://npmjs.com) and exported via the [`package.json`](./package.json) `exports` field:
 
-### function findUnusedExports
-
-Finds unused [ECMAScript module exports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export) in a project. `.gitignore` files are used to ignore files.
-
-| Parameter | Type | Description |
-| :-- | :-- | :-- |
-| `options` | object? | Options. |
-| `options.cwd` | string? | A directory path to scope the search for source and `.gitignore` files, defaulting to `process.cwd()`. |
-| `options.moduleGlob` | string? = `**/*.{mjs,cjs,js}` | JavaScript file glob pattern. |
-| `options.resolveFileExtensions` | Array\<string>? | File extensions (without the leading `.`, in preference order) to automatically resolve in extensionless import specifiers. [Import specifier file extensions are mandatory in Node.js](https://nodejs.org/api/esm.html#esm_mandatory_file_extensions); if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) `["mjs", "js"]` might be appropriate. |
-| `options.resolveIndexFiles` | boolean? = `false` | Should directory index files be automatically resolved in extensionless import specifiers. [Node.js doesn’t do this by default](https://nodejs.org/api/esm.html#esm_mandatory_file_extensions); if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) `true` might be appropriate. This option only works if the option `resolveFileExtensions` is used. |
-
-**Returns:** object\<string, [ModuleExports](#type-moduleexports)> — Map of module file paths and unused module exports.
-
-#### Examples
-
-_Ways to `import`._
-
-> ```js
-> import { findUnusedExports } from "find-unused-exports";
-> ```
->
-> ```js
-> import findUnusedExports from "find-unused-exports/findUnusedExports.mjs";
-> ```
-
----
-
-### type ModuleExports
-
-List of ECMAScript module export names, including `default` if one is a default export.
-
-**Type:** Set\<string>
-
-#### Examples
-
-_How export statements translate._
-
-> These export statements:
->
-> ```js
-> export const a = 1;
-> export const b = 2;
-> export default 3;
-> ```
->
-> Translate to:
->
-> ```js
-> new Set(["a", "b", "default"]);
-> ```
-
-## Caveats
-
-### Dynamic imports
-
-A [dynamic import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#Dynamic_Imports) marks the default and all named exports of the imported module as used. It’s not feasible for this tool to determine exactly the default or named imports used at runtime.
-
-#### Examples
-
-_A dynamic import._
-
-> ```js
-> import("./a.mjs");
-> ```
-
-### Re-exporting all
-
-Using `*` to [re-export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export#Re-exporting_Aggregating) all named exports from a module marks them as used. Figuring out the export names `*` represents is hard for project files and impossible for external files. Avoid re-exporting all with `*` to find every unused export.
-
-#### Examples
-
-_It can’t be determined if all of these exports are imported somewhere else._
-
-> ```js
-> export * from "./b.mjs";
-> ```
+- [`findUnusedExports.mjs`](./findUnusedExports.mjs)

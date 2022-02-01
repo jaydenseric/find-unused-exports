@@ -1,11 +1,20 @@
+// @ts-check
+
 import { strictEqual, throws } from "assert";
 
 import CliError from "./CliError.mjs";
 
+/**
+ * Adds `CliError` tests.
+ * @param {import("test-director").default} tests Test director.
+ */
 export default (tests) => {
   tests.add("`CliError` with argument 1 `message` not a string.", () => {
     throws(() => {
-      new CliError(true);
+      new CliError(
+        // @ts-expect-error Testing invalid.
+        true
+      );
     }, new TypeError("Argument 1 `message` must be a string."));
   });
 

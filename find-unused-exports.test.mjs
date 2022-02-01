@@ -1,3 +1,5 @@
+// @ts-check
+
 import { strictEqual } from "assert";
 import { spawnSync } from "child_process";
 import replaceStackTraces from "replace-stack-traces";
@@ -8,6 +10,10 @@ const FIND_UNUSED_EXPORTS_CLI_PATH = fileURLToPath(
   new URL("./find-unused-exports.mjs", import.meta.url)
 );
 
+/**
+ * Adds `find-unused-exports` tests.
+ * @param {import("test-director").default} tests Test director.
+ */
 export default (tests) => {
   tests.add("`find-unused-exports` CLI with no unused exports.", async () => {
     const { stdout, stderr, status, error } = spawnSync(
@@ -19,7 +25,7 @@ export default (tests) => {
         ),
         env: {
           ...process.env,
-          FORCE_COLOR: 1,
+          FORCE_COLOR: "1",
         },
       }
     );
@@ -47,7 +53,7 @@ export default (tests) => {
         ),
         env: {
           ...process.env,
-          FORCE_COLOR: 1,
+          FORCE_COLOR: "1",
         },
       }
     );
@@ -75,7 +81,7 @@ export default (tests) => {
         ),
         env: {
           ...process.env,
-          FORCE_COLOR: 1,
+          FORCE_COLOR: "1",
         },
       }
     );
@@ -112,7 +118,7 @@ export default (tests) => {
           ),
           env: {
             ...process.env,
-            FORCE_COLOR: 1,
+            FORCE_COLOR: "1",
           },
         }
       );
@@ -151,7 +157,7 @@ export default (tests) => {
           ),
           env: {
             ...process.env,
-            FORCE_COLOR: 1,
+            FORCE_COLOR: "1",
           },
         }
       );
@@ -185,7 +191,7 @@ export default (tests) => {
           ),
           env: {
             ...process.env,
-            FORCE_COLOR: 1,
+            FORCE_COLOR: "1",
           },
         }
       );
@@ -217,7 +223,7 @@ export default (tests) => {
           cwd: fixtureProjectPath,
           env: {
             ...process.env,
-            FORCE_COLOR: 1,
+            FORCE_COLOR: "1",
           },
         }
       );

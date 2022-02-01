@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// @ts-check
 
 import arg from "arg";
 import { bold, dim, green, red, underline } from "kleur/colors";
@@ -11,10 +12,7 @@ import reportCliError from "./reportCliError.mjs";
 
 /**
  * Runs the `find-unused-exports` CLI.
- * @kind function
- * @name findUnusedExportsCli
  * @returns {Promise<void>} Resolves once the operation is done.
- * @ignore
  */
 async function findUnusedExportsCli() {
   try {
