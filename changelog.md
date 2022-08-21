@@ -1,5 +1,16 @@
 # find-unused-exports changelog
 
+## Next
+
+### Major
+
+- Updated Node.js support to `^14.17.0 || ^16.0.0 || >= 18.0.0`.
+
+### Patch
+
+- Updated GitHub Actions CI config:
+  - Run tests with Node.js v14, v16, v18.
+
 ## 3.0.0
 
 ### Major
