@@ -1,6 +1,6 @@
 // @ts-check
 
-import fs from "node:fs";
+import { lstat } from "node:fs/promises";
 
 /**
  * Checks if a filesystem path is a directory path.
@@ -12,7 +12,7 @@ export default async function isDirectoryPath(path) {
     throw new TypeError("Argument 1 `path` must be a string.");
 
   try {
-    const stats = await fs.promises.lstat(path);
+    const stats = await lstat(path);
     if (!stats.isDirectory()) throw new TypeError("Not a directory.");
   } catch (error) {
     return false;

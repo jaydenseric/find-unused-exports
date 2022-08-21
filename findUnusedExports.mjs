@@ -1,7 +1,7 @@
 // @ts-check
 
 import { globby } from "globby";
-import fs from "node:fs";
+import { readFile } from "node:fs/promises";
 import { dirname, extname, join, resolve, sep } from "node:path";
 
 import isDirectoryPath from "./isDirectoryPath.mjs";
@@ -79,7 +79,7 @@ export default async function findUnusedExports({
   await Promise.all(
     moduleFileRelativePaths.map(async (moduleFileRelativePath) => {
       const moduleFilePath = join(cwd, moduleFileRelativePath);
-      const code = await fs.promises.readFile(moduleFilePath, "utf8");
+      const code = await readFile(moduleFilePath, "utf8");
 
       scannedModules[moduleFilePath] = await scanModuleCode(
         code,
