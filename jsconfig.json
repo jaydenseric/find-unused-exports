@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "module": "node12",
+    "maxNodeModuleJsDepth": 10,
+    "module": "nodenext",
     "noEmit": true,
     "strict": true
   },

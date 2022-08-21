@@ -46,22 +46,22 @@
     "node": "^14.17.0 || ^16.0.0 || >= 18.0.0"
   },
   "dependencies": {
-    "@babel/core": "^7.16.12",
-    "@types/babel__core": "^7.1.18",
+    "@babel/core": "^7.18.10",
+    "@types/babel__core": "^7.1.19",
     "@types/node": "*",
-    "arg": "^5.0.1",
-    "globby": "^13.1.0",
-    "kleur": "^4.1.4"
+    "arg": "^5.0.2",
+    "globby": "^13.1.2",
+    "kleur": "^4.1.5"
   },
   "devDependencies": {
-    "coverage-node": "^6.0.0",
-    "eslint": "^8.7.0",
+    "coverage-node": "^8.0.0",
+    "eslint": "^8.22.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
-    "prettier": "^2.5.1",
-    "replace-stack-traces": "^1.0.0",
-    "snapshot-assertion": "^4.0.1",
-    "test-director": "^8.0.1",
-    "typescript": "^4.6.0-dev.20220130"
+    "prettier": "^2.7.1",
+    "replace-stack-traces": "^2.0.0",
+    "snapshot-assertion": "^5.0.0",
+    "test-director": "^10.0.0",
+    "typescript": "^4.7.4"
   },
   "scripts": {
     "eslint": "eslint .",
