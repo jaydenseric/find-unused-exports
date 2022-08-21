@@ -1,7 +1,7 @@
 // @ts-check
 
-import { rejects, strictEqual } from "assert";
-import { fileURLToPath } from "url";
+import { rejects, strictEqual } from "node:assert";
+import { fileURLToPath } from "node:url";
 
 import isDirectoryPath from "./isDirectoryPath.mjs";
 

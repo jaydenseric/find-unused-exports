@@ -3,7 +3,7 @@
 
 import arg from "arg";
 import { bold, dim, green, red, underline } from "kleur/colors";
-import { relative } from "path";
+import { relative } from "node:path";
 
 import CliError from "./CliError.mjs";
 import errorConsole from "./errorConsole.mjs";

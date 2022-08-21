@@ -1,6 +1,6 @@
 // @ts-check
 
-import { Console } from "console";
+import { Console } from "node:console";
 
 /**
  * The `console` API, but all output is to `stderr`. This allows `console.group`

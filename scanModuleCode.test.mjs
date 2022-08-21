@@ -1,6 +1,6 @@
 // @ts-check
 
-import { deepStrictEqual, rejects } from "assert";
+import { deepStrictEqual, rejects } from "node:assert";
 
 import scanModuleCode from "./scanModuleCode.mjs";
 

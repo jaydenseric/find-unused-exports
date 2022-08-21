@@ -1,8 +1,8 @@
 // @ts-check
 
-import { deepStrictEqual, rejects } from "assert";
-import { join, resolve } from "path";
-import { fileURLToPath } from "url";
+import { deepStrictEqual, rejects } from "node:assert";
+import { join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
 import findUnusedExports from "./findUnusedExports.mjs";
 

@@ -1,6 +1,6 @@
 // @ts-check
 
-import fs from "fs";
+import fs from "node:fs";
 
 /**
  * Checks if a filesystem path is a directory path.

@@ -1,8 +1,8 @@
 // @ts-check
 
-import fs from "fs";
 import { globby } from "globby";
-import { dirname, extname, join, resolve, sep } from "path";
+import fs from "node:fs";
+import { dirname, extname, join, resolve, sep } from "node:path";
 
 import isDirectoryPath from "./isDirectoryPath.mjs";
 import scanModuleCode from "./scanModuleCode.mjs";

@@ -1,10 +1,10 @@
 // @ts-check
 
-import { strictEqual } from "assert";
-import { spawnSync } from "child_process";
+import { strictEqual } from "node:assert";
+import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 import replaceStackTraces from "replace-stack-traces";
 import snapshot from "snapshot-assertion";
-import { fileURLToPath } from "url";
 
 const FIND_UNUSED_EXPORTS_CLI_PATH = fileURLToPath(
   new URL("./find-unused-exports.mjs", import.meta.url)

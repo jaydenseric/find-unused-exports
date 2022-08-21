@@ -1,7 +1,7 @@
 // @ts-check
 
 import babel from "@babel/core";
-import { deepStrictEqual, throws } from "assert";
+import { deepStrictEqual, throws } from "node:assert";
 
 import getVariableDeclarationIdentifierNames from "./getVariableDeclarationIdentifierNames.mjs";
 
