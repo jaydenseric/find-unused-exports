@@ -21,6 +21,10 @@
   - Updated `actions/checkout` to v3.
   - Updated `actions/setup-node` to v3.
 - Replaced TypeScript `Record` types with index signatures.
+- Revamped the readme:
+  - Removed the badges.
+  - Added a “Requirements” section.
+  - Added information about TypeScript config and [optimal JavaScript module design](https://jaydenseric.com/blog/optimal-javascript-module-design).
 
 ## 3.0.0
 

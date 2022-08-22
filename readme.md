@@ -1,7 +1,5 @@
 # find-unused-exports
 
-[![npm version](https://badgen.net/npm/v/find-unused-exports)](https://npm.im/find-unused-exports) [![CI status](https://github.com/jaydenseric/find-unused-exports/workflows/CI/badge.svg)](https://github.com/jaydenseric/find-unused-exports/actions)
-
 A [Node.js](https://nodejs.org) [CLI](#cli) and equivalent JS [API](#exports) to find unused [ECMAScript module exports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export) in a project.
 
 To achieve this the whole project is analyzed at once, something [ESLint](https://eslint.org) can’t do as it lints files in isolation.
@@ -11,13 +9,13 @@ To achieve this the whole project is analyzed at once, something [ESLint](https:
 
 ## Installation
 
-To install with [npm](https://npmjs.com/get-npm), run:
+To install [`find-unused-exports`](https://npm.im/find-unused-exports) with [npm](https://npmjs.com/get-npm), run:
 
 ```sh
 npm install find-unused-exports --save-dev
 ```
 
-Then, use either the [CLI](#cli) command [`find-unused-exports`](#command-find-unused-exports) or the JS [API](#exports) function `findUnusedExports`.
+Then, either use the [CLI](#cli) command [`find-unused-exports`](#command-find-unused-exports) or import and use the function [`findUnusedExports`](./findUnusedExports.mjs).
 
 ## Ignoring unused exports
 
@@ -72,13 +70,25 @@ Line or block comments can be used:
 /* ignore unused exports */
 ```
 
+## Requirements
+
+Supported runtime environments:
+
+- [Node.js](https://nodejs.org) versions `^14.17.0 || ^16.0.0 || >= 18.0.0`.
+
+Projects must configure [TypeScript](https://typescriptlang.org) to use types from the ECMAScript modules that have a `// @ts-check` comment:
+
+- [`compilerOptions.allowJs`](https://typescriptlang.org/tsconfig#allowJs) should be `true`.
+- [`compilerOptions.maxNodeModuleJsDepth`](https://typescriptlang.org/tsconfig#maxNodeModuleJsDepth) should be reasonably large, e.g. `10`.
+- [`compilerOptions.module`](https://typescriptlang.org/tsconfig#module) should be `"node16"` or `"nodenext"`.
+
 ## CLI
 
 ### Command `find-unused-exports`
 
 Finds unused [ECMAScript module exports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export) in a project. If some are found, it reports them to `stderr` and exits with a `1` error status. `.gitignore` files are used to ignore files.
 
-It implements the JS [API](#exports) function `findUnusedExports`.
+It implements the function [`findUnusedExports`](./findUnusedExports.mjs).
 
 #### Arguments
 
@@ -118,6 +128,6 @@ npx find-unused-exports --module-glob "**/*.js" --resolve-file-extensions js --r
 
 ## Exports
 
-These ECMAScript modules are published to [npm](https://npmjs.com) and exported via the [`package.json`](./package.json) `exports` field:
+The [npm](https://npmjs.com) package [`find-unused-exports`](https://npm.im/find-unused-exports) features [optimal JavaScript module design](https://jaydenseric.com/blog/optimal-javascript-module-design). It doesn’t have a main index module, so use deep imports from the ECMAScript modules that are exported via the [`package.json`](./package.json) field [`exports`](https://nodejs.org/api/packages.html#exports):
 
 - [`findUnusedExports.mjs`](./findUnusedExports.mjs)
