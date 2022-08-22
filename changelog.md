@@ -1,6 +1,6 @@
 # find-unused-exports changelog
 
-## Next
+## 4.0.0
 
 ### Major
 
