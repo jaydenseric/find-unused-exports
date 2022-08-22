@@ -20,6 +20,7 @@
   - Run tests with Node.js v14, v16, v18.
   - Updated `actions/checkout` to v3.
   - Updated `actions/setup-node` to v3.
+- Replaced TypeScript `Record` types with index signatures.
 
 ## 3.0.0
 

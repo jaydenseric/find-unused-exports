@@ -30,9 +30,9 @@ import scanModuleCode from "./scanModuleCode.mjs";
  *   [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org))
  *   `true` might be appropriate. This option only works if the option
  *   `resolveFileExtensions` is used. Defaults to `false`.
- * @returns {Promise<
- *   Record<string, import("./scanModuleCode.mjs").ModuleExports>
- * >} Map of module file paths and unused module exports.
+ * @returns {Promise<{
+ *   [moduleFilePath: string]: import("./scanModuleCode.mjs").ModuleExports,
+ * }>} Map of module file paths and unused module exports.
  */
 export default async function findUnusedExports({
   cwd = process.cwd(),
@@ -73,7 +73,11 @@ export default async function findUnusedExports({
     gitignore: true,
   });
 
-  /** @type {Record<string, import("./scanModuleCode.mjs").ModuleScan>} */
+  /**
+   * @type {{
+   *   [moduleFilePath: string]: import("./scanModuleCode.mjs").ModuleScan,
+   * }}
+   */
   const scannedModules = {};
 
   await Promise.all(
@@ -91,7 +95,11 @@ export default async function findUnusedExports({
   // All possibly unused exports are mapped by module absolute file paths, then
   // any found to have been imported in project files are eliminated.
 
-  /** @type {Record<string, import("./scanModuleCode.mjs").ModuleExports>} */
+  /**
+   * @type {{
+   *   [moduleFilePath: string]: import("./scanModuleCode.mjs").ModuleExports,
+   * }}
+   */
   const possiblyUnusedExports = {};
 
   for (const [path, { exports }] of Object.entries(scannedModules))
