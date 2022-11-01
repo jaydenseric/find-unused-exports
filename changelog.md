@@ -15,6 +15,7 @@
 ### Patch
 
 - Updated dependencies.
+- Avoid function `findUnusedExports` parameter destructuring to workaround a recently introduced TypeScript bug: [microsoft/TypeScript#50286](https://github.com/microsoft/TypeScript/issues/50286).
 
 ## 4.0.0
 
