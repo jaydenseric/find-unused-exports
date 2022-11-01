@@ -47,7 +47,7 @@
     "node": "^14.17.0 || ^16.0.0 || >= 18.0.0"
   },
   "dependencies": {
-    "@babel/core": "^7.18.10",
+    "@babel/core": "^7.19.6",
     "@types/babel__core": "^7.1.19",
     "@types/node": "*",
     "arg": "^5.0.2",
@@ -56,13 +56,13 @@
   },
   "devDependencies": {
     "coverage-node": "^8.0.0",
-    "eslint": "^8.22.0",
-    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "eslint": "^8.26.0",
+    "eslint-plugin-simple-import-sort": "^8.0.0",
     "prettier": "^2.7.1",
     "replace-stack-traces": "^2.0.0",
     "snapshot-assertion": "^5.0.0",
     "test-director": "^10.0.0",
-    "typescript": "^4.7.4"
+    "typescript": "^4.8.4"
   },
   "scripts": {
     "eslint": "eslint .",

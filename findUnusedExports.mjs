@@ -1,8 +1,9 @@
 // @ts-check
 
-import { globby } from "globby";
 import { readFile } from "node:fs/promises";
 import { dirname, extname, join, resolve, sep } from "node:path";
+
+import { globby } from "globby";
 
 import isDirectoryPath from "./isDirectoryPath.mjs";
 import MODULE_GLOB from "./MODULE_GLOB.mjs";

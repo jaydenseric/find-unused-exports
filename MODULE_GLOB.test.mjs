@@ -1,7 +1,8 @@
 // @ts-check
 
-import { globby } from "globby";
 import { deepEqual } from "node:assert";
+
+import { globby } from "globby";
 
 import MODULE_GLOB from "./MODULE_GLOB.mjs";
 

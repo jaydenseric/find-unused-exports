@@ -3,6 +3,7 @@
 import { strictEqual } from "node:assert";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+
 import replaceStackTraces from "replace-stack-traces";
 import snapshot from "snapshot-assertion";
 

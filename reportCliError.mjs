@@ -1,7 +1,8 @@
 // @ts-check
 
-import { bold, red } from "kleur/colors";
 import { inspect } from "node:util";
+
+import { bold, red } from "kleur/colors";
 
 import CliError from "./CliError.mjs";
 import errorConsole from "./errorConsole.mjs";
