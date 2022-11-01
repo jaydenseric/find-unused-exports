@@ -11,6 +11,7 @@
 ### Minor
 
 - Enable TypeScript syntax when parsing `.mts` and `.cts` files with Babel, even when the project has no Babel config for TypeScript.
+- Renamed the `snapshot` import to `assertSnapshot` in tests.
 
 ### Patch
 

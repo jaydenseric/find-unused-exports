@@ -5,7 +5,7 @@ import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 import replaceStackTraces from "replace-stack-traces";
-import snapshot from "snapshot-assertion";
+import assertSnapshot from "snapshot-assertion";
 
 import reportCliError from "./reportCliError.mjs";
 
@@ -52,7 +52,7 @@ export default (tests) => {
 
       strictEqual(stdout.toString(), "");
 
-      await snapshot(
+      await assertSnapshot(
         replaceStackTraces(stderr.toString()),
         new URL(
           "./test/snapshots/reportCliError/Error-instance-with-stack-stderr.ans",
@@ -89,7 +89,7 @@ export default (tests) => {
 
       strictEqual(stdout.toString(), "");
 
-      await snapshot(
+      await assertSnapshot(
         replaceStackTraces(stderr.toString()),
         new URL(
           "./test/snapshots/reportCliError/Error-instance-without-stack-stderr.ans",
@@ -124,7 +124,7 @@ export default (tests) => {
 
     strictEqual(stdout.toString(), "");
 
-    await snapshot(
+    await assertSnapshot(
       replaceStackTraces(stderr.toString()),
       new URL(
         "./test/snapshots/reportCliError/CliError-instance-stderr.ans",
@@ -158,7 +158,7 @@ export default (tests) => {
 
     strictEqual(stdout.toString(), "");
 
-    await snapshot(
+    await assertSnapshot(
       replaceStackTraces(stderr.toString()),
       new URL(
         "./test/snapshots/reportCliError/primitive-value-stderr.ans",

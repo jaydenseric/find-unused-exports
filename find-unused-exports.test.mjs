@@ -5,7 +5,7 @@ import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 import replaceStackTraces from "replace-stack-traces";
-import snapshot from "snapshot-assertion";
+import assertSnapshot from "snapshot-assertion";
 
 const FIND_UNUSED_EXPORTS_CLI_PATH = fileURLToPath(
   new URL("./find-unused-exports.mjs", import.meta.url)
@@ -33,7 +33,7 @@ export default (tests) => {
 
     if (error) throw error;
 
-    await snapshot(
+    await assertSnapshot(
       stdout.toString(),
       new URL(
         "./test/snapshots/find-unused-exports/no-unused-exports-stdout.ans",
@@ -62,7 +62,7 @@ export default (tests) => {
     if (error) throw error;
 
     strictEqual(stdout.toString(), "");
-    await snapshot(
+    await assertSnapshot(
       stderr.toString(),
       new URL(
         "./test/snapshots/find-unused-exports/some-unused-exports-stderr.ans",
@@ -92,7 +92,7 @@ export default (tests) => {
       if (error) throw error;
 
       strictEqual(stdout.toString(), "");
-      await snapshot(
+      await assertSnapshot(
         stderr.toString(),
         new URL(
           "./test/snapshots/find-unused-exports/typescript-syntax-stderr.ans",
@@ -121,7 +121,7 @@ export default (tests) => {
     if (error) throw error;
 
     strictEqual(stdout.toString(), "");
-    await snapshot(
+    await assertSnapshot(
       stderr.toString(),
       new URL(
         "./test/snapshots/find-unused-exports/module-glob-stderr.ans",
@@ -158,7 +158,7 @@ export default (tests) => {
       if (error) throw error;
 
       strictEqual(stdout.toString(), "");
-      await snapshot(
+      await assertSnapshot(
         stderr.toString(),
         new URL(
           "./test/snapshots/find-unused-exports/resolve-file-extensions-stderr.ans",
@@ -197,7 +197,7 @@ export default (tests) => {
       if (error) throw error;
 
       strictEqual(stdout.toString(), "");
-      await snapshot(
+      await assertSnapshot(
         stderr.toString(),
         new URL(
           "./test/snapshots/find-unused-exports/resolve-file-extensions-and-index-files-stderr.ans",
@@ -231,7 +231,7 @@ export default (tests) => {
       if (error) throw error;
 
       strictEqual(stdout.toString(), "");
-      await snapshot(
+      await assertSnapshot(
         stderr.toString(),
         new URL(
           "./test/snapshots/find-unused-exports/resolve-index-files-without-resolve-file-extensions-stderr.ans",
@@ -263,7 +263,7 @@ export default (tests) => {
       if (error) throw error;
 
       strictEqual(stdout.toString(), "");
-      await snapshot(
+      await assertSnapshot(
         replaceStackTraces(
           stderr.toString().replace(fixtureProjectPath, "<path>")
         ),
