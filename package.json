@@ -1,6 +1,6 @@
 {
   "name": "find-unused-exports",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "description": "A CLI and equivalent JS API to find unused ECMAScript module exports in a project.",
   "license": "MIT",
   "author": {
