@@ -1,5 +1,17 @@
 # find-unused-exports changelog
 
+## Next
+
+### Major
+
+- Added support for TypeScript modules with the file extensions `.mts` and `.cts`:
+  - Changed the function `findUnusedExports` option `moduleGlob` and the CLI command `find-unused-exports` argument `--module-glob` default value from `"**/*.{mjs,cjs,js}"` to `"**/{!(*.d).mts,!(*.d).cts,*.{mjs,cjs,js}}"`; `.mts` and `.cts` files (but not TypeScript definition files) are now recursively matched by default.
+  - An import specifier path with the file extension `.mjs` that doesn’t match an existing file now resolves to a file at the same path with an `.mts` file extension, if it exists.
+
+### Minor
+
+- Enable TypeScript syntax when parsing `.mts` and `.cts` files with Babel, even when the project has no Babel config for TypeScript.
+
 ## 4.0.0
 
 ### Major

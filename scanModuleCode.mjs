@@ -42,17 +42,27 @@ export default async function scanModuleCode(code, path) {
     exports: new Set(),
   };
 
+  /** @type {Array<import("@babel/parser").ParserPlugin>} */
+  const plugins = [
+    // Allow parsing code containing modern syntax even if a project doesn’t
+    // have Babel config to handle it.
+    "classProperties",
+    ["decorators", { decoratorsBeforeExport: false }],
+  ];
+
+  if (
+    path &&
+    // Path is a TypeScript module.
+    (path.endsWith(".mts") || path.endsWith(".cts"))
+  )
+    // Allow parsing code containing TypeScript syntax.
+    plugins.push("typescript");
+
   const ast = await babel.parseAsync(code, {
     // Provide the code file path for more useful Babel parse errors.
     filename: path,
-
-    // Allow parsing code containing modern syntax even if a project doesn’t
-    // have Babel config to handle it.
     parserOpts: {
-      plugins: [
-        "classProperties",
-        ["decorators", { decoratorsBeforeExport: false }],
-      ],
+      plugins,
     },
   });
 

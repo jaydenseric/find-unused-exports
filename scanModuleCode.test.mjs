@@ -36,6 +36,26 @@ export default (tests) => {
     }
   );
 
+  tests.add(
+    "`scanModuleCode` with argument 2 `path` a `.mts` file, TypeScript syntax.",
+    async () => {
+      deepStrictEqual(await scanModuleCode("let a: boolean;", "a.mts"), {
+        imports: {},
+        exports: new Set(),
+      });
+    }
+  );
+
+  tests.add(
+    "`scanModuleCode` with argument 2 `path` a `.cts` file, TypeScript syntax.",
+    async () => {
+      deepStrictEqual(await scanModuleCode("let a: boolean;", "a.cts"), {
+        imports: {},
+        exports: new Set(),
+      });
+    }
+  );
+
   tests.add("`scanModuleCode` without imports or exports.", async () => {
     deepStrictEqual(await scanModuleCode(""), {
       imports: {},

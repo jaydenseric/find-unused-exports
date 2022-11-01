@@ -5,6 +5,7 @@ import { readFile } from "node:fs/promises";
 import { dirname, extname, join, resolve, sep } from "node:path";
 
 import isDirectoryPath from "./isDirectoryPath.mjs";
+import MODULE_GLOB from "./MODULE_GLOB.mjs";
 import scanModuleCode from "./scanModuleCode.mjs";
 
 /**
@@ -14,8 +15,8 @@ import scanModuleCode from "./scanModuleCode.mjs";
  * @param {object} [options] Options.
  * @param {string} [options.cwd] A directory path to scope the search for source
  *   and `.gitignore` files, defaulting to `process.cwd()`.
- * @param {string} [options.moduleGlob] JavaScript file glob pattern. By default
- *   `.mjs`, `.cjs`, and `.js` files are recursively matched.
+ * @param {string} [options.moduleGlob] JavaScript file glob pattern. Defaults
+ *   to {@linkcode MODULE_GLOB}.
  * @param {Array<string>} [options.resolveFileExtensions] File extensions
  *   (without the leading `.`, in preference order) to automatically resolve in
  *   extensionless import specifiers.
@@ -36,7 +37,7 @@ import scanModuleCode from "./scanModuleCode.mjs";
  */
 export default async function findUnusedExports({
   cwd = process.cwd(),
-  moduleGlob = "**/*.{mjs,cjs,js}",
+  moduleGlob = MODULE_GLOB,
   resolveFileExtensions,
   resolveIndexFiles = false,
 } = {}) {
@@ -110,19 +111,37 @@ export default async function findUnusedExports({
     for (const [specifier, moduleImports] of Object.entries(imports))
       if (specifier.startsWith(".")) {
         const specifierAbsolutePath = resolve(dirname(path), specifier);
+        const specifierExtension = extname(specifierAbsolutePath);
         const specifierPossiblePaths = [specifierAbsolutePath];
 
-        if (!extname(specifierAbsolutePath) && resolveFileExtensions) {
-          for (const extension of resolveFileExtensions)
+        switch (specifierExtension) {
+          // TypeScript import specifiers may use the `.mjs` file extension to
+          // resolve an `.mts` file in that directory with the same name.
+          case ".mjs": {
             specifierPossiblePaths.push(
-              `${specifierAbsolutePath}.${extension}`
+              `${specifierAbsolutePath.slice(
+                0,
+                -specifierExtension.length
+              )}.mts`
             );
+            break;
+          }
 
-          if (resolveIndexFiles)
-            for (const extension of resolveFileExtensions)
-              specifierPossiblePaths.push(
-                `${specifierAbsolutePath}${sep}index.${extension}`
-              );
+          // No file extension.
+          case "": {
+            if (resolveFileExtensions) {
+              for (const extension of resolveFileExtensions)
+                specifierPossiblePaths.push(
+                  `${specifierAbsolutePath}.${extension}`
+                );
+
+              if (resolveIndexFiles)
+                for (const extension of resolveFileExtensions)
+                  specifierPossiblePaths.push(
+                    `${specifierAbsolutePath}${sep}index.${extension}`
+                  );
+            }
+          }
         }
 
         // If there’s no match for the imported module in the map of (so far)

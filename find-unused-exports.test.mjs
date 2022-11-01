@@ -71,6 +71,37 @@ export default (tests) => {
     strictEqual(status, 1);
   });
 
+  tests.add(
+    "`find-unused-exports` CLI with a module containing TypeScript syntax.",
+    async () => {
+      const { stdout, stderr, status, error } = spawnSync(
+        "node",
+        [FIND_UNUSED_EXPORTS_CLI_PATH],
+        {
+          cwd: fileURLToPath(
+            new URL("./test/fixtures/typescript-syntax", import.meta.url)
+          ),
+          env: {
+            ...process.env,
+            FORCE_COLOR: "1",
+          },
+        }
+      );
+
+      if (error) throw error;
+
+      strictEqual(stdout.toString(), "");
+      await snapshot(
+        stderr.toString(),
+        new URL(
+          "./test/snapshots/find-unused-exports/typescript-syntax-stderr.ans",
+          import.meta.url
+        )
+      );
+      strictEqual(status, 1);
+    }
+  );
+
   tests.add("`find-unused-exports` CLI with arg `--module-glob`.", async () => {
     const { stdout, stderr, status, error } = spawnSync(
       "node",
