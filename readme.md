@@ -74,7 +74,7 @@ Line or block comments can be used:
 
 Supported runtime environments:
 
-- [Node.js](https://nodejs.org) versions `^14.17.0 || ^16.0.0 || >= 18.0.0`.
+- [Node.js](https://nodejs.org) versions `^16.17.0 || >=18.0.0`.
 
 Projects must configure [TypeScript](https://typescriptlang.org) to use types from the ECMAScript modules that have a `// @ts-check` comment:
 

@@ -44,7 +44,7 @@
     "find-unused-exports": "find-unused-exports.mjs"
   },
   "engines": {
-    "node": "^14.17.0 || ^16.0.0 || >= 18.0.0"
+    "node": "^16.17.0 || >=18.0.0"
   },
   "dependencies": {
     "@babel/core": "^7.19.6",
