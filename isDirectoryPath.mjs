@@ -14,7 +14,7 @@ export default async function isDirectoryPath(path) {
   try {
     const stats = await lstat(path);
     if (!stats.isDirectory()) throw new TypeError("Not a directory.");
-  } catch (error) {
+  } catch {
     return false;
   }
 

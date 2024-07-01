@@ -17,6 +17,7 @@
   - Run tests with Node.js v18, v20, v22.
   - Updated `actions/checkout` to v4.
   - Updated `actions/setup-node` to v4.
+- Migrated to the ESLint v9 CLI and “flat” config.
 - Updated a test snapshot for newer dependencies.
 
 ## 5.0.0
