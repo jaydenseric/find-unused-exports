@@ -1,6 +1,7 @@
 // @ts-check
 
 import eslintJs from "@eslint/js";
+import eslintPluginJsdoc from "eslint-plugin-jsdoc";
 import eslintPluginSimpleImportSort from "eslint-plugin-simple-import-sort";
 import globals from "globals";
 
@@ -32,6 +33,10 @@ const eslintConfig = [
   {
     files: globsJs,
     ...eslintJs.configs.recommended,
+  },
+  {
+    files: globsJs,
+    ...eslintPluginJsdoc.configs["flat/recommended-typescript-flavor-error"],
   },
   {
     files: globsJs,

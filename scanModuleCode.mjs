@@ -257,9 +257,9 @@ export default async function scanModuleCode(code, path) {
 /**
  * Scan of an ECMAScript module’s imports and exports.
  * @typedef {object} ModuleScan
- * @prop {{ [importSpecifier: string]: ModuleImports }} imports Map of import
- *   specifiers and the imports used.
- * @prop {ModuleExports} exports Declared exports.
+ * @property {{ [importSpecifier: string]: ModuleImports }} imports Map of
+ *   import specifiers and the imports used.
+ * @property {ModuleExports} exports Declared exports.
  */
 
 /**

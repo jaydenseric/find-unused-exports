@@ -18,6 +18,7 @@
   - Updated `actions/checkout` to v4.
   - Updated `actions/setup-node` to v4.
 - Migrated to the ESLint v9 CLI and “flat” config.
+- Integrated a new dev dependency [`eslint-plugin-jsdoc`](https://npm.im/eslint-plugin-jsdoc).
 - Updated a test snapshot for newer dependencies.
 
 ## 5.0.0
