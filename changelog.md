@@ -4,13 +4,13 @@
 
 ### Major
 
-- Updated Node.js support to `^16.17.0 || >=18.0.0`.
+- Updated Node.js support to `^18.18.0 || ^20.9.0 || >=22.0.0`.
 - Updated the function `findUnusedExports` to no longer ignore dotfiles when executing the module glob.
 
 ### Patch
 
 - Updated GitHub Actions CI config:
-  - Run tests with Node.js v16, v18, v20.
+  - Run tests with Node.js v18, v20, v22.
 - Updated a test snapshot for newer dependencies.
 
 ## 5.0.0
