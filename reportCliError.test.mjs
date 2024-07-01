@@ -2,6 +2,7 @@
 
 import { strictEqual, throws } from "node:assert";
 import { spawnSync } from "node:child_process";
+import { describe, it } from "node:test";
 import { fileURLToPath } from "node:url";
 
 import replaceStackTraces from "replace-stack-traces";
@@ -9,27 +10,19 @@ import assertSnapshot from "snapshot-assertion";
 
 import reportCliError from "./reportCliError.mjs";
 
-/**
- * Adds `reportCliError` tests.
- * @param {import("test-director").default} tests Test director.
- */
-export default (tests) => {
-  tests.add(
-    "`reportCliError` with argument 1 `cliDescription` not a string.",
-    () => {
-      throws(() => {
-        reportCliError(
-          // @ts-expect-error Testing invalid.
-          true,
-          new Error("Message.")
-        );
-      }, new TypeError("Argument 1 `cliDescription` must be a string."));
-    }
-  );
+describe("Function `reportCliError`.", { concurrency: true }, () => {
+  it("Argument 1 `cliDescription` not a string.", () => {
+    throws(() => {
+      reportCliError(
+        // @ts-expect-error Testing invalid.
+        true,
+        new Error("Message.")
+      );
+    }, new TypeError("Argument 1 `cliDescription` must be a string."));
+  });
 
-  tests.add(
-    "`reportCliError` with a `Error` instance, with stack.",
-    async () => {
+  describe("`Error` instance.", { concurrency: true }, () => {
+    it("With stack.", async () => {
       const { stdout, stderr, status, error } = spawnSync(
         "node",
         [
@@ -61,12 +54,9 @@ export default (tests) => {
       );
 
       strictEqual(status, 0);
-    }
-  );
+    });
 
-  tests.add(
-    "`reportCliError` with a `Error` instance, without stack.",
-    async () => {
+    it("Without stack.", async () => {
       const { stdout, stderr, status, error } = spawnSync(
         "node",
         [
@@ -98,10 +88,10 @@ export default (tests) => {
       );
 
       strictEqual(status, 0);
-    }
-  );
+    });
+  });
 
-  tests.add("`reportCliError` with a `CliError` instance.", async () => {
+  it("`CliError` instance.", async () => {
     const { stdout, stderr, status, error } = spawnSync(
       "node",
       [
@@ -135,7 +125,7 @@ export default (tests) => {
     strictEqual(status, 0);
   });
 
-  tests.add("`reportCliError` with a primitive value.", async () => {
+  it("Primitive value.", async () => {
     const { stdout, stderr, status, error } = spawnSync(
       "node",
       [
@@ -168,4 +158,4 @@ export default (tests) => {
 
     strictEqual(status, 0);
   });
-};
+});

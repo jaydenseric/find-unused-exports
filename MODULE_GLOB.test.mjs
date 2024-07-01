@@ -1,17 +1,14 @@
 // @ts-check
 
 import { deepEqual } from "node:assert";
+import { describe, it } from "node:test";
 
 import { globby } from "globby";
 
 import MODULE_GLOB from "./MODULE_GLOB.mjs";
 
-/**
- * Adds `MODULE_GLOB` tests.
- * @param {import("test-director").default} tests Test director.
- */
-export default (tests) => {
-  tests.add("`MODULE_GLOB` with matching modules.", async () => {
+describe("Constant `MODULE_GLOB`.", { concurrency: true }, () => {
+  it("Matching modules.", async () => {
     deepEqual(
       await globby(MODULE_GLOB, {
         cwd: new URL(
@@ -55,7 +52,7 @@ export default (tests) => {
     );
   });
 
-  tests.add("`MODULE_GLOB` with excluded files.", async () => {
+  it("Excluded files.", async () => {
     deepEqual(
       await globby(MODULE_GLOB, {
         cwd: new URL(
@@ -67,4 +64,4 @@ export default (tests) => {
       []
     );
   });
-};
+});

@@ -6,6 +6,7 @@
 
 - Updated Node.js support to `^18.18.0 || ^20.9.0 || >=22.0.0`.
 - Updated the function `findUnusedExports` to no longer ignore dotfiles when executing the module glob.
+- Use the Node.js test runner API and remove the dev dependency [`test-director`](https://npm.im/test-director).
 
 ### Patch
 

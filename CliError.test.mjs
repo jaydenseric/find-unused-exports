@@ -1,15 +1,12 @@
 // @ts-check
 
 import { strictEqual, throws } from "node:assert";
+import { describe, it } from "node:test";
 
 import CliError from "./CliError.mjs";
 
-/**
- * Adds `CliError` tests.
- * @param {import("test-director").default} tests Test director.
- */
-export default (tests) => {
-  tests.add("`CliError` with argument 1 `message` not a string.", () => {
+describe("Class `CliError`.", { concurrency: true }, () => {
+  it("Argument 1 `message` not a string.", () => {
     throws(() => {
       new CliError(
         // @ts-expect-error Testing invalid.
@@ -18,7 +15,7 @@ export default (tests) => {
     }, new TypeError("Argument 1 `message` must be a string."));
   });
 
-  tests.add("`CliError` with arguments valid.", () => {
+  it("Arguments valid.", () => {
     const message = "Message.";
     const error = new CliError(message);
 
@@ -26,4 +23,4 @@ export default (tests) => {
     strictEqual(error.name, "CliError");
     strictEqual(error.message, message);
   });
-};
+});
