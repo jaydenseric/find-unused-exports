@@ -20,6 +20,7 @@
 - Migrated to the ESLint v9 CLI and “flat” config.
 - Integrated a new dev dependency [`eslint-plugin-jsdoc`](https://npm.im/eslint-plugin-jsdoc).
 - Updated a test snapshot for newer dependencies.
+- Avoid British English spelling in a JSDoc description.
 
 ## 5.0.0
 

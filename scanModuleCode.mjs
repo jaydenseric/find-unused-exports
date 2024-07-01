@@ -22,7 +22,7 @@ const assertFile = babel.types.assertFile;
  * Scans a JavaScript module’s code for ECMAScript module imports and exports.
  * An ECMAScript module may contain all kinds of imports and exports. A CommonJS
  * module may only contain dynamic imports, but because it might be source code
- * to be bundled or transpiled, regular imports and exports are still analysed.
+ * to be bundled or transpiled, regular imports and exports are still analyzed.
  * @param {string} code JavaScript code.
  * @param {string} [path] Path to the file the code is from, for more useful
  *   Babel parse errors.
