@@ -5,6 +5,7 @@
 ### Major
 
 - Updated Node.js support to `^16.17.0 || >=18.0.0`.
+- Updated the function `findUnusedExports` to no longer ignore dotfiles when executing the module glob.
 
 ### Patch
 

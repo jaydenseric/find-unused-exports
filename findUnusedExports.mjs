@@ -76,6 +76,7 @@ export default async function findUnusedExports(options = {}) {
   // These paths are relative to the given `cwd`.
   const moduleFileRelativePaths = await globby(moduleGlob, {
     cwd,
+    dot: true,
     gitignore: true,
   });
 
