@@ -10,6 +10,7 @@
 
 - Updated GitHub Actions CI config:
   - Run tests with Node.js v16, v18, v20.
+- Updated a test snapshot for newer dependencies.
 
 ## 5.0.0
 
