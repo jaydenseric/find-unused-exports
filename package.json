@@ -8,7 +8,10 @@
     "email": "me@jaydenseric.com",
     "url": "https://jaydenseric.com"
   },
-  "repository": "github:jaydenseric/find-unused-exports",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jaydenseric/find-unused-exports.git"
+  },
   "homepage": "https://github.com/jaydenseric/find-unused-exports#readme",
   "bugs": "https://github.com/jaydenseric/find-unused-exports/issues",
   "funding": "https://github.com/sponsors/jaydenseric",
