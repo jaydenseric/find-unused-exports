@@ -41,6 +41,23 @@ describe("Function `scanModuleCode`.", { concurrency: true }, () => {
         exports: new Set(),
       });
     });
+
+    it("`.ts` file, TypeScript syntax.", async () => {
+      deepStrictEqual(await scanModuleCode("let a: boolean;", "a.ts"), {
+        imports: {},
+        exports: new Set(),
+      });
+    });
+
+    it("`.tsx` file, TypeScript and JSX syntax.", async () => {
+      deepStrictEqual(
+        await scanModuleCode("let a: boolean; const b = <div />;", "a.tsx"),
+        {
+          imports: {},
+          exports: new Set(),
+        },
+      );
+    });
   });
 
   it("No imports or exports.", async () => {

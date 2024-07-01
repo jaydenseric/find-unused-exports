@@ -3,7 +3,8 @@
     "maxNodeModuleJsDepth": 10,
     "module": "nodenext",
     "noEmit": true,
-    "strict": true
+    "strict": true,
+    "jsx": "preserve"
   },
   "typeAcquisition": {
     "enable": false

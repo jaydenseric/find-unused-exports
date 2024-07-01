@@ -9,6 +9,15 @@
 - Use the Node.js test runner API and remove the dev dependency [`test-director`](https://npm.im/test-director).
 - Updated the dependency [`globby`](https://npm.im/globby) to v14.
 - Updated the function `findUnusedExports` to no longer ignore dotfiles when executing the module glob.
+- Changed the function `findUnusedExports` option `moduleGlob` and the CLI command `find-unused-exports` argument `--module-glob` default value from `**/{!(*.d).mts,!(*.d).cts,*.{mjs,cjs,js}}` to `**/{!(*.d).mts,!(*.d).cts,!(*.d).ts,*.{mjs,cjs,js,tsx}}`; `.ts` and `.tsx` files (but not TypeScript definition files) are now recursively matched by default.
+- Support resolving additional kinds of TypeScript source modules (if the exist) depending on the import specifier path file extension:
+  - `.cjs` resolves `.cts`.
+  - `.js` resolves `.ts` and `.tsx`.
+
+### Minor
+
+- Enable TypeScript syntax when parsing `.ts` and `.tsx` files with Babel, even when the project has no Babel config for TypeScript.
+- Enable JSX syntax when parsing `.tsx` files with Babel, even when the project has no Babel config for JSX.
 
 ### Patch
 

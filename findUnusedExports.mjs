@@ -133,6 +133,34 @@ export default async function findUnusedExports(options = {}) {
             break;
           }
 
+          // TypeScript import specifiers may use the `.cjs` file extension to
+          // resolve a `.cts` file in that directory with the same name.
+          case ".cjs": {
+            specifierPossiblePaths.push(
+              `${specifierAbsolutePath.slice(
+                0,
+                -specifierExtension.length,
+              )}.cts`,
+            );
+            break;
+          }
+
+          // TypeScript import specifiers may use the `.js` file extension to
+          // resolve a `.ts` or `.tsx` file in that directory with the same
+          // name.
+          case ".js": {
+            const pathWithoutExtension = specifierAbsolutePath.slice(
+              0,
+              -specifierExtension.length,
+            );
+
+            specifierPossiblePaths.push(
+              `${pathWithoutExtension}.ts`,
+              `${pathWithoutExtension}.tsx`,
+            );
+            break;
+          }
+
           // No file extension.
           case "": {
             if (resolveFileExtensions) {

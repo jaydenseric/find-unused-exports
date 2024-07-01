@@ -53,10 +53,18 @@ export default async function scanModuleCode(code, path) {
   if (
     path &&
     // Path is a TypeScript module.
-    (path.endsWith(".mts") || path.endsWith(".cts"))
-  )
+    (path.endsWith(".mts") ||
+      path.endsWith(".cts") ||
+      path.endsWith(".ts") ||
+      path.endsWith(".tsx"))
+  ) {
     // Allow parsing code containing TypeScript syntax.
     plugins.push("typescript");
+
+    if (path.endsWith(".tsx"))
+      // Allow parsing code containing JSX syntax.
+      plugins.push("jsx");
+  }
 
   const ast = await babel.parseAsync(code, {
     // Provide the code file path for more useful Babel parse errors.
