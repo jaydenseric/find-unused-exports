@@ -29,7 +29,7 @@ async function findUnusedExportsCli() {
 
     if (resolveIndexFiles && !resolveFileExtensionsList)
       throw new CliError(
-        "The `--resolve-index-files` flag can only be used with the `--resolve-file-extensions` argument."
+        "The `--resolve-index-files` flag can only be used with the `--resolve-file-extensions` argument.",
       );
 
     const unusedExports = await findUnusedExports({
@@ -67,9 +67,9 @@ async function findUnusedExportsCli() {
               countUnusedExports === 1 ? "" : "s"
             } in ${countUnusedExportsModules} module${
               countUnusedExportsModules === 1 ? "" : "s"
-            }.`
-          )
-        )}\n`
+            }.`,
+          ),
+        )}\n`,
       );
 
       process.exitCode = 1;

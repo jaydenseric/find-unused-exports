@@ -97,7 +97,7 @@ export default async function scanModuleCode(code, path) {
             assertIdentifier(specifier.imported);
 
             analysis.imports[path.node.source.value].add(
-              specifier.imported.name
+              specifier.imported.name,
             );
             break;
           }
@@ -150,14 +150,14 @@ export default async function scanModuleCode(code, path) {
             //              ^^^^^^^^^^^^^^^
             analysis.exports.add(
               // @ts-ignore `id` must exist in export declarations.
-              path.node.declaration.id.name
+              path.node.declaration.id.name,
             );
             break;
           case "VariableDeclaration": {
             // E.g. `export const a = 1`
             //              ^^^^^^^^^^^
             for (const name of getVariableDeclarationIdentifierNames(
-              path.node.declaration
+              path.node.declaration,
             ))
               analysis.exports.add(name);
           }
@@ -190,7 +190,7 @@ export default async function scanModuleCode(code, path) {
               //                ^
               else
                 analysis.imports[path.node.source.value].add(
-                  specifier.local.name
+                  specifier.local.name,
                 );
               break;
             }

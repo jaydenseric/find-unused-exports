@@ -62,7 +62,7 @@ export default async function findUnusedExports(options = {}) {
       !resolveFileExtensions.every((x) => typeof x === "string")
     )
       throw new TypeError(
-        "Option `resolveFileExtensions` must be an array of strings."
+        "Option `resolveFileExtensions` must be an array of strings.",
       );
 
   if (typeof resolveIndexFiles !== "boolean")
@@ -70,7 +70,7 @@ export default async function findUnusedExports(options = {}) {
 
   if (!resolveFileExtensions && resolveIndexFiles)
     throw new TypeError(
-      "Option `resolveIndexFiles` can only be `true` if the option `resolveFileExtensions` is used."
+      "Option `resolveIndexFiles` can only be `true` if the option `resolveFileExtensions` is used.",
     );
 
   // These paths are relative to the given `cwd`.
@@ -94,9 +94,9 @@ export default async function findUnusedExports(options = {}) {
 
       scannedModules[moduleFilePath] = await scanModuleCode(
         code,
-        moduleFilePath
+        moduleFilePath,
       );
-    })
+    }),
   );
 
   // All possibly unused exports are mapped by module absolute file paths, then
@@ -127,8 +127,8 @@ export default async function findUnusedExports(options = {}) {
             specifierPossiblePaths.push(
               `${specifierAbsolutePath.slice(
                 0,
-                -specifierExtension.length
-              )}.mts`
+                -specifierExtension.length,
+              )}.mts`,
             );
             break;
           }
@@ -138,13 +138,13 @@ export default async function findUnusedExports(options = {}) {
             if (resolveFileExtensions) {
               for (const extension of resolveFileExtensions)
                 specifierPossiblePaths.push(
-                  `${specifierAbsolutePath}.${extension}`
+                  `${specifierAbsolutePath}.${extension}`,
                 );
 
               if (resolveIndexFiles)
                 for (const extension of resolveFileExtensions)
                   specifierPossiblePaths.push(
-                    `${specifierAbsolutePath}${sep}index.${extension}`
+                    `${specifierAbsolutePath}${sep}index.${extension}`,
                   );
             }
           }
@@ -155,7 +155,7 @@ export default async function findUnusedExports(options = {}) {
         // remain unused, or the import is simply unresolvable (not an issue for
         // this tool).
         const importedModulePath = specifierPossiblePaths.find(
-          (path) => path in possiblyUnusedExports
+          (path) => path in possiblyUnusedExports,
         );
 
         if (importedModulePath) {

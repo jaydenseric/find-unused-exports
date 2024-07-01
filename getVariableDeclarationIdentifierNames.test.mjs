@@ -16,11 +16,11 @@ describe(
         () =>
           getVariableDeclarationIdentifierNames(
             // @ts-expect-error Testing invalid.
-            true
+            true,
           ),
         new TypeError(
-          "Argument 1 `variableDeclaration` must be a `VariableDeclaration` Babel AST node."
-        )
+          "Argument 1 `variableDeclaration` must be a `VariableDeclaration` Babel AST node.",
+        ),
       );
     });
 
@@ -30,9 +30,9 @@ describe(
           getVariableDeclarationIdentifierNames(
             /** @type {babel.types.VariableDeclaration} */ (
               babel.template.ast("const a = 1")
-            )
+            ),
           ),
-          ["a"]
+          ["a"],
         );
       });
 
@@ -42,9 +42,9 @@ describe(
             getVariableDeclarationIdentifierNames(
               /** @type {babel.types.VariableDeclaration} */ (
                 babel.template.ast("const { a, b } = { a: 1, b: 1 }")
-              )
+              ),
             ),
-            ["a", "b"]
+            ["a", "b"],
           );
         });
 
@@ -53,9 +53,9 @@ describe(
             getVariableDeclarationIdentifierNames(
               /** @type {babel.types.VariableDeclaration} */ (
                 babel.template.ast("const { a, b: c } = { a: 1, b: 1 }")
-              )
+              ),
             ),
-            ["a", "c"]
+            ["a", "c"],
           );
         });
 
@@ -64,9 +64,9 @@ describe(
             getVariableDeclarationIdentifierNames(
               /** @type {babel.types.VariableDeclaration} */ (
                 babel.template.ast("const { a, ...b } = { a: 1, b: 1, c: 1 }")
-              )
+              ),
             ),
-            ["a", "b"]
+            ["a", "b"],
           );
         });
 
@@ -75,9 +75,9 @@ describe(
             getVariableDeclarationIdentifierNames(
               /** @type {babel.types.VariableDeclaration} */ (
                 babel.template.ast("const { a, b: [c]} = { a: 1, b: [1] }")
-              )
+              ),
             ),
-            ["a", "c"]
+            ["a", "c"],
           );
         });
 
@@ -86,11 +86,11 @@ describe(
             getVariableDeclarationIdentifierNames(
               /** @type {babel.types.VariableDeclaration} */ (
                 babel.template.ast(
-                  "const { a, b: { c }} = { a: 1, b: { c: 1 } }"
+                  "const { a, b: { c }} = { a: 1, b: { c: 1 } }",
                 )
-              )
+              ),
             ),
-            ["a", "c"]
+            ["a", "c"],
           );
         });
       });
@@ -101,9 +101,9 @@ describe(
             getVariableDeclarationIdentifierNames(
               /** @type {babel.types.VariableDeclaration} */ (
                 babel.template.ast("const [a, b] = [1, 2]")
-              )
+              ),
             ),
-            ["a", "b"]
+            ["a", "b"],
           );
         });
 
@@ -112,9 +112,9 @@ describe(
             getVariableDeclarationIdentifierNames(
               /** @type {babel.types.VariableDeclaration} */ (
                 babel.template.ast("const [, b] = [1, 2]")
-              )
+              ),
             ),
-            ["b"]
+            ["b"],
           );
         });
 
@@ -123,9 +123,9 @@ describe(
             getVariableDeclarationIdentifierNames(
               /** @type {babel.types.VariableDeclaration} */ (
                 babel.template.ast("const [a, ...b] = [1, 2, 3]")
-              )
+              ),
             ),
-            ["a", "b"]
+            ["a", "b"],
           );
         });
 
@@ -134,9 +134,9 @@ describe(
             getVariableDeclarationIdentifierNames(
               /** @type {babel.types.VariableDeclaration} */ (
                 babel.template.ast("const [a, [b]] = [1, [1, 2, 3]]")
-              )
+              ),
             ),
-            ["a", "b"]
+            ["a", "b"],
           );
         });
 
@@ -145,9 +145,9 @@ describe(
             getVariableDeclarationIdentifierNames(
               /** @type {babel.types.VariableDeclaration} */ (
                 babel.template.ast("const [a, { b }] = [1, { b: 1 }]")
-              )
+              ),
             ),
-            ["a", "b"]
+            ["a", "b"],
           );
         });
       });
@@ -158,10 +158,10 @@ describe(
         getVariableDeclarationIdentifierNames(
           /** @type {babel.types.VariableDeclaration} */ (
             babel.template.ast("var a, b = 1")
-          )
+          ),
         ),
-        ["a", "b"]
+        ["a", "b"],
       );
     });
-  }
+  },
 );

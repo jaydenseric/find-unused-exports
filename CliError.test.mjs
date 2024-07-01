@@ -10,7 +10,7 @@ describe("Class `CliError`.", { concurrency: true }, () => {
     throws(() => {
       new CliError(
         // @ts-expect-error Testing invalid.
-        true
+        true,
       );
     }, new TypeError("Argument 1 `message` must be a string."));
   });

@@ -5,6 +5,8 @@
 ### Major
 
 - Updated Node.js support to `^18.18.0 || ^20.9.0 || >=22.0.0`.
+- Updated the dependency [`globby`](https://npm.im/globby) to v14.
+- Updated dev dependencies, some of which require newer Node.js versions than previously supported.
 - Updated the function `findUnusedExports` to no longer ignore dotfiles when executing the module glob.
 - Use the Node.js test runner API and remove the dev dependency [`test-director`](https://npm.im/test-director).
 

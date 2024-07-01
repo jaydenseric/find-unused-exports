@@ -13,7 +13,7 @@ describe("Constant `MODULE_GLOB`.", { concurrency: true }, () => {
       await globby(MODULE_GLOB, {
         cwd: new URL(
           "./test/fixtures/MODULE_GLOB/matching-modules/",
-          import.meta.url
+          import.meta.url,
         ),
         dot: true,
       }),
@@ -48,7 +48,7 @@ describe("Constant `MODULE_GLOB`.", { concurrency: true }, () => {
         "a/a.mjs",
         "a/ad.cts",
         "a/ad.mts",
-      ]
+      ],
     );
   });
 
@@ -57,11 +57,11 @@ describe("Constant `MODULE_GLOB`.", { concurrency: true }, () => {
       await globby(MODULE_GLOB, {
         cwd: new URL(
           "./test/fixtures/MODULE_GLOB/excluded-files/",
-          import.meta.url
+          import.meta.url,
         ),
         dot: true,
       }),
-      []
+      [],
     );
   });
 });

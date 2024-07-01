@@ -16,7 +16,7 @@ describe("Function `reportCliError`.", { concurrency: true }, () => {
       reportCliError(
         // @ts-expect-error Testing invalid.
         true,
-        new Error("Message.")
+        new Error("Message."),
       );
     }, new TypeError("Argument 1 `cliDescription` must be a string."));
   });
@@ -29,8 +29,8 @@ describe("Function `reportCliError`.", { concurrency: true }, () => {
           fileURLToPath(
             new URL(
               "./test/fixtures/reportCliError/Error-instance-with-stack.mjs",
-              import.meta.url
-            )
+              import.meta.url,
+            ),
           ),
         ],
         {
@@ -38,7 +38,7 @@ describe("Function `reportCliError`.", { concurrency: true }, () => {
             ...process.env,
             FORCE_COLOR: "1",
           },
-        }
+        },
       );
 
       if (error) throw error;
@@ -49,8 +49,8 @@ describe("Function `reportCliError`.", { concurrency: true }, () => {
         replaceStackTraces(stderr.toString()),
         new URL(
           "./test/snapshots/reportCliError/Error-instance-with-stack-stderr.ans",
-          import.meta.url
-        )
+          import.meta.url,
+        ),
       );
 
       strictEqual(status, 0);
@@ -63,8 +63,8 @@ describe("Function `reportCliError`.", { concurrency: true }, () => {
           fileURLToPath(
             new URL(
               "./test/fixtures/reportCliError/Error-instance-without-stack.mjs",
-              import.meta.url
-            )
+              import.meta.url,
+            ),
           ),
         ],
         {
@@ -72,7 +72,7 @@ describe("Function `reportCliError`.", { concurrency: true }, () => {
             ...process.env,
             FORCE_COLOR: "1",
           },
-        }
+        },
       );
 
       if (error) throw error;
@@ -83,8 +83,8 @@ describe("Function `reportCliError`.", { concurrency: true }, () => {
         replaceStackTraces(stderr.toString()),
         new URL(
           "./test/snapshots/reportCliError/Error-instance-without-stack-stderr.ans",
-          import.meta.url
-        )
+          import.meta.url,
+        ),
       );
 
       strictEqual(status, 0);
@@ -98,8 +98,8 @@ describe("Function `reportCliError`.", { concurrency: true }, () => {
         fileURLToPath(
           new URL(
             "./test/fixtures/reportCliError/CliError-instance.mjs",
-            import.meta.url
-          )
+            import.meta.url,
+          ),
         ),
       ],
       {
@@ -107,7 +107,7 @@ describe("Function `reportCliError`.", { concurrency: true }, () => {
           ...process.env,
           FORCE_COLOR: "1",
         },
-      }
+      },
     );
 
     if (error) throw error;
@@ -118,8 +118,8 @@ describe("Function `reportCliError`.", { concurrency: true }, () => {
       replaceStackTraces(stderr.toString()),
       new URL(
         "./test/snapshots/reportCliError/CliError-instance-stderr.ans",
-        import.meta.url
-      )
+        import.meta.url,
+      ),
     );
 
     strictEqual(status, 0);
@@ -132,8 +132,8 @@ describe("Function `reportCliError`.", { concurrency: true }, () => {
         fileURLToPath(
           new URL(
             "./test/fixtures/reportCliError/primitive-value.mjs",
-            import.meta.url
-          )
+            import.meta.url,
+          ),
         ),
       ],
       {
@@ -141,7 +141,7 @@ describe("Function `reportCliError`.", { concurrency: true }, () => {
           ...process.env,
           FORCE_COLOR: "1",
         },
-      }
+      },
     );
 
     if (error) throw error;
@@ -152,8 +152,8 @@ describe("Function `reportCliError`.", { concurrency: true }, () => {
       replaceStackTraces(stderr.toString()),
       new URL(
         "./test/snapshots/reportCliError/primitive-value-stderr.ans",
-        import.meta.url
-      )
+        import.meta.url,
+      ),
     );
 
     strictEqual(status, 0);

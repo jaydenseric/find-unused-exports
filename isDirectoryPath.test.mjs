@@ -11,16 +11,16 @@ describe("Function `isDirectoryPath`.", { concurrency: true }, () => {
     await rejects(
       isDirectoryPath(
         // @ts-expect-error Testing invalid.
-        true
+        true,
       ),
-      new TypeError("Argument 1 `path` must be a string.")
+      new TypeError("Argument 1 `path` must be a string."),
     );
   });
 
   it("Directory path.", async () => {
     strictEqual(
       await isDirectoryPath(fileURLToPath(new URL("./", import.meta.url))),
-      true
+      true,
     );
   });
 
@@ -31,9 +31,9 @@ describe("Function `isDirectoryPath`.", { concurrency: true }, () => {
   it("Nonexistent path.", async () => {
     strictEqual(
       await isDirectoryPath(
-        fileURLToPath(new URL("nonexistent", import.meta.url))
+        fileURLToPath(new URL("nonexistent", import.meta.url)),
       ),
-      false
+      false,
     );
   });
 });

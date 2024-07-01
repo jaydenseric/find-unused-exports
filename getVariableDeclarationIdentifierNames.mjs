@@ -11,11 +11,11 @@ import babel from "@babel/core";
  * @returns {Array<string>} Identifier names.
  */
 export default function getVariableDeclarationIdentifierNames(
-  variableDeclaration
+  variableDeclaration,
 ) {
   if (!babel.types.isVariableDeclaration(variableDeclaration))
     throw new TypeError(
-      "Argument 1 `variableDeclaration` must be a `VariableDeclaration` Babel AST node."
+      "Argument 1 `variableDeclaration` must be a `VariableDeclaration` Babel AST node.",
     );
 
   /** @type {Array<string>} */
@@ -55,7 +55,7 @@ export default function getVariableDeclarationIdentifierNames(
               collectIdentifierNames(
                 // To account for property renaming use the `value`, not the
                 // `key`. If the property isn’t renamed they are the same.
-                property.value
+                property.value,
               );
               break;
             case "RestElement":

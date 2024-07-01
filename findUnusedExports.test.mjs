@@ -14,11 +14,11 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
         cwd: fileURLToPath(
           new URL(
             "./test/fixtures/files-without-exports-imports",
-            import.meta.url
-          )
+            import.meta.url,
+          ),
         ),
       }),
-      {}
+      {},
     );
   });
 
@@ -28,11 +28,11 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
         cwd: fileURLToPath(
           new URL(
             "./test/fixtures/multiple-files-importing-from-same-file",
-            import.meta.url
-          )
+            import.meta.url,
+          ),
         ),
       }),
-      {}
+      {},
     );
   });
 
@@ -40,16 +40,16 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
     deepStrictEqual(
       await findUnusedExports({
         cwd: fileURLToPath(
-          new URL("./test/fixtures/no-unused-exports", import.meta.url)
+          new URL("./test/fixtures/no-unused-exports", import.meta.url),
         ),
       }),
-      {}
+      {},
     );
   });
 
   it("Some unused exports.", async () => {
     const fixtureProjectPath = fileURLToPath(
-      new URL("./test/fixtures/some-unused-exports", import.meta.url)
+      new URL("./test/fixtures/some-unused-exports", import.meta.url),
     );
 
     deepStrictEqual(await findUnusedExports({ cwd: fixtureProjectPath }), {
@@ -64,11 +64,11 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
         cwd: fileURLToPath(
           new URL(
             "./test/fixtures/namespace-import-and-default-import",
-            import.meta.url
-          )
+            import.meta.url,
+          ),
         ),
       }),
-      {}
+      {},
     );
   });
 
@@ -76,8 +76,8 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
     const fixtureProjectPath = fileURLToPath(
       new URL(
         "./test/fixtures/namespace-import-without-default-import",
-        import.meta.url
-      )
+        import.meta.url,
+      ),
     );
 
     deepStrictEqual(await findUnusedExports({ cwd: fixtureProjectPath }), {
@@ -89,10 +89,10 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
     deepStrictEqual(
       await findUnusedExports({
         cwd: fileURLToPath(
-          new URL("./test/fixtures/bare-import-specifier", import.meta.url)
+          new URL("./test/fixtures/bare-import-specifier", import.meta.url),
         ),
       }),
-      {}
+      {},
     );
   });
 
@@ -102,11 +102,11 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
         cwd: fileURLToPath(
           new URL(
             "./test/fixtures/unresolvable-import-specifier",
-            import.meta.url
-          )
+            import.meta.url,
+          ),
         ),
       }),
-      {}
+      {},
     );
   });
 
@@ -114,16 +114,19 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
     deepStrictEqual(
       await findUnusedExports({
         cwd: fileURLToPath(
-          new URL("./test/fixtures/gitignore", import.meta.url)
+          new URL("./test/fixtures/gitignore", import.meta.url),
         ),
       }),
-      {}
+      {},
     );
   });
 
   it("Ignore unused exports comments.", async () => {
     const fixtureProjectPath = fileURLToPath(
-      new URL("./test/fixtures/ignore-unused-exports-comments", import.meta.url)
+      new URL(
+        "./test/fixtures/ignore-unused-exports-comments",
+        import.meta.url,
+      ),
     );
 
     deepStrictEqual(
@@ -133,13 +136,13 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
       {
         [join(fixtureProjectPath, "b.mjs")]: new Set(["a"]),
         [join(fixtureProjectPath, "c.mjs")]: new Set(["default"]),
-      }
+      },
     );
   });
 
   it("Option `moduleGlob`.", async () => {
     const fixtureProjectPath = fileURLToPath(
-      new URL("./test/fixtures/moduleGlob", import.meta.url)
+      new URL("./test/fixtures/moduleGlob", import.meta.url),
     );
 
     deepStrictEqual(
@@ -149,7 +152,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
       }),
       {
         [join(fixtureProjectPath, "a.txt")]: new Set(["default"]),
-      }
+      },
     );
   });
 
@@ -157,8 +160,8 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
     const fixtureProjectPath = fileURLToPath(
       new URL(
         "./test/fixtures/extensionless-import-specifiers",
-        import.meta.url
-      )
+        import.meta.url,
+      ),
     );
 
     deepStrictEqual(
@@ -168,7 +171,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
       }),
       {
         [join(fixtureProjectPath, "b.a.mjs")]: new Set(["default"]),
-      }
+      },
     );
   });
 
@@ -176,8 +179,8 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
     const fixtureProjectPath = fileURLToPath(
       new URL(
         "./test/fixtures/extensionless-import-specifiers-and-index-files",
-        import.meta.url
-      )
+        import.meta.url,
+      ),
     );
 
     deepStrictEqual(
@@ -188,7 +191,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
       }),
       {
         [join(fixtureProjectPath, "b/index.a.mjs")]: new Set(["default"]),
-      }
+      },
     );
   });
 
@@ -199,7 +202,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
           // @ts-expect-error Testing invalid.
           cwd: true,
         }),
-        new TypeError("Option `cwd` must be a string.")
+        new TypeError("Option `cwd` must be a string."),
       );
     });
 
@@ -208,7 +211,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
         findUnusedExports({
           cwd: fileURLToPath(new URL("nonexistent", import.meta.url)),
         }),
-        new TypeError("Option `cwd` must be an accessible directory path.")
+        new TypeError("Option `cwd` must be an accessible directory path."),
       );
     });
   });
@@ -219,7 +222,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
         // @ts-expect-error Testing invalid.
         moduleGlob: true,
       }),
-      new TypeError("Option `moduleGlob` must be a string.")
+      new TypeError("Option `moduleGlob` must be a string."),
     );
   });
 
@@ -231,8 +234,8 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
           resolveFileExtensions: true,
         }),
         new TypeError(
-          "Option `resolveFileExtensions` must be an array of strings."
-        )
+          "Option `resolveFileExtensions` must be an array of strings.",
+        ),
       );
     });
 
@@ -240,8 +243,8 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
       await rejects(
         findUnusedExports({ resolveFileExtensions: [] }),
         new TypeError(
-          "Option `resolveFileExtensions` must be an array of strings."
-        )
+          "Option `resolveFileExtensions` must be an array of strings.",
+        ),
       );
     });
 
@@ -256,8 +259,8 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
           ],
         }),
         new TypeError(
-          "Option `resolveFileExtensions` must be an array of strings."
-        )
+          "Option `resolveFileExtensions` must be an array of strings.",
+        ),
       );
     });
   });
@@ -270,7 +273,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
           // @ts-expect-error Testing invalid.
           resolveIndexFiles: "",
         }),
-        new TypeError("Option `resolveIndexFiles` must be a boolean.")
+        new TypeError("Option `resolveIndexFiles` must be a boolean."),
       );
     });
 
@@ -278,8 +281,8 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
       await rejects(
         findUnusedExports({ resolveIndexFiles: true }),
         new TypeError(
-          "Option `resolveIndexFiles` can only be `true` if the option `resolveFileExtensions` is used."
-        )
+          "Option `resolveIndexFiles` can only be `true` if the option `resolveFileExtensions` is used.",
+        ),
       );
     });
   });

@@ -18,7 +18,7 @@ export default function reportCliError(cliDescription, error) {
 
   errorConsole.group(
     // Whitespace blank lines shouldn’t have redundant indentation or color.
-    `\n${bold(red(`Error running ${cliDescription}:`))}\n`
+    `\n${bold(red(`Error running ${cliDescription}:`))}\n`,
   );
 
   errorConsole.error(
@@ -26,13 +26,13 @@ export default function reportCliError(cliDescription, error) {
       error instanceof CliError
         ? error.message
         : error instanceof Error
-        ? // Rarely, an error doesn’t have a stack. In that case, the standard
-          // `toString` method returns the error’s `name` + `: ` + the
-          // `message`. This is consistent with the first part of a standard
-          // Node.js error’s `stack`.
-          error.stack || error.toString()
-        : inspect(error)
-    )
+          ? // Rarely, an error doesn’t have a stack. In that case, the standard
+            // `toString` method returns the error’s `name` + `: ` + the
+            // `message`. This is consistent with the first part of a standard
+            // Node.js error’s `stack`.
+            error.stack || error.toString()
+          : inspect(error),
+    ),
   );
 
   errorConsole.groupEnd();

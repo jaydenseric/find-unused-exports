@@ -10,9 +10,9 @@ describe("Function `scanModuleCode`.", { concurrency: true }, () => {
     await rejects(
       scanModuleCode(
         // @ts-expect-error Testing invalid.
-        true
+        true,
       ),
-      new TypeError("Argument 1 `code` must be a string.")
+      new TypeError("Argument 1 `code` must be a string."),
     );
   });
 
@@ -22,9 +22,9 @@ describe("Function `scanModuleCode`.", { concurrency: true }, () => {
         scanModuleCode(
           "",
           // @ts-expect-error Testing invalid.
-          true
+          true,
         ),
-        new TypeError("Argument 2 `path` must be a string.")
+        new TypeError("Argument 2 `path` must be a string."),
       );
     });
 
@@ -67,7 +67,7 @@ describe("Function `scanModuleCode`.", { concurrency: true }, () => {
           a: new Set(["default", "a"]),
         },
         exports: new Set(),
-      }
+      },
     );
   });
 
@@ -148,55 +148,55 @@ describe("Function `scanModuleCode`.", { concurrency: true }, () => {
                 {
                   imports: {},
                   exports: new Set(["a", "b"]),
-                }
+                },
               );
             });
 
             it("Renaming.", async () => {
               deepStrictEqual(
                 await scanModuleCode(
-                  "export const { a, b: c } = { a: 1, b: 1 }"
+                  "export const { a, b: c } = { a: 1, b: 1 }",
                 ),
                 {
                   imports: {},
                   exports: new Set(["a", "c"]),
-                }
+                },
               );
             });
 
             it("Rest element.", async () => {
               deepStrictEqual(
                 await scanModuleCode(
-                  "export const { a, ...b } = { a: 1, b: 1, c: 1 }"
+                  "export const { a, ...b } = { a: 1, b: 1, c: 1 }",
                 ),
                 {
                   imports: {},
                   exports: new Set(["a", "b"]),
-                }
+                },
               );
             });
 
             it("Nested array pattern.", async () => {
               deepStrictEqual(
                 await scanModuleCode(
-                  "export const { a, b: [c]} = { a: 1, b: [1] }"
+                  "export const { a, b: [c]} = { a: 1, b: [1] }",
                 ),
                 {
                   imports: {},
                   exports: new Set(["a", "c"]),
-                }
+                },
               );
             });
 
             it("Nested object pattern.", async () => {
               deepStrictEqual(
                 await scanModuleCode(
-                  "export const { a, b: { c }} = { a: 1, b: { c: 1 } }"
+                  "export const { a, b: { c }} = { a: 1, b: { c: 1 } }",
                 ),
                 {
                   imports: {},
                   exports: new Set(["a", "c"]),
-                }
+                },
               );
             });
           });
@@ -208,7 +208,7 @@ describe("Function `scanModuleCode`.", { concurrency: true }, () => {
                 {
                   imports: {},
                   exports: new Set(["a", "b"]),
-                }
+                },
               );
             });
 
@@ -218,7 +218,7 @@ describe("Function `scanModuleCode`.", { concurrency: true }, () => {
                 {
                   imports: {},
                   exports: new Set(["b"]),
-                }
+                },
               );
             });
 
@@ -228,7 +228,7 @@ describe("Function `scanModuleCode`.", { concurrency: true }, () => {
                 {
                   imports: {},
                   exports: new Set(["a", "b"]),
-                }
+                },
               );
             });
 
@@ -238,7 +238,7 @@ describe("Function `scanModuleCode`.", { concurrency: true }, () => {
                 {
                   imports: {},
                   exports: new Set(["a", "b"]),
-                }
+                },
               );
             });
 
@@ -248,7 +248,7 @@ describe("Function `scanModuleCode`.", { concurrency: true }, () => {
                 {
                   imports: {},
                   exports: new Set(["a", "b"]),
-                }
+                },
               );
             });
           });
@@ -277,7 +277,7 @@ describe("Function `scanModuleCode`.", { concurrency: true }, () => {
       {
         imports: {},
         exports: new Set(["default", "a"]),
-      }
+      },
     );
   });
 
@@ -302,14 +302,14 @@ describe("Function `scanModuleCode`.", { concurrency: true }, () => {
   it("Export default from, existing specifier.", async () => {
     deepStrictEqual(
       await scanModuleCode(
-        'import { a } from "a"; export { default } from "a"'
+        'import { a } from "a"; export { default } from "a"',
       ),
       {
         imports: {
           a: new Set(["default", "a"]),
         },
         exports: new Set(["default"]),
-      }
+      },
     );
   });
 
@@ -353,7 +353,7 @@ describe("Function `scanModuleCode`.", { concurrency: true }, () => {
           "a",
           // All export names are unknown.
         ]),
-      }
+      },
     );
   });
 
@@ -376,7 +376,7 @@ export default 1;
         {
           imports: {},
           exports: new Set(),
-        }
+        },
       );
     });
 
@@ -389,7 +389,7 @@ export default 1;
         {
           imports: {},
           exports: new Set(),
-        }
+        },
       );
     });
 
@@ -401,12 +401,12 @@ export default 1;
 export const a = 1;
 export const b = 1;
 export const c = 1;
-`
+`,
         ),
         {
           imports: {},
           exports: new Set(),
-        }
+        },
       );
     });
 
@@ -419,7 +419,7 @@ export default 1;
         {
           imports: {},
           exports: new Set(["a"]),
-        }
+        },
       );
     });
 
@@ -433,7 +433,7 @@ export default 1;
         {
           imports: {},
           exports: new Set(["b"]),
-        }
+        },
       );
     });
 
@@ -445,7 +445,7 @@ export default 1;
         {
           imports: {},
           exports: new Set(["default"]),
-        }
+        },
       );
     });
 
@@ -460,7 +460,7 @@ export default 1;
           {
             imports: {},
             exports: new Set(["a"]),
-          }
+          },
         );
       });
 
@@ -475,7 +475,7 @@ export default 1;
           {
             imports: {},
             exports: new Set(["default"]),
-          }
+          },
         );
       });
     });
@@ -489,7 +489,7 @@ export default 1;
         {
           imports: {},
           exports: new Set(["default"]),
-        }
+        },
       );
     });
   });
