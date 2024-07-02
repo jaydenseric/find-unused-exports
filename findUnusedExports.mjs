@@ -9,6 +9,8 @@ import isDirectoryPath from "./isDirectoryPath.mjs";
 import MODULE_GLOB from "./MODULE_GLOB.mjs";
 import scanModuleCode from "./scanModuleCode.mjs";
 
+/** @import { ModuleExports, ModuleScan } from "./scanModuleCode.mjs" */
+
 /**
  * Finds unused
  * [ECMAScript module exports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export)
@@ -33,7 +35,7 @@ import scanModuleCode from "./scanModuleCode.mjs";
  *   `true` might be appropriate. This option only works if the option
  *   `resolveFileExtensions` is used. Defaults to `false`.
  * @returns {Promise<{
- *   [moduleFilePath: string]: import("./scanModuleCode.mjs").ModuleExports,
+ *   [moduleFilePath: string]: ModuleExports,
  * }>} Map of module file paths and unused module exports.
  */
 export default async function findUnusedExports(options = {}) {
@@ -82,7 +84,7 @@ export default async function findUnusedExports(options = {}) {
 
   /**
    * @type {{
-   *   [moduleFilePath: string]: import("./scanModuleCode.mjs").ModuleScan,
+   *   [moduleFilePath: string]: ModuleScan,
    * }}
    */
   const scannedModules = {};
@@ -104,7 +106,7 @@ export default async function findUnusedExports(options = {}) {
 
   /**
    * @type {{
-   *   [moduleFilePath: string]: import("./scanModuleCode.mjs").ModuleExports,
+   *   [moduleFilePath: string]: ModuleExports,
    * }}
    */
   const possiblyUnusedExports = {};

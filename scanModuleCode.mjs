@@ -6,6 +6,8 @@ import babel from "@babel/core";
 
 import getVariableDeclarationIdentifierNames from "./getVariableDeclarationIdentifierNames.mjs";
 
+/** @import { ParserPlugin } from "@babel/parser" */
+
 // Babel seems to also support non-standard string literals in place of named
 // import and export identifiers, perhaps because CJS can have export names
 // containing dashes, etc. such as `exports["a-b-c"]` and they want to support
@@ -42,7 +44,7 @@ export default async function scanModuleCode(code, path) {
     exports: new Set(),
   };
 
-  /** @type {Array<import("@babel/parser").ParserPlugin>} */
+  /** @type {Array<ParserPlugin>} */
   const plugins = [
     // Allow parsing code containing modern syntax even if a project doesn’t
     // have Babel config to handle it.

@@ -13,6 +13,7 @@
 - Support resolving additional kinds of TypeScript source modules (if the exist) depending on the import specifier path file extension:
   - `.cjs` resolves `.cts`.
   - `.js` resolves `.ts` and `.tsx`.
+- Use the TypeScript v5.5+ JSDoc tag `@import` to import types in modules.
 
 ### Minor
 
