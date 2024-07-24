@@ -1,5 +1,11 @@
 # find-unused-exports changelog
 
+## Next
+
+### Minor
+
+- Enable JSX syntax when parsing `.jsx` files with Babel, even when the project has no Babel config for JSX.
+
 ## 6.0.0
 
 ### Major
