@@ -52,20 +52,19 @@ export default async function scanModuleCode(code, path) {
     ["decorators", { decoratorsBeforeExport: false }],
   ];
 
-  if (
-    path &&
+  if (path) {
     // Path is a TypeScript module.
-    (path.endsWith(".mts") ||
+    if (
+      path.endsWith(".mts") ||
       path.endsWith(".cts") ||
       path.endsWith(".ts") ||
-      path.endsWith(".tsx"))
-  ) {
-    // Allow parsing code containing TypeScript syntax.
-    plugins.push("typescript");
+      path.endsWith(".tsx")
+    )
+      // Allow parsing code containing TypeScript syntax.
+      plugins.push("typescript");
 
-    if (path.endsWith(".tsx"))
-      // Allow parsing code containing JSX syntax.
-      plugins.push("jsx");
+    // Allow parsing code containing JSX syntax.
+    if (path.endsWith(".tsx") || path.endsWith(".jsx")) plugins.push("jsx");
   }
 
   const ast = await babel.parseAsync(code, {

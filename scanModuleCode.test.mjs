@@ -58,6 +58,13 @@ describe("Function `scanModuleCode`.", { concurrency: true }, () => {
         },
       );
     });
+
+    it("`.jsx` file, JavaScript and JSX syntax.", async () => {
+      deepStrictEqual(await scanModuleCode("const a = <div />;", "a.jsx"), {
+        imports: {},
+        exports: new Set(),
+      });
+    });
   });
 
   it("No imports or exports.", async () => {
