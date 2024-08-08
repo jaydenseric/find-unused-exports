@@ -60,13 +60,10 @@ describe("Function `scanModuleCode`.", { concurrency: true }, () => {
     });
 
     it("`.jsx` file, JavaScript and JSX syntax.", async () => {
-      deepStrictEqual(
-        await scanModuleCode("let a; const b = <div />;", "a.jsx"),
-        {
-          imports: {},
-          exports: new Set(),
-        },
-      );
+      deepStrictEqual(await scanModuleCode("const a = <div />;", "a.jsx"), {
+        imports: {},
+        exports: new Set(),
+      });
     });
   });
 
