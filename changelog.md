@@ -4,7 +4,7 @@
 
 ### Minor
 
-- Enable JSX syntax when parsing `.jsx` files with Babel, even when the project has no Babel config for JSX.
+- Enable JSX syntax when parsing `.jsx` files with Babel, even when the project has no Babel config for JSX, via [#8](https://github.com/jaydenseric/find-unused-exports/pull/8).
 
 ## 6.0.0
 
