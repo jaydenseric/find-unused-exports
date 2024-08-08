@@ -94,7 +94,7 @@ It implements the function [`findUnusedExports`](./findUnusedExports.mjs).
 
 | Argument | Default | Description |
 | :-- | :-- | :-- |
-| `--module-glob` | `"**/{!(*.d).mts,!(*.d).cts,!(*.d).ts,*.{mjs,cjs,js,tsx}}"` | Module file glob pattern. |
+| `--module-glob` | `"**/{!(*.d).mts,!(*.d).cts,!(*.d).ts,*.{mjs,cjs,js,jsx,tsx}}"` | Module file glob pattern. |
 | `--resolve-file-extensions` |  | File extensions (without the leading `.`, multiple separated with `,` in preference order) to automatically resolve in extensionless import specifiers. [Import specifier file extensions are mandatory in Node.js](https://nodejs.org/api/esm.html#mandatory-file-extensions); if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) `mjs,js` might be appropriate. |
 | `--resolve-index-files` |  | Should directory index files be automatically resolved in extensionless import specifiers. [Node.js doesn’t do this by default](https://nodejs.org/api/esm.html#mandatory-file-extensions); if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) this argument might be appropriate. This argument only works if the argument `--resolve-file-extensions` is used. |
 

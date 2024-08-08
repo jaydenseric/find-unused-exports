@@ -2,6 +2,10 @@
 
 ## Next
 
+### Major
+
+- Changed the function `findUnusedExports` option `moduleGlob` and the CLI command `find-unused-exports` argument `--module-glob` default value from `**/{!(*.d).mts,!(*.d).cts,!(*.d).ts,*.{mjs,cjs,js,tsx}}` to `**/{!(*.d).mts,!(*.d).cts,!(*.d).ts,*.{mjs,cjs,js,jsx,tsx}}`; `.jsx` files are now recursively matched by default.
+
 ### Minor
 
 - Enable JSX syntax when parsing `.jsx` files with Babel, even when the project has no Babel config for JSX, via [#8](https://github.com/jaydenseric/find-unused-exports/pull/8).
