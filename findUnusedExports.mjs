@@ -189,19 +189,13 @@ export default async function findUnusedExports(options = {}) {
         );
 
         if (importedModulePath) {
-          if (moduleImports.has("*")) {
-            // Delete all the named exports from the unused exports set.
-            for (const name of possiblyUnusedExports[importedModulePath])
-              if (name !== "default")
-                possiblyUnusedExports[importedModulePath].delete(name);
-
-            // Check if a default import also needs to be deleted from the unused
-            // exports set.
-            if (moduleImports.has("default"))
-              possiblyUnusedExports[importedModulePath].delete("default");
-          } else
-            for (const name of moduleImports)
-              possiblyUnusedExports[importedModulePath].delete(name);
+          // If a namespace import (`import * as`) imported all exports of the
+          // module, delete every export from the unused exports set. Otherwise,
+          // delete only the imported exports from the unused exports set.
+          for (const name of moduleImports.has("*")
+            ? possiblyUnusedExports[importedModulePath]
+            : moduleImports)
+            possiblyUnusedExports[importedModulePath].delete(name);
 
           // Check if the module still has possibly unused exports.
           if (!possiblyUnusedExports[importedModulePath].size)

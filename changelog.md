@@ -12,6 +12,7 @@
 
 ### Patch
 
+- Fixed a namespace import not causing the default export to be considered used.
 - Improved the internal module `MODULE_GLOB` tests.
 
 ## 6.0.0

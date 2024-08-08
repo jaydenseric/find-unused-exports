@@ -80,9 +80,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
       ),
     );
 
-    deepStrictEqual(await findUnusedExports({ cwd: fixtureProjectPath }), {
-      [join(fixtureProjectPath, "a.mjs")]: new Set(["default"]),
-    });
+    deepStrictEqual(await findUnusedExports({ cwd: fixtureProjectPath }), {});
   });
 
   it("Bare import specifier.", async () => {
