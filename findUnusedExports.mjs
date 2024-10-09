@@ -1,5 +1,7 @@
 // @ts-check
 
+/** @import { ModuleExports, ModuleScan } from "./scanModuleCode.mjs" */
+
 import { readFile } from "node:fs/promises";
 import { dirname, extname, join, resolve, sep } from "node:path";
 
@@ -8,8 +10,6 @@ import { globby } from "globby";
 import isDirectoryPath from "./isDirectoryPath.mjs";
 import MODULE_GLOB from "./MODULE_GLOB.mjs";
 import scanModuleCode from "./scanModuleCode.mjs";
-
-/** @import { ModuleExports, ModuleScan } from "./scanModuleCode.mjs" */
 
 /**
  * Finds unused

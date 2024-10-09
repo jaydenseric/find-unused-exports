@@ -5,6 +5,7 @@
 ### Patch
 
 - Updated dependencies.
+- Moved JSDoc comments containing `@import` to before real imports.
 
 ## 7.0.0
 
