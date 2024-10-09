@@ -15,6 +15,7 @@
 - Enabled the TypeScript compiler options `noUnusedLocals` and `noUnusedParameters`.
 - Use the correct type for the ESLint config.
 - Moved JSDoc comments containing `@import` to before real imports.
+- Removed a workaround for the fixed TypeScript bug [microsoft/TypeScript#50286](https://github.com/microsoft/TypeScript/issues/50286) in the function `findUnusedExports`.
 
 ## 7.0.0
 

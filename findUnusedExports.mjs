@@ -38,16 +38,12 @@ import scanModuleCode from "./scanModuleCode.mjs";
  *   [moduleFilePath: string]: ModuleExports,
  * }>} Map of module file paths and unused module exports.
  */
-export default async function findUnusedExports(options = {}) {
-  // Avoid function parameter destructuring to workaround this TypeScript bug:
-  // https://github.com/microsoft/TypeScript/issues/50286
-  const {
-    cwd = process.cwd(),
-    moduleGlob = MODULE_GLOB,
-    resolveFileExtensions,
-    resolveIndexFiles = false,
-  } = options;
-
+export default async function findUnusedExports({
+  cwd = process.cwd(),
+  moduleGlob = MODULE_GLOB,
+  resolveFileExtensions,
+  resolveIndexFiles = false,
+} = {}) {
   if (typeof cwd !== "string")
     throw new TypeError("Option `cwd` must be a string.");
 
