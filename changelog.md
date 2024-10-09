@@ -8,6 +8,10 @@
 - Updated the package scripts:
   - Reordered the scripts.
   - Replaced `npm run` with `node --run`.
+- Updated GitHub Actions CI config:
+  - Run checks in seperate jobs.
+  - Removed custom step names.
+  - Replaced `npm run` with `node --run`.
 - Moved JSDoc comments containing `@import` to before real imports.
 
 ## 7.0.0
