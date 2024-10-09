@@ -1,5 +1,11 @@
 # find-unused-exports changelog
 
+## Next
+
+### Patch
+
+- Updated dependencies.
+
 ## 7.0.0
 
 ### Major
