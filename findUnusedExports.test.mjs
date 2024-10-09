@@ -138,59 +138,32 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
     );
   });
 
-  it("Option `moduleGlob`.", async () => {
-    const fixtureProjectPath = fileURLToPath(
-      new URL("./test/fixtures/moduleGlob", import.meta.url),
-    );
+  describe("Option `moduleGlob`.", { concurrency: true }, () => {
+    it("Not a string.", async () => {
+      await rejects(
+        findUnusedExports({
+          // @ts-expect-error Testing invalid.
+          moduleGlob: true,
+        }),
+        new TypeError("Option `moduleGlob` must be a string."),
+      );
+    });
 
-    deepStrictEqual(
-      await findUnusedExports({
-        cwd: fixtureProjectPath,
-        moduleGlob: "**/*.txt",
-      }),
-      {
-        [join(fixtureProjectPath, "a.txt")]: new Set(["default"]),
-      },
-    );
-  });
+    it("Valid.", async () => {
+      const fixtureProjectPath = fileURLToPath(
+        new URL("./test/fixtures/moduleGlob", import.meta.url),
+      );
 
-  it("Option `resolveFileExtensions`.", async () => {
-    const fixtureProjectPath = fileURLToPath(
-      new URL(
-        "./test/fixtures/extensionless-import-specifiers",
-        import.meta.url,
-      ),
-    );
-
-    deepStrictEqual(
-      await findUnusedExports({
-        cwd: fixtureProjectPath,
-        resolveFileExtensions: ["mjs", "a.mjs"],
-      }),
-      {
-        [join(fixtureProjectPath, "b.a.mjs")]: new Set(["default"]),
-      },
-    );
-  });
-
-  it("Options `resolveFileExtensions` and `resolveIndexFiles`.", async () => {
-    const fixtureProjectPath = fileURLToPath(
-      new URL(
-        "./test/fixtures/extensionless-import-specifiers-and-index-files",
-        import.meta.url,
-      ),
-    );
-
-    deepStrictEqual(
-      await findUnusedExports({
-        cwd: fixtureProjectPath,
-        resolveFileExtensions: ["mjs", "a.mjs"],
-        resolveIndexFiles: true,
-      }),
-      {
-        [join(fixtureProjectPath, "b/index.a.mjs")]: new Set(["default"]),
-      },
-    );
+      deepStrictEqual(
+        await findUnusedExports({
+          cwd: fixtureProjectPath,
+          moduleGlob: "**/*.txt",
+        }),
+        {
+          [join(fixtureProjectPath, "a.txt")]: new Set(["default"]),
+        },
+      );
+    });
   });
 
   describe("Option `cwd`.", { concurrency: true }, () => {
@@ -212,16 +185,6 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
         new TypeError("Option `cwd` must be an accessible directory path."),
       );
     });
-  });
-
-  it("Option `moduleGlob` not a string.", async () => {
-    await rejects(
-      findUnusedExports({
-        // @ts-expect-error Testing invalid.
-        moduleGlob: true,
-      }),
-      new TypeError("Option `moduleGlob` must be a string."),
-    );
   });
 
   describe("Option `resolveFileExtensions`.", { concurrency: true }, () => {
@@ -261,6 +224,25 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
         ),
       );
     });
+
+    it("Valid.", async () => {
+      const fixtureProjectPath = fileURLToPath(
+        new URL(
+          "./test/fixtures/extensionless-import-specifiers",
+          import.meta.url,
+        ),
+      );
+
+      deepStrictEqual(
+        await findUnusedExports({
+          cwd: fixtureProjectPath,
+          resolveFileExtensions: ["mjs", "a.mjs"],
+        }),
+        {
+          [join(fixtureProjectPath, "b.a.mjs")]: new Set(["default"]),
+        },
+      );
+    });
   });
 
   describe("Option `resolveIndexFiles`.", { concurrency: true }, () => {
@@ -283,5 +265,25 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
         ),
       );
     });
+  });
+
+  it("Options `resolveFileExtensions` and `resolveIndexFiles`.", async () => {
+    const fixtureProjectPath = fileURLToPath(
+      new URL(
+        "./test/fixtures/extensionless-import-specifiers-and-index-files",
+        import.meta.url,
+      ),
+    );
+
+    deepStrictEqual(
+      await findUnusedExports({
+        cwd: fixtureProjectPath,
+        resolveFileExtensions: ["mjs", "a.mjs"],
+        resolveIndexFiles: true,
+      }),
+      {
+        [join(fixtureProjectPath, "b/index.a.mjs")]: new Set(["default"]),
+      },
+    );
   });
 });
