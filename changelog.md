@@ -12,6 +12,7 @@
   - Run checks in seperate jobs.
   - Removed custom step names.
   - Replaced `npm run` with `node --run`.
+- Enabled the TypeScript compiler options `noUnusedLocals` and `noUnusedParameters`.
 - Moved JSDoc comments containing `@import` to before real imports.
 
 ## 7.0.0
