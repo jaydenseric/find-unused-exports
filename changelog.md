@@ -5,7 +5,9 @@
 ### Patch
 
 - Updated dependencies.
-- Reordered the package scripts.
+- Updated the package scripts:
+  - Reordered the scripts.
+  - Replaced `npm run` with `node --run`.
 - Moved JSDoc comments containing `@import` to before real imports.
 
 ## 7.0.0
