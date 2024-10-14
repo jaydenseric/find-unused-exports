@@ -19,6 +19,7 @@
 - Better function `findUnusedExports` test structure.
 - Avoid converting file URLs to paths in the CLI command `find-unused-exports` tests.
 - Updated examples in the readme.
+- Updated URLs in the readme.
 
 ## 7.0.0
 

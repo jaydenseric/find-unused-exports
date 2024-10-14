@@ -100,19 +100,19 @@ It implements the function [`findUnusedExports`](./findUnusedExports.mjs).
 
 #### Examples
 
-Using [`npx`](https://docs.npmjs.com/cli/v8/commands/npx) in a standard [Node.js](https://nodejs.org) project:
+Using [`npx`](https://docs.npmjs.com/cli/v10/commands/npx) in a standard [Node.js](https://nodejs.org) project:
 
 ```sh
 npx find-unused-exports
 ```
 
-Using [`npx`](https://docs.npmjs.com/cli/v8/commands/npx) in a typical [webpack](https://webpack.js.org) project that has ESM in `.js` files, extensionless import specifiers, and `index.js` files:
+Using [`npx`](https://docs.npmjs.com/cli/v10/commands/npx) in a typical [webpack](https://webpack.js.org) project that has ESM in `.js` files, extensionless import specifiers, and `index.js` files:
 
 ```sh
 npx find-unused-exports --module-glob "**/*.js" --resolve-file-extensions js --resolve-index-files
 ```
 
-[`package.json` scripts](https://docs.npmjs.com/cli/v8/using-npm/scripts) for a project that also uses [`eslint`](https://npm.im/eslint) and [`prettier`](https://npm.im/prettier):
+[`package.json` scripts](https://docs.npmjs.com/cli/v10/using-npm/scripts) for a project that also uses [`eslint`](https://npm.im/eslint) and [`prettier`](https://npm.im/prettier):
 
 ```json
 {
