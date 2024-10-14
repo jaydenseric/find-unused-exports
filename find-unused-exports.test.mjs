@@ -18,9 +18,7 @@ describe("CLI command `find-unused-exports`.", { concurrency: true }, () => {
       "node",
       [FIND_UNUSED_EXPORTS_CLI_PATH],
       {
-        cwd: fileURLToPath(
-          new URL("./test/fixtures/no-unused-exports", import.meta.url),
-        ),
+        cwd: new URL("./test/fixtures/no-unused-exports", import.meta.url),
         env: {
           ...process.env,
           FORCE_COLOR: "1",
@@ -46,9 +44,7 @@ describe("CLI command `find-unused-exports`.", { concurrency: true }, () => {
       "node",
       [FIND_UNUSED_EXPORTS_CLI_PATH],
       {
-        cwd: fileURLToPath(
-          new URL("./test/fixtures/some-unused-exports", import.meta.url),
-        ),
+        cwd: new URL("./test/fixtures/some-unused-exports", import.meta.url),
         env: {
           ...process.env,
           FORCE_COLOR: "1",
@@ -74,9 +70,7 @@ describe("CLI command `find-unused-exports`.", { concurrency: true }, () => {
       "node",
       [FIND_UNUSED_EXPORTS_CLI_PATH],
       {
-        cwd: fileURLToPath(
-          new URL("./test/fixtures/typescript-syntax", import.meta.url),
-        ),
+        cwd: new URL("./test/fixtures/typescript-syntax", import.meta.url),
         env: {
           ...process.env,
           FORCE_COLOR: "1",
@@ -102,9 +96,7 @@ describe("CLI command `find-unused-exports`.", { concurrency: true }, () => {
       "node",
       [FIND_UNUSED_EXPORTS_CLI_PATH, "--module-glob", "**/*.txt"],
       {
-        cwd: fileURLToPath(
-          new URL("./test/fixtures/moduleGlob", import.meta.url),
-        ),
+        cwd: new URL("./test/fixtures/moduleGlob", import.meta.url),
         env: {
           ...process.env,
           FORCE_COLOR: "1",
@@ -130,11 +122,9 @@ describe("CLI command `find-unused-exports`.", { concurrency: true }, () => {
       "node",
       [FIND_UNUSED_EXPORTS_CLI_PATH, "--resolve-file-extensions", "mjs,a.mjs"],
       {
-        cwd: fileURLToPath(
-          new URL(
-            "./test/fixtures/extensionless-import-specifiers",
-            import.meta.url,
-          ),
+        cwd: new URL(
+          "./test/fixtures/extensionless-import-specifiers",
+          import.meta.url,
         ),
         env: {
           ...process.env,
@@ -166,11 +156,9 @@ describe("CLI command `find-unused-exports`.", { concurrency: true }, () => {
         "--resolve-index-files",
       ],
       {
-        cwd: fileURLToPath(
-          new URL(
-            "./test/fixtures/extensionless-import-specifiers-and-index-files",
-            import.meta.url,
-          ),
+        cwd: new URL(
+          "./test/fixtures/extensionless-import-specifiers-and-index-files",
+          import.meta.url,
         ),
         env: {
           ...process.env,
@@ -197,11 +185,9 @@ describe("CLI command `find-unused-exports`.", { concurrency: true }, () => {
       "node",
       [FIND_UNUSED_EXPORTS_CLI_PATH, "--resolve-index-files"],
       {
-        cwd: fileURLToPath(
-          new URL(
-            "./test/fixtures/extensionless-import-specifiers-and-index-files",
-            import.meta.url,
-          ),
+        cwd: new URL(
+          "./test/fixtures/extensionless-import-specifiers-and-index-files",
+          import.meta.url,
         ),
         env: {
           ...process.env,

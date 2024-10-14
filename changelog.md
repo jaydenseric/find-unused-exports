@@ -17,6 +17,7 @@
 - Moved JSDoc comments containing `@import` to before real imports.
 - Removed a workaround for the fixed TypeScript bug [microsoft/TypeScript#50286](https://github.com/microsoft/TypeScript/issues/50286) in the function `findUnusedExports`.
 - Better function `findUnusedExports` test structure.
+- Avoid converting file URLs to paths in the CLI command `find-unused-exports` tests.
 
 ## 7.0.0
 
