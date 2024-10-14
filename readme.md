@@ -117,10 +117,10 @@ npx find-unused-exports --module-glob "**/*.js" --resolve-file-extensions js --r
 ```json
 {
   "scripts": {
-    "eslint": "eslint .",
     "prettier": "prettier -c .",
+    "eslint": "eslint",
     "find-unused-exports": "find-unused-exports",
-    "test": "npm run eslint && npm run prettier && npm run find-unused-exports",
+    "test": "npm run prettier && npm run eslint && npm run find-unused-exports",
     "prepublishOnly": "npm test"
   }
 }
