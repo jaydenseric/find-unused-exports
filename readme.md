@@ -9,7 +9,7 @@ To achieve this the whole project is analyzed at once, something [ESLint](https:
 
 ## Installation
 
-To install [`find-unused-exports`](https://npm.im/find-unused-exports) with [npm](https://npmjs.com/get-npm), run:
+To install [`find-unused-exports`](https://npm.im/find-unused-exports) with [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm), run:
 
 ```sh
 npm install find-unused-exports --save-dev
