@@ -143,9 +143,9 @@ export default async function findUnusedExports({
         pathToFileURL(path),
       );
 
-      // Bail if the specifier is bare and couldn’t be resolved by the import
-      // map; this tool only scans project files.
-      if (!resolvedImport) continue;
+      // This tool only scans project files; bail if the import couldn’t be
+      // resolved to a file URL.
+      if (resolvedImport?.protocol !== "file:") continue;
 
       const specifierAbsolutePath = fileURLToPath(resolvedImport);
       const specifierExtension = extname(specifierAbsolutePath);

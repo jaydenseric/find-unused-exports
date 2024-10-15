@@ -94,6 +94,20 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
     );
   });
 
+  it("Protocol `node:` import specifier.", async () => {
+    deepStrictEqual(
+      await findUnusedExports({
+        cwd: fileURLToPath(
+          new URL(
+            "./test/fixtures/protocol-node-import-specifier",
+            import.meta.url,
+          ),
+        ),
+      }),
+      {},
+    );
+  });
+
   it("Unresolvable import specifier.", async () => {
     deepStrictEqual(
       await findUnusedExports({
