@@ -1,0 +1,5 @@
+
+[1m[31mError running find-unused-exports:[39m[22m
+
+  [31mThe `--import-map` argument must be JSON.[39m
+

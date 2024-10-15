@@ -1,6 +1,6 @@
 // @ts-check
 
-import { deepStrictEqual, rejects } from "node:assert";
+import { deepStrictEqual, ok, rejects, strictEqual } from "node:assert";
 import { join, resolve } from "node:path";
 import { describe, it } from "node:test";
 import { fileURLToPath } from "node:url";
@@ -136,6 +136,46 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
         [join(fixtureProjectPath, "c.mjs")]: new Set(["default"]),
       },
     );
+  });
+
+  describe("Option `importMap`.", { concurrency: true }, () => {
+    it("Invalid.", async () => {
+      await rejects(
+        findUnusedExports({
+          // @ts-expect-error Testing invalid.
+          importMap: true,
+        }),
+        (error) => {
+          ok(error instanceof TypeError);
+          strictEqual(
+            error.message,
+            "Option `importMap` must be a valid import map.",
+          );
+          ok(error.cause instanceof TypeError);
+          return true;
+        },
+      );
+    });
+
+    it("Valid.", async () => {
+      const fixtureProjectPath = fileURLToPath(
+        new URL("./test/fixtures/import-map", import.meta.url),
+      );
+
+      deepStrictEqual(
+        await findUnusedExports({
+          cwd: fixtureProjectPath,
+          importMap: {
+            imports: {
+              "#a": "./a.mjs",
+            },
+          },
+        }),
+        {
+          [join(fixtureProjectPath, "b.mjs")]: new Set(["default"]),
+        },
+      );
+    });
   });
 
   describe("Option `moduleGlob`.", { concurrency: true }, () => {

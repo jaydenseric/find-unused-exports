@@ -1,12 +1,18 @@
 // @ts-check
 
-/** @import { ModuleExports, ModuleScan } from "./scanModuleCode.mjs" */
+/**
+ * @import { ImportMap, ParsedImportMap } from "@import-maps/resolve"
+ * @import { ModuleExports, ModuleScan } from "./scanModuleCode.mjs"
+ */
 
 import { readFile } from "node:fs/promises";
-import { dirname, extname, join, resolve, sep } from "node:path";
+import { extname, join, sep } from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
+import { parse, resolve as resolveImport } from "@import-maps/resolve";
 import { globby } from "globby";
 
+import directoryPathToFileURL from "./directoryPathToFileURL.mjs";
 import isDirectoryPath from "./isDirectoryPath.mjs";
 import MODULE_GLOB from "./MODULE_GLOB.mjs";
 import scanModuleCode from "./scanModuleCode.mjs";
@@ -18,6 +24,10 @@ import scanModuleCode from "./scanModuleCode.mjs";
  * @param {object} [options] Options.
  * @param {string} [options.cwd] A directory path to scope the search for source
  *   and `.gitignore` files, defaulting to `process.cwd()`.
+ * @param {ImportMap} [options.importMap]
+ *   [Import map](https://github.com/WICG/import-maps) that’s relative to the
+ *   current working directory specified by the option {@linkcode cwd}. Defaults
+ *   to `{}`.
  * @param {string} [options.moduleGlob] JavaScript file glob pattern. Defaults
  *   to {@linkcode MODULE_GLOB}.
  * @param {Array<string>} [options.resolveFileExtensions] File extensions
@@ -40,6 +50,7 @@ import scanModuleCode from "./scanModuleCode.mjs";
  */
 export default async function findUnusedExports({
   cwd = process.cwd(),
+  importMap = {},
   moduleGlob = MODULE_GLOB,
   resolveFileExtensions,
   resolveIndexFiles = false,
@@ -49,6 +60,19 @@ export default async function findUnusedExports({
 
   if (!(await isDirectoryPath(cwd)))
     throw new TypeError("Option `cwd` must be an accessible directory path.");
+
+  const cwdUrl = directoryPathToFileURL(cwd);
+
+  /** @type {ParsedImportMap} */
+  let parsedImportMap;
+
+  try {
+    parsedImportMap = parse(importMap, cwdUrl);
+  } catch (cause) {
+    throw new TypeError("Option `importMap` must be a valid import map.", {
+      cause,
+    });
+  }
 
   if (typeof moduleGlob !== "string")
     throw new TypeError("Option `moduleGlob` must be a string.");
@@ -110,95 +134,98 @@ export default async function findUnusedExports({
   for (const [path, { exports }] of Object.entries(scannedModules))
     if (exports.size) possiblyUnusedExports[path] = exports;
 
-  // Bail if the specifier is bare; this tool only scans project files.
   for (const [path, { imports }] of Object.entries(scannedModules))
-    for (const [specifier, moduleImports] of Object.entries(imports))
-      if (specifier.startsWith(".")) {
-        const specifierAbsolutePath = resolve(dirname(path), specifier);
-        const specifierExtension = extname(specifierAbsolutePath);
-        const specifierPossiblePaths = [specifierAbsolutePath];
+    for (const [specifier, moduleImports] of Object.entries(imports)) {
+      const { resolvedImport } = resolveImport(
+        specifier,
+        parsedImportMap,
+        // @ts-ignore https://github.com/microsoft/TypeScript/issues/59996
+        pathToFileURL(path),
+      );
 
-        switch (specifierExtension) {
-          // TypeScript import specifiers may use the `.mjs` file extension to
-          // resolve an `.mts` file in that directory with the same name.
-          case ".mjs": {
-            specifierPossiblePaths.push(
-              `${specifierAbsolutePath.slice(
-                0,
-                -specifierExtension.length,
-              )}.mts`,
-            );
-            break;
-          }
+      // Bail if the specifier is bare and couldn’t be resolved by the import
+      // map; this tool only scans project files.
+      if (!resolvedImport) continue;
 
-          // TypeScript import specifiers may use the `.cjs` file extension to
-          // resolve a `.cts` file in that directory with the same name.
-          case ".cjs": {
-            specifierPossiblePaths.push(
-              `${specifierAbsolutePath.slice(
-                0,
-                -specifierExtension.length,
-              )}.cts`,
-            );
-            break;
-          }
+      const specifierAbsolutePath = fileURLToPath(resolvedImport);
+      const specifierExtension = extname(specifierAbsolutePath);
+      const specifierPossiblePaths = [specifierAbsolutePath];
 
-          // TypeScript import specifiers may use the `.js` file extension to
-          // resolve a `.ts` or `.tsx` file in that directory with the same
-          // name.
-          case ".js": {
-            const pathWithoutExtension = specifierAbsolutePath.slice(
-              0,
-              -specifierExtension.length,
-            );
+      switch (specifierExtension) {
+        // TypeScript import specifiers may use the `.mjs` file extension to
+        // resolve an `.mts` file in that directory with the same name.
+        case ".mjs": {
+          specifierPossiblePaths.push(
+            `${specifierAbsolutePath.slice(0, -specifierExtension.length)}.mts`,
+          );
+          break;
+        }
 
-            specifierPossiblePaths.push(
-              `${pathWithoutExtension}.ts`,
-              `${pathWithoutExtension}.tsx`,
-            );
-            break;
-          }
+        // TypeScript import specifiers may use the `.cjs` file extension to
+        // resolve a `.cts` file in that directory with the same name.
+        case ".cjs": {
+          specifierPossiblePaths.push(
+            `${specifierAbsolutePath.slice(0, -specifierExtension.length)}.cts`,
+          );
+          break;
+        }
 
-          // No file extension.
-          case "": {
-            if (resolveFileExtensions) {
+        // TypeScript import specifiers may use the `.js` file extension to
+        // resolve a `.ts` or `.tsx` file in that directory with the same
+        // name.
+        case ".js": {
+          const pathWithoutExtension = specifierAbsolutePath.slice(
+            0,
+            -specifierExtension.length,
+          );
+
+          specifierPossiblePaths.push(
+            `${pathWithoutExtension}.ts`,
+            `${pathWithoutExtension}.tsx`,
+          );
+          break;
+        }
+
+        // No file extension.
+        case "": {
+          if (resolveFileExtensions) {
+            for (const extension of resolveFileExtensions)
+              specifierPossiblePaths.push(
+                `${specifierAbsolutePath}.${extension}`,
+              );
+
+            if (resolveIndexFiles)
               for (const extension of resolveFileExtensions)
                 specifierPossiblePaths.push(
-                  `${specifierAbsolutePath}.${extension}`,
+                  `${specifierAbsolutePath}${sep}index.${extension}`,
                 );
-
-              if (resolveIndexFiles)
-                for (const extension of resolveFileExtensions)
-                  specifierPossiblePaths.push(
-                    `${specifierAbsolutePath}${sep}index.${extension}`,
-                  );
-            }
           }
         }
-
-        // If there’s no match for the imported module in the map of (so far)
-        // unused exports it means either none of the imported module’s exports
-        // remain unused, or the import is simply unresolvable (not an issue for
-        // this tool).
-        const importedModulePath = specifierPossiblePaths.find(
-          (path) => path in possiblyUnusedExports,
-        );
-
-        if (importedModulePath) {
-          // If a namespace import (`import * as`) imported all exports of the
-          // module, delete every export from the unused exports set. Otherwise,
-          // delete only the imported exports from the unused exports set.
-          for (const name of moduleImports.has("*")
-            ? possiblyUnusedExports[importedModulePath]
-            : moduleImports)
-            possiblyUnusedExports[importedModulePath].delete(name);
-
-          // Check if the module still has possibly unused exports.
-          if (!possiblyUnusedExports[importedModulePath].size)
-            // Delete the file from the map of unused exports.
-            delete possiblyUnusedExports[importedModulePath];
-        }
       }
+
+      // If there’s no match for the imported module in the map of (so far)
+      // unused exports it means either none of the imported module’s exports
+      // remain unused, or the import is simply unresolvable (not an issue for
+      // this tool).
+      const importedModulePath = specifierPossiblePaths.find(
+        (path) => path in possiblyUnusedExports,
+      );
+
+      if (importedModulePath) {
+        // If a namespace import (`import * as`) imported all exports of the
+        // module, delete every export from the unused exports set. Otherwise,
+        // delete only the imported exports from the unused exports set.
+        for (const name of moduleImports.has("*")
+          ? possiblyUnusedExports[importedModulePath]
+          : moduleImports)
+          possiblyUnusedExports[importedModulePath].delete(name);
+
+        // Check if the module still has possibly unused exports.
+        if (!possiblyUnusedExports[importedModulePath].size)
+          // Delete the file from the map of unused exports.
+          delete possiblyUnusedExports[importedModulePath];
+      }
+    }
 
   return possiblyUnusedExports;
 }

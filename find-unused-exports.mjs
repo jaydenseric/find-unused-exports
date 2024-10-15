@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 // @ts-check
 
+/** @import { ImportMap } from "@import-maps/resolve" */
+
 import { relative } from "node:path";
 
 import arg from "arg";
@@ -18,14 +20,27 @@ import reportCliError from "./reportCliError.mjs";
 async function findUnusedExportsCli() {
   try {
     const {
+      "--import-map": importMapJson,
       "--module-glob": moduleGlob,
       "--resolve-file-extensions": resolveFileExtensionsList,
       "--resolve-index-files": resolveIndexFiles,
     } = arg({
+      "--import-map": String,
       "--module-glob": String,
       "--resolve-file-extensions": String,
       "--resolve-index-files": Boolean,
     });
+
+    /** @type {ImportMap | undefined} */
+    let importMap;
+
+    if (importMapJson) {
+      try {
+        importMap = JSON.parse(importMapJson);
+      } catch {
+        throw new CliError(`The \`--import-map\` argument must be JSON.`);
+      }
+    }
 
     if (resolveIndexFiles && !resolveFileExtensionsList)
       throw new CliError(
@@ -33,6 +48,7 @@ async function findUnusedExportsCli() {
       );
 
     const unusedExports = await findUnusedExports({
+      importMap,
       moduleGlob,
       resolveFileExtensions: resolveFileExtensionsList
         ? resolveFileExtensionsList.split(",")

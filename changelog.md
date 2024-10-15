@@ -2,6 +2,12 @@
 
 ## Next
 
+### Minor
+
+- Added support for [import maps](https://github.com/WICG/import-maps), fixing [#4](https://github.com/jaydenseric/find-unused-exports/issues/4):
+  - Added the CLI command `find-unused-exports` argument `--import-map`.
+  - Added the function `findUnusedExports` option `importMap`.
+
 ### Patch
 
 - Updated dependencies.

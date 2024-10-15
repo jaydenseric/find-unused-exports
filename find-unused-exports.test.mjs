@@ -91,6 +91,65 @@ describe("CLI command `find-unused-exports`.", { concurrency: true }, () => {
     strictEqual(status, 1);
   });
 
+  describe("Arg `--import-map`.", { concurrency: true }, () => {
+    it("Invalid.", async () => {
+      const { stdout, stderr, status, error } = spawnSync(
+        "node",
+        [FIND_UNUSED_EXPORTS_CLI_PATH, "--import-map", "_"],
+        {
+          cwd: new URL("./test/fixtures/import-map", import.meta.url),
+          env: {
+            ...process.env,
+            FORCE_COLOR: "1",
+          },
+        },
+      );
+
+      if (error) throw error;
+
+      strictEqual(stdout.toString(), "");
+      await assertSnapshot(
+        stderr.toString(),
+        new URL(
+          "./test/snapshots/find-unused-exports/import-map-invalid-stderr.ans",
+          import.meta.url,
+        ),
+      );
+      strictEqual(status, 1);
+    });
+
+    it("Valid.", async () => {
+      const { stdout, stderr, status, error } = spawnSync(
+        "node",
+        [
+          FIND_UNUSED_EXPORTS_CLI_PATH,
+          "--import-map",
+          '"$(cat import-map.json)"',
+        ],
+        {
+          cwd: new URL("./test/fixtures/import-map", import.meta.url),
+          env: {
+            ...process.env,
+            FORCE_COLOR: "1",
+          },
+          shell: true,
+        },
+      );
+
+      if (error) throw error;
+
+      strictEqual(stdout.toString(), "");
+      await assertSnapshot(
+        stderr.toString(),
+        new URL(
+          "./test/snapshots/find-unused-exports/import-map-valid-stderr.ans",
+          import.meta.url,
+        ),
+      );
+      strictEqual(status, 1);
+    });
+  });
+
   it("Arg `--module-glob`.", async () => {
     const { stdout, stderr, status, error } = spawnSync(
       "node",
