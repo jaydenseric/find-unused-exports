@@ -139,7 +139,6 @@ export default async function findUnusedExports({
       const { resolvedImport } = resolveImport(
         specifier,
         parsedImportMap,
-        // @ts-ignore https://github.com/microsoft/TypeScript/issues/59996
         pathToFileURL(path),
       );
 

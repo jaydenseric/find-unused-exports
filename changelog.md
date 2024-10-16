@@ -1,5 +1,11 @@
 # find-unused-exports changelog
 
+## Next
+
+### Patch
+
+- Removed no longer necessary TypeScript ignore comments now that [microsoft/TypeScript#59996](https://github.com/microsoft/TypeScript/issues/59996) is fixed.
+
 ## 7.1.0
 
 ### Minor

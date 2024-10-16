@@ -12,7 +12,6 @@ export default function directoryPathToFileURL(directoryPath) {
   if (typeof directoryPath !== "string")
     throw new TypeError("Argument 1 `directoryPath` must be a string.");
 
-  // @ts-ignore https://github.com/microsoft/TypeScript/issues/59996
   return pathToFileURL(
     directoryPath.endsWith("/") ? directoryPath : `${directoryPath}/`,
   );
