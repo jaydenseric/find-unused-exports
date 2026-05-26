@@ -1,5 +1,11 @@
 # find-unused-exports changelog
 
+## Next
+
+### Patch
+
+- Fixed a typo in the changelog v7.1.0 patch notes.
+
 ## 7.1.1
 
 ### Patch
@@ -21,7 +27,7 @@
   - Reordered the scripts.
   - Replaced `npm run` with `node --run`.
 - Updated GitHub Actions CI config:
-  - Run checks in seperate jobs.
+  - Run checks in separate jobs.
   - Removed custom step names.
   - Replaced `npm run` with `node --run`.
 - Enabled the TypeScript compiler options `noUnusedLocals` and `noUnusedParameters`.
