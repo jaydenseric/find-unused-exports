@@ -5,9 +5,11 @@
 ### Major
 
 - Updated Node.js support to `^22.13.0 || >=24.0.0`.
+- Updated dev dependencies, some of which require newer Node.js versions than previously supported.
 
 ### Patch
 
+- Removed ESLint `@types` dev dependencies as it now publishes types.
 - Fixed a typo in the changelog v7.1.0 patch notes.
 - Updated GitHub Actions CI config:
   - Run tests with Node.js v22, v24.
