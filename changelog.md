@@ -10,6 +10,7 @@
 ### Patch
 
 - Removed ESLint `@types` dev dependencies as it now publishes types.
+- Migrated config for TypeScript v6.
 - Fixed a typo in the changelog v7.1.0 patch notes.
 - Updated GitHub Actions CI config:
   - Run tests with Node.js v22, v24.
