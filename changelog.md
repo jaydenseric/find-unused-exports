@@ -2,9 +2,18 @@
 
 ## Next
 
+### Major
+
+- Updated Node.js support to `^22.13.0 || >=24.0.0`.
+
 ### Patch
 
 - Fixed a typo in the changelog v7.1.0 patch notes.
+- Updated GitHub Actions CI config:
+  - Run tests with Node.js v22, v24.
+  - Removed conditionality for Node.js < v22 support.
+  - Updated `actions/checkout` to v6.
+  - Updated `actions/setup-node` to v6.
 
 ## 7.1.1
 
