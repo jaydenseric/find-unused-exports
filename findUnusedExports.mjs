@@ -25,9 +25,9 @@ import scanModuleCode from "./scanModuleCode.mjs";
  * @param {string} [options.cwd] A directory path to scope the search for source
  *   and `.gitignore` files, defaulting to `process.cwd()`.
  * @param {ImportMap} [options.importMap]
- *   [Import map](https://github.com/WICG/import-maps) that’s relative to the
- *   current working directory specified by the option {@linkcode cwd}. Defaults
- *   to `{}`.
+ *   [Import map](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/script/type/importmap#import_map_json_representation)
+ *   that’s relative to the current working directory specified by the option
+ *   {@linkcode cwd}. Defaults to `{}`.
  * @param {string} [options.moduleGlob] JavaScript file glob pattern. Defaults
  *   to {@linkcode MODULE_GLOB}.
  * @param {Array<string>} [options.resolveFileExtensions] File extensions
