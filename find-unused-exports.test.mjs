@@ -120,12 +120,16 @@ describe("CLI command `find-unused-exports`.", { concurrency: true }, () => {
 
     it("Valid.", async () => {
       const { stdout, stderr, status, error } = spawnSync(
-        "node",
+        // Workaround Node.js deprecating passing args with shell enabled:
+        // https://nodejs.org/api/deprecations.html#DEP0190
         [
+          "node",
           FIND_UNUSED_EXPORTS_CLI_PATH,
           "--import-map",
+          // Instead of providing the import map directly, shell is used to test
+          // the readme example of using the CLI with an import map JSON file.
           '"$(cat import-map.json)"',
-        ],
+        ].join(" "),
         {
           cwd: new URL("./test/fixtures/import-map", import.meta.url),
           env: {

@@ -22,6 +22,7 @@
   - Removed conditionality for Node.js < v22 support.
   - Updated `actions/checkout` to v6.
   - Updated `actions/setup-node` to v6.
+- Workaround Node.js deprecation [DEP0190](https://nodejs.org/api/deprecations.html#DEP0190) in tests.
 
 ## 7.1.1
 
