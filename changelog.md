@@ -26,6 +26,7 @@
   - Updated `actions/checkout` to v6.
   - Updated `actions/setup-node` to v6.
 - Workaround Node.js deprecation [DEP0190](https://nodejs.org/api/deprecations.html#DEP0190) in tests.
+- Added Git ignored test fixtures that were accidentally missing from the repo.
 
 ## 7.1.1
 
