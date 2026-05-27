@@ -122,15 +122,28 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
     );
   });
 
-  it("`.gitignore` file.", async () => {
-    deepStrictEqual(
-      await findUnusedExports({
-        cwd: fileURLToPath(
-          new URL("./test/fixtures/gitignore", import.meta.url),
-        ),
-      }),
-      {},
-    );
+  describe("`.gitignore` file.", { concurrency: true }, () => {
+    it("In CWD.", async () => {
+      deepStrictEqual(
+        await findUnusedExports({
+          cwd: fileURLToPath(
+            new URL("./test/fixtures/gitignore", import.meta.url),
+          ),
+        }),
+        {},
+      );
+    });
+
+    it("Above CWD.", async () => {
+      deepStrictEqual(
+        await findUnusedExports({
+          cwd: fileURLToPath(
+            new URL("./test/fixtures/gitignore/a", import.meta.url),
+          ),
+        }),
+        {},
+      );
+    });
   });
 
   it("Ignore unused exports comments.", async () => {

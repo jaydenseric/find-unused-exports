@@ -10,6 +10,9 @@
   - In some situations ANSI formatting is simpler with the same appearance.
   - The environment variable `FORCE_COLOR` now overrides `NO_COLOR` if both are set.
   - Potential bugs have been fixed relating to separately checking if `stdout` and `stderr` streams should be formatted.
+- Updated the dependency [`globby`](https://npm.im/globby) to v16, fixing [#5](https://github.com/jaydenseric/find-unused-exports/issues/5):
+  - `.gitignore` files above the CWD are now respected, and a test for this has been added.
+  - The way globs are implemented may have subtly changed.
 
 ### Patch
 

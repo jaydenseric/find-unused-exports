@@ -56,7 +56,7 @@
     "@types/babel__core": "^7.20.5",
     "@types/node": "*",
     "arg": "^5.0.2",
-    "globby": "^14.0.2"
+    "globby": "^16.2.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
