@@ -4,9 +4,9 @@
 /** @import { ImportMap } from "@import-maps/resolve" */
 
 import { relative } from "node:path";
+import { styleText } from "node:util";
 
 import arg from "arg";
-import { bold, dim, green, red, underline } from "kleur/colors";
 
 import CliError from "./CliError.mjs";
 import errorConsole from "./errorConsole.mjs";
@@ -71,25 +71,40 @@ async function findUnusedExportsCli() {
 
         countUnusedExports += exports.size;
 
-        errorConsole.group(`\n${underline(red(relative(cwd, path)))}`);
-        errorConsole.error(dim(red(Array.from(exports).join(", "))));
+        errorConsole.group(
+          `\n${styleText(["underline", "red"], relative(cwd, path), {
+            stream: process.stderr,
+          })}`,
+        );
+        errorConsole.error(
+          styleText(["dim", "red"], Array.from(exports).join(", "), {
+            stream: process.stderr,
+          }),
+        );
         errorConsole.groupEnd();
       }
 
       errorConsole.error(
-        `\n${bold(
-          red(
-            `${countUnusedExports} unused export${
-              countUnusedExports === 1 ? "" : "s"
-            } in ${countUnusedExportsModules} module${
-              countUnusedExportsModules === 1 ? "" : "s"
-            }.`,
-          ),
+        `\n${styleText(
+          ["bold", "red"],
+          `${countUnusedExports} unused export${
+            countUnusedExports === 1 ? "" : "s"
+          } in ${countUnusedExportsModules} module${
+            countUnusedExportsModules === 1 ? "" : "s"
+          }.`,
+          {
+            stream: process.stderr,
+          },
         )}\n`,
       );
 
       process.exitCode = 1;
-    } else console.info(`\n${bold(green(`0 unused exports.`))}\n`);
+    } else
+      console.info(
+        `\n${styleText(["bold", "green"], `0 unused exports.`, {
+          stream: process.stdout,
+        })}\n`,
+      );
   } catch (error) {
     reportCliError("find-unused-exports", error);
 

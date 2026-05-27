@@ -6,6 +6,10 @@
 
 - Updated Node.js support to `^22.13.0 || >=24.0.0`.
 - Updated dev dependencies, some of which require newer Node.js versions than previously supported.
+- Replaced the dependency [`kleur`](https://npm.im/kleur) with the native Node.js API [`styleText` from `node:util`](https://nodejs.org/api/util.html#utilstyletextformat-text-options), affecting CLI output:
+  - In some situations ANSI formatting is simpler with the same appearance.
+  - The environment variable `FORCE_COLOR` now overrides `NO_COLOR` if both are set.
+  - Potential bugs have been fixed relating to separately checking if `stdout` and `stderr` streams should be formatted.
 
 ### Patch
 

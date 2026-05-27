@@ -1,8 +1,6 @@
 // @ts-check
 
-import { inspect } from "node:util";
-
-import { bold, red } from "kleur/colors";
+import { inspect, styleText } from "node:util";
 
 import CliError from "./CliError.mjs";
 import errorConsole from "./errorConsole.mjs";
@@ -18,11 +16,14 @@ export default function reportCliError(cliDescription, error) {
 
   errorConsole.group(
     // Whitespace blank lines shouldn’t have redundant indentation or color.
-    `\n${bold(red(`Error running ${cliDescription}:`))}\n`,
+    `\n${styleText(["bold", "red"], `Error running ${cliDescription}:`, {
+      stream: process.stderr,
+    })}\n`,
   );
 
   errorConsole.error(
-    red(
+    styleText(
+      "red",
       error instanceof CliError
         ? error.message
         : error instanceof Error
@@ -32,6 +33,9 @@ export default function reportCliError(cliDescription, error) {
             // Node.js error’s `stack`.
             error.stack || error.toString()
           : inspect(error),
+      {
+        stream: process.stderr,
+      },
     ),
   );
 
