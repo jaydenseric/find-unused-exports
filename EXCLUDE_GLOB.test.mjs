@@ -4,21 +4,12 @@ import { ok, strictEqual } from "node:assert";
 import { matchesGlob } from "node:path";
 import { describe, it } from "node:test";
 
-import MODULE_GLOB from "./MODULE_GLOB.mjs";
+import EXCLUDE_GLOB from "./EXCLUDE_GLOB.mjs";
 
-describe("Constant `MODULE_GLOB`.", { concurrency: true }, () => {
-  for (const extension of [
-    "cjs",
-    "cts",
-    "js",
-    "jsx",
-    "mjs",
-    "mts",
-    "ts",
-    "tsx",
-  ])
+describe("Constant `EXCLUDE_GLOB`.", { concurrency: true }, () => {
+  for (const extension of ["d.mts", "d.cts", "d.ts"])
     describe(
-      `Matching module file extension \`${extension}\`.`,
+      `Matching TypeScript declaration file extension \`${extension}\`.`,
       { concurrency: true },
       () => {
         for (const filename of [
@@ -35,17 +26,32 @@ describe("Constant `MODULE_GLOB`.", { concurrency: true }, () => {
         ])
           describe(`Filename \`${filename}\`.`, { concurrency: true }, () => {
             it("Not nested.", () => {
-              ok(matchesGlob(filename, MODULE_GLOB));
+              ok(matchesGlob(filename, EXCLUDE_GLOB));
             });
 
             it("Nested.", () => {
-              ok(matchesGlob(`a/${filename}`, MODULE_GLOB));
+              ok(matchesGlob(`a/${filename}`, EXCLUDE_GLOB));
             });
           });
       },
     );
 
+  describe(
+    "Matching `node_modules` directories.",
+    { concurrency: true },
+    () => {
+      it("Not nested.", () => {
+        ok(matchesGlob("node_modules/a.mjs", EXCLUDE_GLOB));
+      });
+
+      it("Nested.", () => {
+        ok(matchesGlob("a/node_modules/a.mjs", EXCLUDE_GLOB));
+      });
+    },
+  );
+
   it("Not matching.", () => {
-    strictEqual(matchesGlob("/a.txt", MODULE_GLOB), false);
+    strictEqual(matchesGlob("a.a.ts", EXCLUDE_GLOB), false);
+    strictEqual(matchesGlob("a/a.mjs", EXCLUDE_GLOB), false);
   });
 });

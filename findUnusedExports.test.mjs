@@ -95,54 +95,35 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
   });
 
   it("Protocol `node:` import specifier.", async () => {
-    deepStrictEqual(
-      await findUnusedExports({
-        cwd: fileURLToPath(
-          new URL(
-            "./test/fixtures/protocol-node-import-specifier",
-            import.meta.url,
-          ),
-        ),
-      }),
-      {},
+    const fixtureProjectPath = fileURLToPath(
+      new URL(
+        "./test/fixtures/protocol-node-import-specifier",
+        import.meta.url,
+      ),
     );
+
+    deepStrictEqual(await findUnusedExports({ cwd: fixtureProjectPath }), {
+      [join(fixtureProjectPath, "a.mjs")]: new Set(["default"]),
+    });
+  });
+
+  it("Side effect import.", async () => {
+    const fixtureProjectPath = fileURLToPath(
+      new URL("./test/fixtures/side-effect-import", import.meta.url),
+    );
+
+    deepStrictEqual(await findUnusedExports({ cwd: fixtureProjectPath }), {
+      [join(fixtureProjectPath, "a.mjs")]: new Set(["default"]),
+    });
   });
 
   it("Unresolvable import specifier.", async () => {
-    deepStrictEqual(
-      await findUnusedExports({
-        cwd: fileURLToPath(
-          new URL(
-            "./test/fixtures/unresolvable-import-specifier",
-            import.meta.url,
-          ),
-        ),
-      }),
-      {},
+    const fixtureProjectPath = fileURLToPath(
+      new URL("./test/fixtures/unresolvable-import-specifier", import.meta.url),
     );
-  });
 
-  describe("`.gitignore` file.", { concurrency: true }, () => {
-    it("In CWD.", async () => {
-      deepStrictEqual(
-        await findUnusedExports({
-          cwd: fileURLToPath(
-            new URL("./test/fixtures/gitignore", import.meta.url),
-          ),
-        }),
-        {},
-      );
-    });
-
-    it("Above CWD.", async () => {
-      deepStrictEqual(
-        await findUnusedExports({
-          cwd: fileURLToPath(
-            new URL("./test/fixtures/gitignore/a", import.meta.url),
-          ),
-        }),
-        {},
-      );
+    deepStrictEqual(await findUnusedExports({ cwd: fixtureProjectPath }), {
+      [join(fixtureProjectPath, "a.mjs")]: new Set(["default"]),
     });
   });
 
@@ -163,6 +144,110 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
         [join(fixtureProjectPath, "c.mjs")]: new Set(["default"]),
       },
     );
+  });
+
+  describe("Option `excludeGlob`.", { concurrency: true }, () => {
+    it("Not a string.", async () => {
+      await rejects(
+        findUnusedExports({
+          // @ts-expect-error Testing invalid.
+          excludeGlob: true,
+        }),
+        new TypeError("Option `excludeGlob` must be a string."),
+      );
+    });
+
+    it("Valid.", async () => {
+      const fixtureProjectPath = fileURLToPath(
+        new URL("./test/fixtures/excludeGlob", import.meta.url),
+      );
+
+      deepStrictEqual(
+        await findUnusedExports({
+          cwd: fixtureProjectPath,
+          excludeGlob: "**/b.mjs",
+        }),
+        {
+          [join(fixtureProjectPath, "a.mjs")]: new Set(["default"]),
+        },
+      );
+    });
+  });
+
+  describe("Option `ignore`.", { concurrency: true }, () => {
+    it("Not an object.", async () => {
+      await rejects(
+        findUnusedExports({
+          // @ts-expect-error Testing invalid.
+          ignore: true,
+        }),
+        new TypeError("Option `ignore` must be an object."),
+      );
+    });
+
+    it("Object with an entry not an array.", async () => {
+      await rejects(
+        findUnusedExports({
+          ignore: {
+            // @ts-expect-error Testing invalid.
+            a: true,
+          },
+        }),
+        new TypeError("Option `ignore` entry `a` must be an array."),
+      );
+    });
+
+    it("Object with an entry array with an item not a string.", async () => {
+      await rejects(
+        findUnusedExports({
+          ignore: {
+            a: [
+              "a",
+              // @ts-expect-error Testing invalid.
+              true,
+            ],
+          },
+        }),
+        new TypeError("Option `ignore` entry `a` entry 1 must be a string."),
+      );
+    });
+
+    it("Ignoring some unused exports.", async () => {
+      const fixtureProjectPath = fileURLToPath(
+        new URL("./test/fixtures/option-ignore", import.meta.url),
+      );
+
+      deepStrictEqual(
+        await findUnusedExports({
+          cwd: fixtureProjectPath,
+          ignore: {
+            "a.mjs": ["default"],
+            "b.mjs": ["a"],
+          },
+        }),
+        {
+          [join(fixtureProjectPath, "a.mjs")]: new Set(["b"]),
+          [join(fixtureProjectPath, "b.mjs")]: new Set(["default"]),
+        },
+      );
+    });
+
+    it("Ignoring all unused exports.", async () => {
+      const fixtureProjectPath = fileURLToPath(
+        new URL("./test/fixtures/option-ignore", import.meta.url),
+      );
+
+      deepStrictEqual(
+        await findUnusedExports({
+          cwd: fixtureProjectPath,
+          ignore: {
+            "a.mjs": ["default", "b"],
+            "b.mjs": ["default", "a"],
+          },
+        }),
+        {},
+      );
+    });
   });
 
   describe("Option `importMap`.", { concurrency: true }, () => {

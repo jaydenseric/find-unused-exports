@@ -1,5 +1,42 @@
 # find-unused-exports changelog
 
+## Next
+
+### Major
+
+- Updated Node.js support to `^22.19.0 || >=24.5.0`.
+- Replaced the dependency [`globby`](https://npm.im/globby) with native Node.js APIs:
+  - [`glob` from `node:fs/promises`](https://nodejs.org/api/fs.html#fspromisesglobpattern-options).
+  - [`matchesGlob` from `node:path`](https://nodejs.org/api/path.html#pathmatchesglobpath-pattern).
+
+  The way globs work may have subtly changed.
+
+- `.gitignore` files are no longer used to exclude modules from analysis. To exclude third party modules and build artifacts from analysis, use the new function `findUnusedExports` option `excludeGlob` or the new CLI command `find-unused-exports` argument `--exclude-glob`.
+
+### Minor
+
+- Added the ability to specify a file glob to exclude modules from analysis:
+  - Added the function `findUnusedExports` option `excludeGlob`, a file glob pattern to exclude files from the option `moduleGlob` results, relative to the current working directory specified by the option `cwd`. Defaults to `{**/{,*,.*}.d.{mts,cts,ts},**/node_modules/**}`.
+  - Added the CLI command `find-unused-exports` argument `--exclude-glob`, implementing the function `findUnusedExports` option `excludeGlob`.
+  - Changed the function `findUnusedExports` option `moduleGlob` and CLI command `find-unused-exports` argument `--module-glob` default glob:
+
+    ```diff
+    - **/{!(*.d).mts,!(*.d).cts,!(*.d).ts,*.{mjs,cjs,js,jsx,tsx}}
+    + **/{,*,.*}.{mts,cts,ts,tsx,mjs,cjs,js,jsx}
+    ```
+
+    TypeScript declaration files are now excluded via the separate exclude glob.
+
+- Added the ability to configure ignored exports, fixing [#9](https://github.com/jaydenseric/find-unused-exports/issues/9):
+  - Added the function `findUnusedExports` option `ignore`, a map of module file globs (relative to the current working directory specified by the option `cwd`) and export names to ignore as unused.
+  - Added the CLI command `find-unused-exports` argument `--ignore`, implementing the function `findUnusedExports` option `ignore`.
+
+### Patch
+
+- Removed the dev dependency [`disposable-directory`](https://npm.im/disposable-directory) and updated tests.
+- Implemented various performance optimizations in the function `findUnusedExports`.
+- Updated docs.
+
 ## 8.0.0
 
 ### Major

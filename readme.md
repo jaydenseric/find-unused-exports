@@ -17,17 +17,74 @@ npm install find-unused-exports --save-dev
 
 Then, either use the [CLI](#cli) command [`find-unused-exports`](#command-find-unused-exports) or import and use the function [`findUnusedExports`](./findUnusedExports.mjs).
 
+## Excluding modules
+
+Exclude third party modules and build artifacts from analysis via an exclude glob. This is specified for the [CLI](#cli) command [`find-unused-exports`](#command-find-unused-exports) via the argument `--exclude-glob` (relative to the current working directory), and for the function [`findUnusedExports`](./findUnusedExports.mjs) via the option `excludeGlob` (relative to the option `cwd`, defaulting to `process.cwd()`).
+
+By default TypeScript declaration files and `node_modules` directories are recursively excluded:
+
+```sh
+{**/{,*,.*}.d.{mts,cts,ts},**/node_modules/**}
+```
+
+When specifying a custom exclude glob, include what the default does. E.g. to also exclude a directory `dist` at the project root:
+
+```sh
+{**/{,*,.*}.d.{mts,cts,ts},**/node_modules/**,dist/**}
+```
+
+Don’t exclude modules you author as a way to ignore expectedly unused exports:
+
+- Accidental unused exports in the excluded modules won’t be detected.
+- The imports won’t be analyzed, potentially causing exports elsewhere in the project to be falsely considered unused.
+
+See below for how to properly ignore specific exports in specific modules.
+
 ## Ignoring unused exports
 
-`.gitignore` files are used to ignore whole files or directories. This is useful for ignoring:
+Ignore exports that are unused in a project for valid reasons:
 
-- Third party modules, e.g. `node_modules`.
-- Compiled files, e.g. `.next` or `dist`.
+- If the project is a package intended to be used by other projects, the package exports may be unused.
+- If the project has configuration modules for tools, the exports are unused. E.g. the [ESLint](https://eslint.org) config file `eslint.config.mjs` has an unused default export.
+- If the project uses a framework that by convention consumes certain certain exports from project modules, they may be unused. E.g. in a [Next.js](https://nextjs.org) project the directory `pages` modules have unused default exports.
 
-Special comments can be used anywhere in a module to ignore all or specific unused exports. This is useful for ignoring intentionally unused exports intended to be imported from external code, e.g.
+### Ignore map
 
-- For published packages, the public exports.
-- For [Next.js](https://nextjs.org) projects, the `default` exports in `pages` directory modules.
+A map of module file globs and export names to ignore as unused. This is specified for the [CLI](#cli) command [`find-unused-exports`](#command-find-unused-exports) via the argument `--ignore` (relative to the current working directory), and for the function [`findUnusedExports`](./findUnusedExports.mjs) via the option `ignore` (relative to the option `cwd`, defaulting to `process.cwd()`).
+
+#### Examples
+
+For a [Next.js](https://nextjs.org) and [ESLint](https://eslint.org) project, a contrived `ignore-unused-exports.json`:
+
+```json
+{
+  "eslint.config.js": ["default"],
+  "next.config.js": ["default"],
+  "pages/**/*.js": [
+    "default",
+    "getServerSideProps",
+    "getStaticPaths",
+    "getStaticProps"
+  ]
+}
+```
+
+Then, using [`npx`](https://docs.npmjs.com/cli/v11/commands/npx):
+
+```sh
+npx find-unused-exports --ignore "$(cat ignore-unused-exports.json)"
+```
+
+### Ignore comments
+
+Ignore comments can be used anywhere in a module to ignore all or specific unused exports. They are line or block comments, with the format:
+
+1. Optional whitespace.
+2. `ignore unused exports` (case insensitive).
+3. Optionally to only ignore specific exports:
+   1. Optional spaces.
+   2. The names of exports to ignore, separated by a `,` and optional spaces.
+4. Optional whitespace.
 
 #### Examples
 
@@ -74,7 +131,7 @@ Line or block comments can be used:
 
 Supported runtime environments:
 
-- [Node.js](https://nodejs.org) versions `^22.13.0 || >=24.0.0`.
+- [Node.js](https://nodejs.org) versions `^22.19.0 || >=24.5.0`.
 
 Projects must configure [TypeScript](https://typescriptlang.org) to use types from the ECMAScript modules that have a `// @ts-check` comment:
 
@@ -94,8 +151,10 @@ It implements the function [`findUnusedExports`](./findUnusedExports.mjs).
 
 | Argument | Default | Description |
 | :-- | :-- | :-- |
-| `--import-map` | `"{}"` | JSON [import map](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/script/type/importmap#import_map_json_representation) that’s relative to the current working directory. |
-| `--module-glob` | `"**/{!(*.d).mts,!(*.d).cts,!(*.d).ts,*.{mjs,cjs,js,jsx,tsx}}"` | Module file glob pattern. |
+| `--exclude-glob` | `"{**/{,*,.*}.d.{mts,cts,ts},**/node_modules/**}"` | File glob pattern to exclude files from the `--module-glob` results, relative to the current working directory. |
+| `--ignore` |  | JSON object mapping module file globs (relative to the current working directory) to arrays of export names to ignore as unused. |
+| `--import-map` | `"{}"` | JSON [import map](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/script/type/importmap#import_map_json_representation), relative to the current working directory. |
+| `--module-glob` | `"**/{,*,.*}.{mts,cts,ts,tsx,mjs,cjs,js,jsx}"` | Module file glob pattern, relative to the current working directory. |
 | `--resolve-file-extensions` |  | File extensions (without the leading `.`, multiple separated with `,` in preference order) to automatically resolve in extensionless import specifiers. [Import specifier file extensions are mandatory in Node.js](https://nodejs.org/api/esm.html#mandatory-file-extensions); if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) `mjs,js` might be appropriate. |
 | `--resolve-index-files` |  | Should directory index files be automatically resolved in extensionless import specifiers. [Node.js doesn’t do this by default](https://nodejs.org/api/esm.html#mandatory-file-extensions); if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) this argument might be appropriate. This argument only works if the argument `--resolve-file-extensions` is used. |
 
@@ -107,7 +166,7 @@ Using [`npx`](https://docs.npmjs.com/cli/v11/commands/npx) in a standard [Node.j
 npx find-unused-exports
 ```
 
-Using [`npx`](https://docs.npmjs.com/cli/v11/commands/npx) in a typical [webpack](https://webpack.js.org) project that has ESM in `.js` files, extensionless import specifiers, and `index.js` files:
+Using [`npx`](https://docs.npmjs.com/cli/v11/commands/npx) in a legacy [webpack](https://webpack.js.org) project that has ESM in `.js` files, extensionless import specifiers, and `index.js` files:
 
 ```sh
 npx find-unused-exports --module-glob "**/*.js" --resolve-file-extensions js --resolve-index-files
@@ -127,8 +186,8 @@ npx find-unused-exports --import-map "$(cat import-map.json)"
     "prettier": "prettier -c .",
     "eslint": "eslint",
     "find-unused-exports": "find-unused-exports",
-    "test": "npm run prettier && npm run eslint && npm run find-unused-exports",
-    "prepublishOnly": "npm test"
+    "test": "node --run prettier && node --run eslint && node --run find-unused-exports",
+    "prepublishOnly": "node --run test"
   }
 }
 ```

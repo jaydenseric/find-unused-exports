@@ -31,6 +31,7 @@
     "CliError.mjs",
     "directoryPathToFileURL.mjs",
     "errorConsole.mjs",
+    "EXCLUDE_GLOB.mjs",
     "find-unused-exports.mjs",
     "findUnusedExports.mjs",
     "getVariableDeclarationIdentifierNames.mjs",
@@ -48,20 +49,18 @@
     "find-unused-exports": "find-unused-exports.mjs"
   },
   "engines": {
-    "node": "^22.13.0 || >=24.0.0"
+    "node": "^22.19.0 || >=24.5.0"
   },
   "dependencies": {
     "@babel/core": "^7.25.7",
     "@import-maps/resolve": "^2.0.0",
     "@types/babel__core": "^7.20.5",
     "@types/node": "*",
-    "arg": "^5.0.2",
-    "globby": "^16.2.0"
+    "arg": "^5.0.2"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "coverage-node": "^8.0.0",
-    "disposable-directory": "^6.0.0",
     "eslint": "^10.4.0",
     "eslint-plugin-jsdoc": "^63.0.0",
     "eslint-plugin-simple-import-sort": "^13.0.0",

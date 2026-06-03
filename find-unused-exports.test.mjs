@@ -91,6 +91,93 @@ describe("CLI command `find-unused-exports`.", { concurrency: true }, () => {
     strictEqual(status, 1);
   });
 
+  it("Arg `--exclude-glob`.", async () => {
+    const { stdout, stderr, status, error } = spawnSync(
+      "node",
+      [FIND_UNUSED_EXPORTS_CLI_PATH, "--exclude-glob", "**/b.mjs"],
+      {
+        cwd: new URL("./test/fixtures/excludeGlob", import.meta.url),
+        env: {
+          ...process.env,
+          FORCE_COLOR: "1",
+        },
+      },
+    );
+
+    if (error) throw error;
+
+    strictEqual(stdout.toString(), "");
+    await assertSnapshot(
+      stderr.toString(),
+      new URL(
+        "./test/snapshots/find-unused-exports/exclude-glob-stderr.ans",
+        import.meta.url,
+      ),
+    );
+    strictEqual(status, 1);
+  });
+
+  describe("Arg `--ignore`.", { concurrency: true }, () => {
+    it("Invalid.", async () => {
+      const { stdout, stderr, status, error } = spawnSync(
+        "node",
+        [FIND_UNUSED_EXPORTS_CLI_PATH, "--ignore", "_"],
+        {
+          cwd: new URL("./test/fixtures/option-ignore", import.meta.url),
+          env: {
+            ...process.env,
+            FORCE_COLOR: "1",
+          },
+        },
+      );
+
+      if (error) throw error;
+
+      strictEqual(stdout.toString(), "");
+      await assertSnapshot(
+        stderr.toString(),
+        new URL(
+          "./test/snapshots/find-unused-exports/ignore-invalid-stderr.ans",
+          import.meta.url,
+        ),
+      );
+      strictEqual(status, 1);
+    });
+
+    it("Valid.", async () => {
+      const { stdout, stderr, status, error } = spawnSync(
+        "node",
+        [
+          FIND_UNUSED_EXPORTS_CLI_PATH,
+          "--ignore",
+          JSON.stringify({
+            "a.mjs": ["default"],
+            "b.mjs": ["a"],
+          }),
+        ],
+        {
+          cwd: new URL("./test/fixtures/option-ignore", import.meta.url),
+          env: {
+            ...process.env,
+            FORCE_COLOR: "1",
+          },
+        },
+      );
+
+      if (error) throw error;
+
+      strictEqual(stdout.toString(), "");
+      await assertSnapshot(
+        stderr.toString(),
+        new URL(
+          "./test/snapshots/find-unused-exports/ignore-valid-stderr.ans",
+          import.meta.url,
+        ),
+      );
+      strictEqual(status, 1);
+    });
+  });
+
   describe("Arg `--import-map`.", { concurrency: true }, () => {
     it("Invalid.", async () => {
       const { stdout, stderr, status, error } = spawnSync(

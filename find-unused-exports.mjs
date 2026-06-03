@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 // @ts-check
 
-/** @import { ImportMap } from "@import-maps/resolve" */
+/**
+ * @import { ImportMap } from "@import-maps/resolve"
+ * @import { IgnoreExportsMap } from "./findUnusedExports.mjs"
+ */
 
 import { relative } from "node:path";
 import { styleText } from "node:util";
@@ -20,16 +23,31 @@ import reportCliError from "./reportCliError.mjs";
 async function findUnusedExportsCli() {
   try {
     const {
+      "--exclude-glob": excludeGlob,
+      "--ignore": ignoreJson,
       "--import-map": importMapJson,
       "--module-glob": moduleGlob,
       "--resolve-file-extensions": resolveFileExtensionsList,
       "--resolve-index-files": resolveIndexFiles,
     } = arg({
+      "--exclude-glob": String,
+      "--ignore": String,
       "--import-map": String,
       "--module-glob": String,
       "--resolve-file-extensions": String,
       "--resolve-index-files": Boolean,
     });
+
+    /** @type {IgnoreExportsMap | undefined} */
+    let ignore;
+
+    if (ignoreJson) {
+      try {
+        ignore = JSON.parse(ignoreJson);
+      } catch {
+        throw new CliError(`The \`--ignore\` argument must be JSON.`);
+      }
+    }
 
     /** @type {ImportMap | undefined} */
     let importMap;
@@ -48,6 +66,8 @@ async function findUnusedExportsCli() {
       );
 
     const unusedExports = await findUnusedExports({
+      excludeGlob,
+      ignore,
       importMap,
       moduleGlob,
       resolveFileExtensions: resolveFileExtensionsList

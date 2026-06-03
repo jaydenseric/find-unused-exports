@@ -1,2 +1,4 @@
 // eslint-disable-next-line no-unused-vars
 import a from "node:assert";
+
+export default 1;
