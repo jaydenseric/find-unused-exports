@@ -330,6 +330,7 @@ export default async function findUnusedExports({
 }
 
 /**
- * Map of module file globs and export names to ignore as unused.
+ * Map of module file globs (relative to a current working directory) and export
+ * names to ignore as unused.
  * @typedef {{ [glob: string]: Array<string> }} IgnoreExportsMap
  */
