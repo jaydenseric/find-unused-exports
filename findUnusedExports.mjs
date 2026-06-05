@@ -167,59 +167,62 @@ export default async function findUnusedExports({
     // export names from that module’s possibly unused exports set, and if the
     // set becomes empty, delete the module from the map of possibly unused
     // exports.
-    scannedModulesLoop: for (const { path, scan } of scannedModules) {
-      const pathFileUrl = pathToFileURL(path);
+    scannedModulesLoop: for (const scannedModule of scannedModules) {
+      const scannedModuleFileUrl = pathToFileURL(scannedModule.path);
 
-      for (const specifier in scan.imports) {
-        const moduleImports = scan.imports[specifier];
+      for (const importSpecifier in scannedModule.scan.imports) {
+        const moduleImports = scannedModule.scan.imports[importSpecifier];
 
         // If it’s a side effect import that doesn't use exports, it can’t be
         // used to eliminate any unused exports, so skip it.
         if (!moduleImports.size) continue;
 
-        const { resolvedImport } = resolveImport(
-          specifier,
-          parsedImportMap,
-          pathFileUrl,
-        );
+        const { resolvedImport: importSpecifierImportMappedUrl } =
+          resolveImport(importSpecifier, parsedImportMap, scannedModuleFileUrl);
 
-        // This tool only scans project files; bail if the import couldn’t be
-        // resolved to a file URL.
-        if (resolvedImport?.protocol !== "file:") continue;
+        // This tool only scans project files; bail if the import specifier
+        // couldn’t be import map resolved to a file URL.
+        if (importSpecifierImportMappedUrl?.protocol !== "file:") continue;
 
         // Try to match the imported module to an entry in the map of (so far)
         // unused exports. If there’s no match, either none of that module’s
         // exports remain unused, or the import is simply unresolvable (not an
         // issue for this tool).
 
-        const specifierAbsolutePath = fileURLToPath(resolvedImport);
+        /** The import specifier import mapped path. */
+        const importSpecifierImportMappedPath = fileURLToPath(
+          importSpecifierImportMappedUrl,
+        );
 
-        /** @type {string} */
-        let importedModulePath = specifierAbsolutePath;
+        /** The imported module file path. */
+        let importedModuleFilePath = importSpecifierImportMappedPath;
 
         /** @type {ModuleExports | undefined} */
-        let importedModuleUnusedExports =
-          possiblyUnusedExports.get(importedModulePath);
+        let importedModuleUnusedExports = possiblyUnusedExports.get(
+          importedModuleFilePath,
+        );
 
         if (!importedModuleUnusedExports) {
-          const specifierExtension = extname(specifierAbsolutePath);
+          const extension = extname(importSpecifierImportMappedPath);
 
-          switch (specifierExtension) {
+          switch (extension) {
             // TypeScript import specifiers may use the `.mjs` file extension
             // to resolve an `.mts` file in that directory with the same name.
             case ".mjs": {
-              importedModulePath = `${specifierAbsolutePath.slice(0, -specifierExtension.length)}.mts`;
-              importedModuleUnusedExports =
-                possiblyUnusedExports.get(importedModulePath);
+              importedModuleFilePath = `${importSpecifierImportMappedPath.slice(0, -extension.length)}.mts`;
+              importedModuleUnusedExports = possiblyUnusedExports.get(
+                importedModuleFilePath,
+              );
               break;
             }
 
             // TypeScript import specifiers may use the `.cjs` file extension
             // to resolve a `.cts` file in that directory with the same name.
             case ".cjs": {
-              importedModulePath = `${specifierAbsolutePath.slice(0, -specifierExtension.length)}.cts`;
-              importedModuleUnusedExports =
-                possiblyUnusedExports.get(importedModulePath);
+              importedModuleFilePath = `${importSpecifierImportMappedPath.slice(0, -extension.length)}.cts`;
+              importedModuleUnusedExports = possiblyUnusedExports.get(
+                importedModuleFilePath,
+              );
               break;
             }
 
@@ -227,19 +230,19 @@ export default async function findUnusedExports({
             // resolve a `.ts` or `.tsx` file in that directory with the same
             // name.
             case ".js": {
-              const pathWithoutExtension = specifierAbsolutePath.slice(
-                0,
-                -specifierExtension.length,
+              const pathWithoutExtension =
+                importSpecifierImportMappedPath.slice(0, -extension.length);
+
+              importedModuleFilePath = `${pathWithoutExtension}.ts`;
+              importedModuleUnusedExports = possiblyUnusedExports.get(
+                importedModuleFilePath,
               );
 
-              importedModulePath = `${pathWithoutExtension}.ts`;
-              importedModuleUnusedExports =
-                possiblyUnusedExports.get(importedModulePath);
-
               if (!importedModuleUnusedExports) {
-                importedModulePath = `${pathWithoutExtension}.tsx`;
-                importedModuleUnusedExports =
-                  possiblyUnusedExports.get(importedModulePath);
+                importedModuleFilePath = `${pathWithoutExtension}.tsx`;
+                importedModuleUnusedExports = possiblyUnusedExports.get(
+                  importedModuleFilePath,
+                );
               }
               break;
             }
@@ -248,18 +251,20 @@ export default async function findUnusedExports({
             case "": {
               if (resolveFileExtensions) {
                 for (const extension of resolveFileExtensions) {
-                  importedModulePath = `${specifierAbsolutePath}.${extension}`;
-                  importedModuleUnusedExports =
-                    possiblyUnusedExports.get(importedModulePath);
+                  importedModuleFilePath = `${importSpecifierImportMappedPath}.${extension}`;
+                  importedModuleUnusedExports = possiblyUnusedExports.get(
+                    importedModuleFilePath,
+                  );
 
                   if (importedModuleUnusedExports) break;
                 }
 
                 if (!importedModuleUnusedExports && resolveIndexFiles)
                   for (const extension of resolveFileExtensions) {
-                    importedModulePath = `${specifierAbsolutePath}${sep}index.${extension}`;
-                    importedModuleUnusedExports =
-                      possiblyUnusedExports.get(importedModulePath);
+                    importedModuleFilePath = `${importSpecifierImportMappedPath}${sep}index.${extension}`;
+                    importedModuleUnusedExports = possiblyUnusedExports.get(
+                      importedModuleFilePath,
+                    );
 
                     if (importedModuleUnusedExports) break;
                   }
@@ -280,7 +285,7 @@ export default async function findUnusedExports({
           // Check if the module still has possibly unused exports.
           if (!importedModuleUnusedExports.size) {
             // Delete the file from the map of unused exports.
-            possiblyUnusedExports.delete(importedModulePath);
+            possiblyUnusedExports.delete(importedModuleFilePath);
 
             // If there are no more possibly unused exports left, skip redundant
             // processing.
@@ -298,19 +303,19 @@ export default async function findUnusedExports({
     // glob matches, delete the ignored export names from the module’s unused
     // exports set, and if the set becomes empty, delete the module from the map
     // of possibly unused exports.
-    for (const [path, unusedExports] of possiblyUnusedExports) {
+    for (const [moduleFilePath, unusedExports] of possiblyUnusedExports) {
       // Ignore globs are relative to the specified `cwd`.
-      const relativePath = relative(cwd, path);
+      const moduleFileRelativePath = relative(cwd, moduleFilePath);
 
       for (const [glob, ignoredExports] of ignoreEntries)
-        if (matchesGlob(relativePath, glob)) {
+        if (matchesGlob(moduleFileRelativePath, glob)) {
           for (const ignoredExportName of ignoredExports)
             unusedExports.delete(ignoredExportName);
 
           // Check if the module still has unused exports.
           if (!unusedExports.size) {
             // Delete the file from the map of unused exports.
-            possiblyUnusedExports.delete(path);
+            possiblyUnusedExports.delete(moduleFilePath);
 
             // Skip looking for more ignore entries for this module, as it no
             // longer has possibly unused exports to ignore.
