@@ -12,6 +12,7 @@
   The way globs work may have subtly changed.
 
 - `.gitignore` files are no longer used to exclude modules from analysis. To exclude third party modules and build artifacts from analysis, use the new function `findUnusedExports` option `excludeGlob` or the new CLI command `find-unused-exports` argument `--exclude-glob`.
+- Module file paths within the map resolved by the function `findUnusedExports` are now relative to the current working directory specified by the option `cwd`, instead of absolute.
 
 ### Minor
 

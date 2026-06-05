@@ -6,7 +6,6 @@
  * @import { IgnoreExportsMap } from "./findUnusedExports.mjs"
  */
 
-import { relative } from "node:path";
 import { styleText } from "node:util";
 
 import arg from "arg";
@@ -84,15 +83,13 @@ async function findUnusedExportsCli() {
     let countUnusedExports = 0;
 
     if (countUnusedExportsModules) {
-      const cwd = process.cwd();
-
       for (const path of unusedExportsModulePaths) {
         const exports = unusedExports[path];
 
         countUnusedExports += exports.size;
 
         errorConsole.group(
-          `\n${styleText(["underline", "red"], relative(cwd, path), {
+          `\n${styleText(["underline", "red"], path, {
             stream: process.stderr,
           })}`,
         );

@@ -54,7 +54,8 @@ import scanModuleCode from "./scanModuleCode.mjs";
  *   `resolveFileExtensions` is used. Defaults to `false`.
  * @returns {Promise<{
  *   [moduleFilePath: string]: ModuleExports,
- * }>} Map of module file paths and unused module exports.
+ * }>} Map of module file paths (relative to the current working directory
+ *   specified by the option {@linkcode cwd}) and unused exports.
  */
 export default async function findUnusedExports({
   cwd = process.cwd(),
@@ -127,11 +128,11 @@ export default async function findUnusedExports({
     );
 
   /**
-   * Map of module file absolute paths and possibly unused exports. At first,
-   * all scanned module exports are considered possibly unused, then any found
-   * to have been imported in other scanned modules are eliminated. Finally, if
-   * there are any truly unused exports, those that are to be ignored are
-   * eliminated.
+   * Map of module file paths (relative to the option `cwd`) and possibly unused
+   * exports. At first, all scanned module exports are considered possibly
+   * unused, then any found to have been imported in other scanned modules are
+   * eliminated. Finally, if there are any truly unused exports, those that are
+   * to be ignored are eliminated.
    * @type {Map<string, ModuleExports>}
    */
   const possiblyUnusedExports = new Map();
@@ -152,7 +153,8 @@ export default async function findUnusedExports({
         const path = join(cwd, moduleFileRelativePath);
         const scan = await scanModuleCode(await readFile(path, "utf8"), path);
 
-        if (scan.exports.size) possiblyUnusedExports.set(path, scan.exports);
+        if (scan.exports.size)
+          possiblyUnusedExports.set(moduleFileRelativePath, scan.exports);
 
         return { path, scan };
       })(),
@@ -189,12 +191,16 @@ export default async function findUnusedExports({
         // exports remain unused, or the import is simply unresolvable (not an
         // issue for this tool).
 
-        /** The import specifier import mapped path. */
-        const importSpecifierImportMappedPath = fileURLToPath(
-          importSpecifierImportMappedUrl,
+        /**
+         * The import specifier import mapped path, relative to the
+         * {@linkcode cwd}.
+         */
+        const importSpecifierImportMappedPath = relative(
+          cwd,
+          fileURLToPath(importSpecifierImportMappedUrl),
         );
 
-        /** The imported module file path. */
+        /** The imported module file path, relative to the {@linkcode cwd}. */
         let importedModuleFilePath = importSpecifierImportMappedPath;
 
         /** @type {ModuleExports | undefined} */
@@ -303,12 +309,9 @@ export default async function findUnusedExports({
     // glob matches, delete the ignored export names from the module’s unused
     // exports set, and if the set becomes empty, delete the module from the map
     // of possibly unused exports.
-    for (const [moduleFilePath, unusedExports] of possiblyUnusedExports) {
-      // Ignore globs are relative to the specified `cwd`.
-      const moduleFileRelativePath = relative(cwd, moduleFilePath);
-
+    for (const [moduleFilePath, unusedExports] of possiblyUnusedExports)
       for (const [glob, ignoredExports] of ignoreEntries)
-        if (matchesGlob(moduleFileRelativePath, glob)) {
+        if (matchesGlob(moduleFilePath, glob)) {
           for (const ignoredExportName of ignoredExports)
             unusedExports.delete(ignoredExportName);
 
@@ -322,7 +325,6 @@ export default async function findUnusedExports({
             break;
           }
         }
-    }
 
   return Object.fromEntries(possiblyUnusedExports);
 }
