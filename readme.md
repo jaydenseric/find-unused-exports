@@ -33,7 +33,7 @@ When specifying a custom exclude glob, include what the default does. E.g. to al
 {**/{,*,.*}.d.{mts,cts,ts},**/node_modules/**,dist/**}
 ```
 
-Don’t exclude modules you author as a way to ignore expectedly unused exports:
+Don’t exclude modules you author as a way to ignore validly unused exports:
 
 - Accidental unused exports in the excluded modules won’t be detected.
 - The imports won’t be analyzed, potentially causing exports elsewhere in the project to be falsely considered unused.
