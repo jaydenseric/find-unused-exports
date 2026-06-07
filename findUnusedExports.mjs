@@ -314,6 +314,9 @@ export default async function findUnusedExports({
     for (const [moduleFilePath, unusedExports] of possiblyUnusedExports)
       for (const [glob, ignoredExports] of ignoreEntries)
         if (matchesGlob(moduleFilePath, glob)) {
+          // If `*` ignored all exports of the module, clear the unused exports
+          // set. Otherwise, delete only the ignored exports from the unused
+          // exports set.
           if (ignoredExports.includes("*")) unusedExports.clear();
           else
             for (const ignoredExportName of ignoredExports)
