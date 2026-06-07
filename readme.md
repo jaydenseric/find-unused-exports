@@ -19,7 +19,7 @@ Then, either use the [CLI](#cli) command [`find-unused-exports`](#command-find-u
 
 ## Excluding modules
 
-Exclude third party modules and build artifacts from analysis via an exclude glob. This is specified for the [CLI](#cli) command [`find-unused-exports`](#command-find-unused-exports) via the argument `--exclude-glob` (relative to the current working directory), and for the function [`findUnusedExports`](./findUnusedExports.mjs) via the option `excludeGlob` (relative to the option `cwd`, defaulting to `process.cwd()`).
+Exclude third party modules and build artifacts from analysis via an exclude glob. This is specified for the [CLI](#cli) command [`find-unused-exports`](#command-find-unused-exports) via the argument `--exclude-glob` (relative to the current working directory), and for the function [`findUnusedExports`](./findUnusedExports.mjs) via the option `excludeGlob` (relative to the current working directory specified by the option `cwd`, defaulting to `process.cwd()`).
 
 By default TypeScript declaration files and `node_modules` directories are recursively excluded:
 
