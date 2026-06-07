@@ -81,7 +81,7 @@ Ignore comments can be used anywhere in a module to ignore all or specific unuse
 
 1. Optional whitespace.
 2. `ignore unused exports` (case insensitive).
-3. Optionally to only ignore specific exports:
+3. Optional to only ignore specific exports:
    1. Optional spaces.
    2. The names of exports to ignore, separated by a `,` and optional spaces.
 4. Optional whitespace.
