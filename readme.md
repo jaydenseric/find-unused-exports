@@ -75,7 +75,7 @@ Then, using [`npx`](https://docs.npmjs.com/cli/v11/commands/npx):
 npx find-unused-exports --ignore "$(cat ignore-unused-exports.json)"
 ```
 
-For a published package, to ignore all the unused exports in a package main index module the ignore map may contain:
+For a published package, to ignore all the unused exports in a package main index module, the ignore exports map may contain:
 
 ```json
 {
