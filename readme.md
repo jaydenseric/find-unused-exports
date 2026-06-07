@@ -50,7 +50,7 @@ Ignore exports that are unused in a project for valid reasons:
 
 ### Ignore map
 
-A map of module file globs and export names to ignore as unused. This is specified for the [CLI](#cli) command [`find-unused-exports`](#command-find-unused-exports) via the argument `--ignore` (relative to the current working directory), and for the function [`findUnusedExports`](./findUnusedExports.mjs) via the option `ignore` (relative to the option `cwd`, defaulting to `process.cwd()`).
+A map of module file globs and export names to ignore as unused. This is specified for the [CLI](#cli) command [`find-unused-exports`](#command-find-unused-exports) via the argument `--ignore` (relative to the current working directory), and for the function [`findUnusedExports`](./findUnusedExports.mjs) via the option `ignore` (relative to the current working directory specified by the option `cwd`, defaulting to `process.cwd()`).
 
 #### Examples
 
