@@ -20,7 +20,7 @@ import scanModuleCode from "./scanModuleCode.mjs";
 /**
  * Finds unused
  * [ECMAScript module exports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export)
- * in a project. `.gitignore` files are used to ignore files.
+ * in a project.
  * @param {object} [options] Options.
  * @param {string} [options.cwd] Directory path to scope the search for module
  *   files, defaulting to `process.cwd()`.

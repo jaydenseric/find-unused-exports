@@ -143,7 +143,7 @@ Projects must configure [TypeScript](https://typescriptlang.org) to use types fr
 
 ### Command `find-unused-exports`
 
-Finds unused [ECMAScript module exports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export) in a project. If some are found, it reports them to `stderr` and exits with a `1` error status. `.gitignore` files are used to ignore files.
+Finds unused [ECMAScript module exports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export) in a project. If some are found, it reports them to `stderr` and exits with a `1` error status.
 
 It implements the function [`findUnusedExports`](./findUnusedExports.mjs).
 
