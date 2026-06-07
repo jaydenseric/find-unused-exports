@@ -29,7 +29,7 @@
     TypeScript declaration files are now excluded via the separate exclude glob.
 
 - Added the ability to configure ignored exports, fixing [#9](https://github.com/jaydenseric/find-unused-exports/issues/9):
-  - Added the function `findUnusedExports` option `ignore`, a map of module file globs (relative to the current working directory specified by the option `cwd`) and export names to ignore as unused.
+  - Added the function `findUnusedExports` option `ignore`, a map of module file globs (relative to the current working directory specified by the option `cwd`) and export names to ignore as unused. The export name `default` ignores the default export, and `*` ignores all exports (usually a bad idea).
   - Added the CLI command `find-unused-exports` argument `--ignore`, implementing the function `findUnusedExports` option `ignore`.
 
 ### Patch

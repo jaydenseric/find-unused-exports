@@ -30,7 +30,9 @@ import scanModuleCode from "./scanModuleCode.mjs";
  *   {@linkcode EXCLUDE_GLOB}.
  * @param {IgnoreExportsMap} [options.ignore] Map of module file globs (relative
  *   to the current working directory specified by the option {@linkcode cwd})
- *   and export names to ignore as unused.
+ *   and export names to ignore as unused. The export name `default` ignores the
+ *   default export, and `*` ignores all exports (usually a bad idea). Defaults
+ *   to `{}`.
  * @param {ImportMap} [options.importMap]
  *   [Import map](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/script/type/importmap#import_map_json_representation),
  *   relative to the current working directory specified by the option
@@ -312,8 +314,10 @@ export default async function findUnusedExports({
     for (const [moduleFilePath, unusedExports] of possiblyUnusedExports)
       for (const [glob, ignoredExports] of ignoreEntries)
         if (matchesGlob(moduleFilePath, glob)) {
-          for (const ignoredExportName of ignoredExports)
-            unusedExports.delete(ignoredExportName);
+          if (ignoredExports.includes("*")) unusedExports.clear();
+          else
+            for (const ignoredExportName of ignoredExports)
+              unusedExports.delete(ignoredExportName);
 
           // Check if the module still has unused exports.
           if (!unusedExports.size) {
@@ -331,6 +335,7 @@ export default async function findUnusedExports({
 
 /**
  * Map of module file globs (relative to a current working directory) and export
- * names to ignore as unused.
+ * names to ignore as unused. The export name `default` ignores the default
+ * export, and `*` ignores all exports (usually a bad idea).
  * @typedef {{ [glob: string]: Array<string> }} IgnoreExportsMap
  */

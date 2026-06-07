@@ -250,8 +250,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
             new URL("./test/fixtures/option-ignore", import.meta.url),
           ),
           ignore: {
-            "a.mjs": ["default", "b"],
-            "b.mjs": ["default", "a"],
+            "**/*.mjs": ["*"],
           },
         }),
         {},

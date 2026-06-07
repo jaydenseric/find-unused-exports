@@ -48,9 +48,9 @@ Ignore exports that are unused in a project for valid reasons:
 - If the project has configuration modules for tools, the exports are unused. E.g. the [ESLint](https://eslint.org) config file `eslint.config.mjs` has an unused default export.
 - If the project uses a framework that by convention consumes certain certain exports from project modules, they may be unused. E.g. in a [Next.js](https://nextjs.org) project the directory `pages` modules have unused default exports.
 
-### Ignore map
+### Ignore exports map
 
-A map of module file globs and export names to ignore as unused. This is specified for the [CLI](#cli) command [`find-unused-exports`](#command-find-unused-exports) via the argument `--ignore` (relative to the current working directory), and for the function [`findUnusedExports`](./findUnusedExports.mjs) via the option `ignore` (relative to the current working directory specified by the option `cwd`, defaulting to `process.cwd()`).
+A map of module file globs and export names to ignore as unused. The export name `default` ignores the default export, and `*` ignores all exports (usually a bad idea). This is specified for the [CLI](#cli) command [`find-unused-exports`](#command-find-unused-exports) via the argument `--ignore` (relative to the current working directory), and for the function [`findUnusedExports`](./findUnusedExports.mjs) via the option `ignore` (relative to the current working directory specified by the option `cwd`, defaulting to `process.cwd()`).
 
 #### Examples
 
@@ -75,6 +75,18 @@ Then, using [`npx`](https://docs.npmjs.com/cli/v11/commands/npx):
 npx find-unused-exports --ignore "$(cat ignore-unused-exports.json)"
 ```
 
+For a published package, to ignore all the unused exports in a package main index module the ignore map may contain:
+
+```json
+{
+  "index.mjs": ["*"]
+}
+```
+
+Please don’t publish a package main index module though, for [optimal JavaScript module design](https://jaydenseric.com/blog/optimal-javascript-module-design).
+
+It’s usually a bad idea to ignore every export with `*`; instead ignore specific export names to be able to detect other accidental unused exports.
+
 ### Ignore comments
 
 Ignore comments can be used anywhere in a module to ignore all or specific unused exports. They are line or block comments, with the format:
@@ -88,7 +100,7 @@ Ignore comments can be used anywhere in a module to ignore all or specific unuse
 
 #### Examples
 
-How to ignore all unused exports:
+How to ignore all unused exports (usually a bad idea):
 
 ```js
 // ignore unused exports
@@ -152,7 +164,7 @@ It implements the function [`findUnusedExports`](./findUnusedExports.mjs).
 | Argument | Default | Description |
 | :-- | :-- | :-- |
 | `--exclude-glob` | `"{**/{,*,.*}.d.{mts,cts,ts},**/node_modules/**}"` | File glob pattern to exclude files from the `--module-glob` results, relative to the current working directory. |
-| `--ignore` |  | JSON object mapping module file globs (relative to the current working directory) to arrays of export names to ignore as unused. |
+| `--ignore` | `"{}"` | JSON [ignore exports map](#ignore-exports-map) of module file globs (relative to the current working directory) and export names to ignore as unused. The export name `default` ignores the default export, and `*` ignores all exports (usually a bad idea). |
 | `--import-map` | `"{}"` | JSON [import map](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/script/type/importmap#import_map_json_representation), relative to the current working directory. |
 | `--module-glob` | `"**/{,*,.*}.{mts,cts,ts,tsx,mjs,cjs,js,jsx}"` | Module file glob pattern, relative to the current working directory. |
 | `--resolve-file-extensions` |  | File extensions (without the leading `.`, multiple separated with `,` in preference order) to automatically resolve in extensionless import specifiers. [Import specifier file extensions are mandatory in Node.js](https://nodejs.org/api/esm.html#mandatory-file-extensions); if your project resolves extensionless imports at build time (e.g. [Next.js](https://nextjs.org), via [webpack](https://webpack.js.org)) `mjs,js` might be appropriate. |
