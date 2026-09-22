@@ -162,6 +162,14 @@ export default async function scanModuleCode(code, path) {
               path.node.declaration.id.name,
             );
             break;
+          case "ClassDeclaration":
+            // E.g. `export class a {}`
+            //              ^^^^^^^^^^^
+            analysis.exports.add(
+              // @ts-ignore `id` must exist in export declarations.
+              path.node.declaration.id.name,
+            );
+            break;
           case "VariableDeclaration": {
             // E.g. `export const a = 1`
             //              ^^^^^^^^^^^

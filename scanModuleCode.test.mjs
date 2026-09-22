@@ -156,6 +156,13 @@ describe("Function `scanModuleCode`.", { concurrency: true }, () => {
         });
       });
 
+      it("Class declaration.", async () => {
+        deepStrictEqual(await scanModuleCode("export class a {}"), {
+          imports: {},
+          exports: new Set(["a"]),
+        });
+      });
+
       describe("Variable declaration.", { concurrency: true }, () => {
         describe("Single declaration.", { concurrency: true }, () => {
           it("Simple identifier.", async () => {

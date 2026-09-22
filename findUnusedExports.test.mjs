@@ -56,6 +56,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
       {
         "a.mjs": new Set(["default", "a"]),
         "b.mjs": new Set(["b"]),
+        "d.mjs": new Set(["Test"]),
       },
     );
   });
