@@ -1,5 +1,11 @@
 # find-unused-exports changelog
 
+## Next
+
+### Patch
+
+- Fixed class exports not being detected, via [#11](https://github.com/jaydenseric/find-unused-exports/pull/11).
+
 ## 9.0.0
 
 ### Major
