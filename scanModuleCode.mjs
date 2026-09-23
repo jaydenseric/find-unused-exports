@@ -155,16 +155,9 @@ export default async function scanModuleCode(code, path) {
       if (path.node.declaration)
         switch (path.node.declaration.type) {
           case "FunctionDeclaration":
-            // E.g. `export function a() {}`
-            //              ^^^^^^^^^^^^^^^
-            analysis.exports.add(
-              // @ts-ignore `id` must exist in export declarations.
-              path.node.declaration.id.name,
-            );
-            break;
           case "ClassDeclaration":
-            // E.g. `export class a {}`
-            //              ^^^^^^^^^^^
+            // E.g. `export function a() {}` or `export class a {}`
+            //              ^^^^^^^^^^^^^^^             ^^^^^^^^^^
             analysis.exports.add(
               // @ts-ignore `id` must exist in export declarations.
               path.node.declaration.id.name,
