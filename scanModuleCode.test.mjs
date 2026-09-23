@@ -150,9 +150,9 @@ describe("Function `scanModuleCode`.", { concurrency: true }, () => {
   describe("Named export.", { concurrency: true }, () => {
     describe("Declaration.", { concurrency: true }, () => {
       it("Class declaration.", async () => {
-        deepStrictEqual(await scanModuleCode("export class a {}"), {
+        deepStrictEqual(await scanModuleCode("export class A {}"), {
           imports: {},
-          exports: new Set(["a"]),
+          exports: new Set(["A"]),
         });
       });
 
