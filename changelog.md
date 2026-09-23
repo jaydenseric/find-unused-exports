@@ -1,5 +1,17 @@
 # find-unused-exports changelog
 
+## Next
+
+### Patch
+
+- Updated package scripts.
+- Updated GitHub Actions CI config:
+  - Improved triggers.
+  - Renamed the job `tests` to `test`.
+  - Run tests with the lower and upper bounds of each supported major Node.js version.
+  - Updated `actions/checkout` to v7.
+  - Updated `actions/setup-node` to v7.
+
 ## 9.0.0
 
 ### Major
