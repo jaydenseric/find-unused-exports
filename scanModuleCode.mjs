@@ -1,24 +1,12 @@
 // @ts-check
 
-/** @import { ParserPlugin } from "@babel/parser" */
+/** @import { InputOptions } from "@babel/core" */
 
 // Use `@babel/core` instead of `@babel/parser` and `@babel/traverse` directly
 // so that project Babel config will be respected when parsing code.
-import babel from "@babel/core";
+import { parseAsync, traverse, types } from "@babel/core";
 
 import getVariableDeclarationIdentifierNames from "./getVariableDeclarationIdentifierNames.mjs";
-
-// Babel seems to also support non-standard string literals in place of named
-// import and export identifiers, perhaps because CJS can have export names
-// containing dashes, etc. such as `exports["a-b-c"]` and they want to support
-// these names in ESM that’s transpiled to CJS. Such non-standard names are
-// explicitly not supported here, using the assertion below.
-
-/** @type {typeof babel.types.assertIdentifier} */
-const assertIdentifier = babel.types.assertIdentifier;
-
-/** @type {typeof babel.types.assertFile} */
-const assertFile = babel.types.assertFile;
 
 /**
  * Scans a JavaScript module’s code for ECMAScript module imports and exports.
@@ -44,17 +32,16 @@ export default async function scanModuleCode(code, path) {
     exports: new Set(),
   };
 
-  /** @type {Array<ParserPlugin>} */
+  /** @type {NonNullable<NonNullable<InputOptions["parserOpts"]>["plugins"]>} */
   const plugins = [
     // Allow parsing code containing modern syntax even if a project doesn’t
     // have Babel config to handle it.
-    "classProperties",
-    ["decorators", { decoratorsBeforeExport: false }],
+    "decorators",
   ];
 
   if (path) {
-    // Path is a TypeScript module.
     if (
+      // Path is a TypeScript module.
       path.endsWith(".mts") ||
       path.endsWith(".cts") ||
       path.endsWith(".ts") ||
@@ -67,7 +54,7 @@ export default async function scanModuleCode(code, path) {
     if (path.endsWith(".tsx") || path.endsWith(".jsx")) plugins.push("jsx");
   }
 
-  const ast = await babel.parseAsync(code, {
+  const ast = await parseAsync(code, {
     // Provide the code file path for more useful Babel parse errors.
     filename: path,
     parserOpts: {
@@ -76,9 +63,9 @@ export default async function scanModuleCode(code, path) {
   });
 
   // Todo: Clarify what might cause `ast` to not be a `File`.
-  assertFile(ast);
+  types.assertFile(ast);
 
-  babel.traverse(ast, {
+  traverse(ast, {
     ImportDeclaration(path) {
       // There may be multiple statements for the same specifier.
       if (!analysis.imports[path.node.source.value])
@@ -103,7 +90,7 @@ export default async function scanModuleCode(code, path) {
             // Guard against Babel support for a non-standard string literal:
             // E.g. `import { "a-b-c" as a } from "a"`
             //                ^^^^^^^
-            assertIdentifier(specifier.imported);
+            types.assertIdentifier(specifier.imported);
 
             analysis.imports[path.node.source.value].add(
               specifier.imported.name,
@@ -114,21 +101,19 @@ export default async function scanModuleCode(code, path) {
 
       path.skip();
     },
-    Import(path) {
+    ImportExpression({ node: { source } }) {
       // E.g. `import("a")`
-      //       ^^^^^^
-      const [specifier] = /** @type {babel.types.CallExpression} */ (
-        path.parent
-      ).arguments;
-      if (specifier && specifier.type === "StringLiteral") {
+      //       ^^^^^^^^^^^
+
+      if (source.type === "StringLiteral") {
         // There may be multiple statements for the same specifier.
-        if (!analysis.imports[specifier.value])
-          analysis.imports[specifier.value] = new Set();
+        if (!analysis.imports[source.value])
+          analysis.imports[source.value] = new Set();
 
         // A dynamic import pulls in everything. It’s not feasible for this tool
         // to figure out exactly the default or named imports used at runtime.
-        analysis.imports[specifier.value].add("default");
-        analysis.imports[specifier.value].add("*");
+        analysis.imports[source.value].add("default");
+        analysis.imports[source.value].add("*");
       }
     },
     ExportDefaultDeclaration(path) {
@@ -194,6 +179,11 @@ export default async function scanModuleCode(code, path) {
               analysis.imports[path.node.source.value].add("*");
               break;
             case "ExportSpecifier": {
+              // Guard against Babel support for a non-standard string literal:
+              // E.g. `export { "a-b-c" as a } from "a"`
+              //                ^^^^^^^
+              types.assertIdentifier(specifier.local);
+
               if (specifier.local.name === "default")
                 // E.g. `export { default as a } from "a"`
                 //                ^^^^^^^
@@ -209,9 +199,9 @@ export default async function scanModuleCode(code, path) {
           }
 
           // Guard against Babel support for a non-standard string literal:
-          // E.g. `export { "a-b-c" as a } from "a"`
-          //                ^^^^^^^
-          assertIdentifier(specifier.exported);
+          // E.g. `export { a as "a-b-c" } from "a"`
+          //                     ^^^^^^^
+          types.assertIdentifier(specifier.exported);
 
           // Process the export.
           if (specifier.exported.name === "default") {
@@ -231,7 +221,7 @@ export default async function scanModuleCode(code, path) {
           // Guard against Babel support for a non-standard string literal:
           // E.g. `const a = 1; export { a as "a-b-c" }`
           //                                  ^^^^^^^
-          assertIdentifier(exported);
+          types.assertIdentifier(exported);
 
           analysis.exports.add(exported.name);
         }

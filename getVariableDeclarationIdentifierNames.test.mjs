@@ -1,9 +1,11 @@
 // @ts-check
 
+/** @import { types } from "@babel/core" */
+
 import { deepStrictEqual, throws } from "node:assert";
 import { describe, it } from "node:test";
 
-import babel from "@babel/core";
+import { template } from "@babel/core";
 
 import getVariableDeclarationIdentifierNames from "./getVariableDeclarationIdentifierNames.mjs";
 
@@ -28,8 +30,8 @@ describe(
       it("Simple identifier.", () => {
         deepStrictEqual(
           getVariableDeclarationIdentifierNames(
-            /** @type {babel.types.VariableDeclaration} */ (
-              babel.template.ast("const a = 1")
+            /** @type {types.VariableDeclaration} */ (
+              template.ast("const a = 1")
             ),
           ),
           ["a"],
@@ -40,8 +42,8 @@ describe(
         it("No renaming.", () => {
           deepStrictEqual(
             getVariableDeclarationIdentifierNames(
-              /** @type {babel.types.VariableDeclaration} */ (
-                babel.template.ast("const { a, b } = { a: 1, b: 1 }")
+              /** @type {types.VariableDeclaration} */ (
+                template.ast("const { a, b } = { a: 1, b: 1 }")
               ),
             ),
             ["a", "b"],
@@ -51,8 +53,8 @@ describe(
         it("Renaming.", () => {
           deepStrictEqual(
             getVariableDeclarationIdentifierNames(
-              /** @type {babel.types.VariableDeclaration} */ (
-                babel.template.ast("const { a, b: c } = { a: 1, b: 1 }")
+              /** @type {types.VariableDeclaration} */ (
+                template.ast("const { a, b: c } = { a: 1, b: 1 }")
               ),
             ),
             ["a", "c"],
@@ -62,8 +64,8 @@ describe(
         it("Rest element.", () => {
           deepStrictEqual(
             getVariableDeclarationIdentifierNames(
-              /** @type {babel.types.VariableDeclaration} */ (
-                babel.template.ast("const { a, ...b } = { a: 1, b: 1, c: 1 }")
+              /** @type {types.VariableDeclaration} */ (
+                template.ast("const { a, ...b } = { a: 1, b: 1, c: 1 }")
               ),
             ),
             ["a", "b"],
@@ -73,8 +75,8 @@ describe(
         it("Nested array pattern.", () => {
           deepStrictEqual(
             getVariableDeclarationIdentifierNames(
-              /** @type {babel.types.VariableDeclaration} */ (
-                babel.template.ast("const { a, b: [c]} = { a: 1, b: [1] }")
+              /** @type {types.VariableDeclaration} */ (
+                template.ast("const { a, b: [c]} = { a: 1, b: [1] }")
               ),
             ),
             ["a", "c"],
@@ -84,10 +86,8 @@ describe(
         it("Nested object pattern.", () => {
           deepStrictEqual(
             getVariableDeclarationIdentifierNames(
-              /** @type {babel.types.VariableDeclaration} */ (
-                babel.template.ast(
-                  "const { a, b: { c }} = { a: 1, b: { c: 1 } }",
-                )
+              /** @type {types.VariableDeclaration} */ (
+                template.ast("const { a, b: { c }} = { a: 1, b: { c: 1 } }")
               ),
             ),
             ["a", "c"],
@@ -99,8 +99,8 @@ describe(
         it("No skipping.", () => {
           deepStrictEqual(
             getVariableDeclarationIdentifierNames(
-              /** @type {babel.types.VariableDeclaration} */ (
-                babel.template.ast("const [a, b] = [1, 2]")
+              /** @type {types.VariableDeclaration} */ (
+                template.ast("const [a, b] = [1, 2]")
               ),
             ),
             ["a", "b"],
@@ -110,8 +110,8 @@ describe(
         it("Skipping.", () => {
           deepStrictEqual(
             getVariableDeclarationIdentifierNames(
-              /** @type {babel.types.VariableDeclaration} */ (
-                babel.template.ast("const [, b] = [1, 2]")
+              /** @type {types.VariableDeclaration} */ (
+                template.ast("const [, b] = [1, 2]")
               ),
             ),
             ["b"],
@@ -121,8 +121,8 @@ describe(
         it("Rest element.", () => {
           deepStrictEqual(
             getVariableDeclarationIdentifierNames(
-              /** @type {babel.types.VariableDeclaration} */ (
-                babel.template.ast("const [a, ...b] = [1, 2, 3]")
+              /** @type {types.VariableDeclaration} */ (
+                template.ast("const [a, ...b] = [1, 2, 3]")
               ),
             ),
             ["a", "b"],
@@ -132,8 +132,8 @@ describe(
         it("Nested array pattern.", () => {
           deepStrictEqual(
             getVariableDeclarationIdentifierNames(
-              /** @type {babel.types.VariableDeclaration} */ (
-                babel.template.ast("const [a, [b]] = [1, [1, 2, 3]]")
+              /** @type {types.VariableDeclaration} */ (
+                template.ast("const [a, [b]] = [1, [1, 2, 3]]")
               ),
             ),
             ["a", "b"],
@@ -143,8 +143,8 @@ describe(
         it("Nested object pattern.", () => {
           deepStrictEqual(
             getVariableDeclarationIdentifierNames(
-              /** @type {babel.types.VariableDeclaration} */ (
-                babel.template.ast("const [a, { b }] = [1, { b: 1 }]")
+              /** @type {types.VariableDeclaration} */ (
+                template.ast("const [a, { b }] = [1, { b: 1 }]")
               ),
             ),
             ["a", "b"],
@@ -156,8 +156,8 @@ describe(
     it("Multiple declarations.", () => {
       deepStrictEqual(
         getVariableDeclarationIdentifierNames(
-          /** @type {babel.types.VariableDeclaration} */ (
-            babel.template.ast("var a, b = 1")
+          /** @type {types.VariableDeclaration} */ (
+            template.ast("var a, b = 1")
           ),
         ),
         ["a", "b"],

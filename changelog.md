@@ -5,6 +5,7 @@
 ### Major
 
 - Updated Node.js support to `^22.22.2 || >=24.15.0`.
+- Migrated to Babel v8. Project Babel config must now be Babel v8 compatible.
 
 ### Patch
 
