@@ -2,6 +2,10 @@
 
 ## Next
 
+### Major
+
+- Updated Node.js support to `^22.22.2 || >=24.15.0`.
+
 ### Patch
 
 - Fixed class exports not being detected, via [#11](https://github.com/jaydenseric/find-unused-exports/pull/11).
