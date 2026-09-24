@@ -74,260 +74,319 @@ describe("Function `scanModuleCode`.", { concurrency: true }, () => {
     });
   });
 
-  it("Default import.", async () => {
-    deepStrictEqual(await scanModuleCode('import a from "a"'), {
-      imports: {
-        a: new Set(["default"]),
-      },
-      exports: new Set(),
-    });
-  });
-
-  it("Default import, existing specifier.", async () => {
-    deepStrictEqual(
-      await scanModuleCode('import { a } from "a"; import b from "a"'),
-      {
+  describe("Static imports.", { concurrency: true }, () => {
+    it("Default.", async () => {
+      deepStrictEqual(await scanModuleCode('import a from "a"'), {
         imports: {
-          a: new Set(["default", "a"]),
+          a: new Set(["default"]),
         },
         exports: new Set(),
-      },
-    );
-  });
-
-  it("Named imports.", async () => {
-    deepStrictEqual(await scanModuleCode('import { a, b } from "a"'), {
-      imports: {
-        a: new Set(["a", "b"]),
-      },
-      exports: new Set(),
+      });
     });
-  });
 
-  it("Namespace import.", async () => {
-    deepStrictEqual(await scanModuleCode('import * as a from "a"'), {
-      imports: {
-        a: new Set(["*"]),
-      },
-      exports: new Set(),
-    });
-  });
+    describe("Named.", { concurrency: true }, () => {
+      describe("Identifiers.", { concurrency: true }, () => {
+        it("Not aliased.", async () => {
+          deepStrictEqual(await scanModuleCode('import { a, b } from "a"'), {
+            imports: {
+              a: new Set(["a", "b"]),
+            },
+            exports: new Set(),
+          });
+        });
 
-  it("Default and namespace import.", async () => {
-    deepStrictEqual(await scanModuleCode('import a, * as b from "a"'), {
-      imports: {
-        a: new Set(["default", "*"]),
-      },
-      exports: new Set(),
-    });
-  });
-
-  it("Default and named imports.", async () => {
-    deepStrictEqual(await scanModuleCode('import a, { b, c } from "a"'), {
-      imports: {
-        a: new Set(["default", "b", "c"]),
-      },
-      exports: new Set(),
-    });
-  });
-
-  it("Dynamic import.", async () => {
-    deepStrictEqual(await scanModuleCode('import("a")'), {
-      imports: {
-        a: new Set(["default", "*"]),
-      },
-      exports: new Set(),
-    });
-  });
-
-  it("Dynamic import in a default export.", async () => {
-    deepStrictEqual(await scanModuleCode('export default import("a")'), {
-      imports: {
-        a: new Set(["default", "*"]),
-      },
-      exports: new Set(["default"]),
-    });
-  });
-
-  it("Dynamic import in a named export.", async () => {
-    deepStrictEqual(await scanModuleCode('export const a = import("a")'), {
-      imports: {
-        a: new Set(["default", "*"]),
-      },
-      exports: new Set(["a"]),
-    });
-  });
-
-  it("Default export.", async () => {
-    deepStrictEqual(await scanModuleCode("export default 1"), {
-      imports: {},
-      exports: new Set(["default"]),
-    });
-  });
-
-  describe("Named export.", { concurrency: true }, () => {
-    describe("Declaration.", { concurrency: true }, () => {
-      it("Class declaration.", async () => {
-        deepStrictEqual(await scanModuleCode("export class A {}"), {
-          imports: {},
-          exports: new Set(["A"]),
+        it("Aliased to identifiers.", async () => {
+          deepStrictEqual(
+            await scanModuleCode('import { a as b, c as d } from "a"'),
+            {
+              imports: {
+                a: new Set(["a", "c"]),
+              },
+              exports: new Set(),
+            },
+          );
         });
       });
 
-      it("Function declaration.", async () => {
-        deepStrictEqual(await scanModuleCode("export function a() {}"), {
-          imports: {},
-          exports: new Set(["a"]),
+      describe("String literals.", { concurrency: true }, () => {
+        it("Aliased to identifiers.", async () => {
+          deepStrictEqual(
+            await scanModuleCode('import { "a-a" as a, "b-b" as b } from "a"'),
+            {
+              imports: {
+                a: new Set(["a-a", "b-b"]),
+              },
+              exports: new Set(),
+            },
+          );
         });
       });
+    });
 
-      describe("Variable declaration.", { concurrency: true }, () => {
-        describe("Single declaration.", { concurrency: true }, () => {
-          it("Simple identifier.", async () => {
-            deepStrictEqual(await scanModuleCode("export const a = 1"), {
-              imports: {},
-              exports: new Set(["a"]),
-            });
-          });
-
-          describe("Object pattern.", { concurrency: true }, () => {
-            it("No renaming.", async () => {
-              deepStrictEqual(
-                await scanModuleCode("export const { a, b } = { a: 1, b: 1 }"),
-                {
-                  imports: {},
-                  exports: new Set(["a", "b"]),
-                },
-              );
-            });
-
-            it("Renaming.", async () => {
-              deepStrictEqual(
-                await scanModuleCode(
-                  "export const { a, b: c } = { a: 1, b: 1 }",
-                ),
-                {
-                  imports: {},
-                  exports: new Set(["a", "c"]),
-                },
-              );
-            });
-
-            it("Rest element.", async () => {
-              deepStrictEqual(
-                await scanModuleCode(
-                  "export const { a, ...b } = { a: 1, b: 1, c: 1 }",
-                ),
-                {
-                  imports: {},
-                  exports: new Set(["a", "b"]),
-                },
-              );
-            });
-
-            it("Nested array pattern.", async () => {
-              deepStrictEqual(
-                await scanModuleCode(
-                  "export const { a, b: [c]} = { a: 1, b: [1] }",
-                ),
-                {
-                  imports: {},
-                  exports: new Set(["a", "c"]),
-                },
-              );
-            });
-
-            it("Nested object pattern.", async () => {
-              deepStrictEqual(
-                await scanModuleCode(
-                  "export const { a, b: { c }} = { a: 1, b: { c: 1 } }",
-                ),
-                {
-                  imports: {},
-                  exports: new Set(["a", "c"]),
-                },
-              );
-            });
-          });
-
-          describe("Array pattern.", { concurrency: true }, () => {
-            it("No skipping.", async () => {
-              deepStrictEqual(
-                await scanModuleCode("export const [a, b] = [1, 2]"),
-                {
-                  imports: {},
-                  exports: new Set(["a", "b"]),
-                },
-              );
-            });
-
-            it("Skipping.", async () => {
-              deepStrictEqual(
-                await scanModuleCode("export const [, b] = [1, 2]"),
-                {
-                  imports: {},
-                  exports: new Set(["b"]),
-                },
-              );
-            });
-
-            it("Rest element.", async () => {
-              deepStrictEqual(
-                await scanModuleCode("export const [a, ...b] = [1, 2, 3]"),
-                {
-                  imports: {},
-                  exports: new Set(["a", "b"]),
-                },
-              );
-            });
-
-            it("Nested array pattern.", async () => {
-              deepStrictEqual(
-                await scanModuleCode("export const [a, [b]] = [1, [1, 2, 3]]"),
-                {
-                  imports: {},
-                  exports: new Set(["a", "b"]),
-                },
-              );
-            });
-
-            it("Nested object pattern.", async () => {
-              deepStrictEqual(
-                await scanModuleCode("export const [a, { b }] = [1, { b: 1 }]"),
-                {
-                  imports: {},
-                  exports: new Set(["a", "b"]),
-                },
-              );
-            });
-          });
-        });
-
-        it("Multiple declarations.", async () => {
-          deepStrictEqual(await scanModuleCode("export var a, b = 1"), {
-            imports: {},
-            exports: new Set(["a", "b"]),
-          });
-        });
+    it("Namespaced.", async () => {
+      deepStrictEqual(await scanModuleCode('import * as a from "a"'), {
+        imports: {
+          a: new Set(["*"]),
+        },
+        exports: new Set(),
       });
+    });
 
-      it("Export specifier.", async () => {
-        deepStrictEqual(await scanModuleCode("const a = 1; export { a }"), {
-          imports: {},
-          exports: new Set(["a"]),
-        });
+    it("Default and namespaced.", async () => {
+      deepStrictEqual(await scanModuleCode('import a, * as b from "a"'), {
+        imports: {
+          a: new Set(["default", "*"]),
+        },
+        exports: new Set(),
+      });
+    });
+
+    it("Default and named.", async () => {
+      deepStrictEqual(await scanModuleCode('import a, { b, c } from "a"'), {
+        imports: {
+          a: new Set(["default", "b", "c"]),
+        },
+        exports: new Set(),
+      });
+    });
+
+    it("Accumulates imports for a repeated module specifier.", async () => {
+      deepStrictEqual(
+        await scanModuleCode('import { a } from "a"; import b from "a"'),
+        {
+          imports: {
+            a: new Set(["default", "a"]),
+          },
+          exports: new Set(),
+        },
+      );
+    });
+  });
+
+  describe("Dynamic imports.", { concurrency: true }, () => {
+    it("Standalone.", async () => {
+      deepStrictEqual(await scanModuleCode('import("a")'), {
+        imports: {
+          a: new Set(["default", "*"]),
+        },
+        exports: new Set(),
+      });
+    });
+
+    it("In a default export.", async () => {
+      deepStrictEqual(await scanModuleCode('export default import("a")'), {
+        imports: {
+          a: new Set(["default", "*"]),
+        },
+        exports: new Set(["default"]),
+      });
+    });
+
+    it("In a named export.", async () => {
+      deepStrictEqual(await scanModuleCode('export const a = import("a")'), {
+        imports: {
+          a: new Set(["default", "*"]),
+        },
+        exports: new Set(["a"]),
       });
     });
   });
 
-  it("Named and default export.", async () => {
-    deepStrictEqual(
-      await scanModuleCode("export const a = 1; export default 1"),
-      {
+  describe("Exports.", { concurrency: true }, () => {
+    it("Default.", async () => {
+      deepStrictEqual(await scanModuleCode("export default 1"), {
         imports: {},
-        exports: new Set(["default", "a"]),
-      },
-    );
+        exports: new Set(["default"]),
+      });
+    });
+
+    describe("Named.", { concurrency: true }, () => {
+      describe("Declaration.", { concurrency: true }, () => {
+        it("Class.", async () => {
+          deepStrictEqual(await scanModuleCode("export class A {}"), {
+            imports: {},
+            exports: new Set(["A"]),
+          });
+        });
+
+        it("Function.", async () => {
+          deepStrictEqual(await scanModuleCode("export function a() {}"), {
+            imports: {},
+            exports: new Set(["a"]),
+          });
+        });
+
+        describe("Variable.", { concurrency: true }, () => {
+          describe("Single.", { concurrency: true }, () => {
+            it("Simple identifier.", async () => {
+              deepStrictEqual(await scanModuleCode("export const a = 1"), {
+                imports: {},
+                exports: new Set(["a"]),
+              });
+            });
+
+            describe("Object pattern.", { concurrency: true }, () => {
+              it("No renaming.", async () => {
+                deepStrictEqual(
+                  await scanModuleCode(
+                    "export const { a, b } = { a: 1, b: 1 }",
+                  ),
+                  {
+                    imports: {},
+                    exports: new Set(["a", "b"]),
+                  },
+                );
+              });
+
+              it("Renaming.", async () => {
+                deepStrictEqual(
+                  await scanModuleCode(
+                    "export const { a, b: c } = { a: 1, b: 1 }",
+                  ),
+                  {
+                    imports: {},
+                    exports: new Set(["a", "c"]),
+                  },
+                );
+              });
+
+              it("Rest element.", async () => {
+                deepStrictEqual(
+                  await scanModuleCode(
+                    "export const { a, ...b } = { a: 1, b: 1, c: 1 }",
+                  ),
+                  {
+                    imports: {},
+                    exports: new Set(["a", "b"]),
+                  },
+                );
+              });
+
+              it("Nested array pattern.", async () => {
+                deepStrictEqual(
+                  await scanModuleCode(
+                    "export const { a, b: [c]} = { a: 1, b: [1] }",
+                  ),
+                  {
+                    imports: {},
+                    exports: new Set(["a", "c"]),
+                  },
+                );
+              });
+
+              it("Nested object pattern.", async () => {
+                deepStrictEqual(
+                  await scanModuleCode(
+                    "export const { a, b: { c }} = { a: 1, b: { c: 1 } }",
+                  ),
+                  {
+                    imports: {},
+                    exports: new Set(["a", "c"]),
+                  },
+                );
+              });
+            });
+
+            describe("Array pattern.", { concurrency: true }, () => {
+              it("No skipping.", async () => {
+                deepStrictEqual(
+                  await scanModuleCode("export const [a, b] = [1, 2]"),
+                  {
+                    imports: {},
+                    exports: new Set(["a", "b"]),
+                  },
+                );
+              });
+
+              it("Skipping.", async () => {
+                deepStrictEqual(
+                  await scanModuleCode("export const [, b] = [1, 2]"),
+                  {
+                    imports: {},
+                    exports: new Set(["b"]),
+                  },
+                );
+              });
+
+              it("Rest element.", async () => {
+                deepStrictEqual(
+                  await scanModuleCode("export const [a, ...b] = [1, 2, 3]"),
+                  {
+                    imports: {},
+                    exports: new Set(["a", "b"]),
+                  },
+                );
+              });
+
+              it("Nested array pattern.", async () => {
+                deepStrictEqual(
+                  await scanModuleCode(
+                    "export const [a, [b]] = [1, [1, 2, 3]]",
+                  ),
+                  {
+                    imports: {},
+                    exports: new Set(["a", "b"]),
+                  },
+                );
+              });
+
+              it("Nested object pattern.", async () => {
+                deepStrictEqual(
+                  await scanModuleCode(
+                    "export const [a, { b }] = [1, { b: 1 }]",
+                  ),
+                  {
+                    imports: {},
+                    exports: new Set(["a", "b"]),
+                  },
+                );
+              });
+            });
+          });
+
+          it("Multiple.", async () => {
+            deepStrictEqual(await scanModuleCode("export var a, b = 1"), {
+              imports: {},
+              exports: new Set(["a", "b"]),
+            });
+          });
+        });
+
+        describe("Export specifier.", { concurrency: true }, () => {
+          it("Identifiers.", async () => {
+            deepStrictEqual(
+              await scanModuleCode("const a = 1, b = 2; export { a, b }"),
+              {
+                imports: {},
+                exports: new Set(["a", "b"]),
+              },
+            );
+          });
+
+          it("String literals.", async () => {
+            deepStrictEqual(
+              await scanModuleCode(
+                'const a = 1, b = 2; export { a as "a-a", b as "b-b" }',
+              ),
+              {
+                imports: {},
+                exports: new Set(["a-a", "b-b"]),
+              },
+            );
+          });
+        });
+      });
+    });
+
+    it("Named and default.", async () => {
+      deepStrictEqual(
+        await scanModuleCode("export const a = 1; export default 1"),
+        {
+          imports: {},
+          exports: new Set(["default", "a"]),
+        },
+      );
+    });
   });
 
   it("Import and export.", async () => {
@@ -339,79 +398,176 @@ describe("Function `scanModuleCode`.", { concurrency: true }, () => {
     });
   });
 
-  it("Export default from.", async () => {
-    deepStrictEqual(await scanModuleCode('export { default } from "a"'), {
-      imports: {
-        a: new Set(["default"]),
-      },
-      exports: new Set(["default"]),
+  describe("Re-exports.", { concurrency: true }, () => {
+    describe("Default.", { concurrency: true }, () => {
+      it("Not aliased.", async () => {
+        deepStrictEqual(await scanModuleCode('export { default } from "a"'), {
+          imports: {
+            a: new Set(["default"]),
+          },
+          exports: new Set(["default"]),
+        });
+      });
+
+      describe("Aliased.", { concurrency: true }, () => {
+        it("Identifiers.", async () => {
+          deepStrictEqual(
+            await scanModuleCode(
+              'export { default as a, default as b } from "a"',
+            ),
+            {
+              imports: {
+                a: new Set(["default"]),
+              },
+              exports: new Set(["a", "b"]),
+            },
+          );
+        });
+
+        it("String literals.", async () => {
+          deepStrictEqual(
+            await scanModuleCode(
+              'export { default as "a-a", default as "b-b" } from "a"',
+            ),
+            {
+              imports: {
+                a: new Set(["default"]),
+              },
+              exports: new Set(["a-a", "b-b"]),
+            },
+          );
+        });
+      });
+
+      it("Accumulates imports for a repeated module specifier.", async () => {
+        deepStrictEqual(
+          await scanModuleCode(
+            'import { a } from "a"; export { default } from "a"',
+          ),
+          {
+            imports: {
+              a: new Set(["default", "a"]),
+            },
+            exports: new Set(["default"]),
+          },
+        );
+      });
     });
-  });
 
-  it("Export default from, existing specifier.", async () => {
-    deepStrictEqual(
-      await scanModuleCode(
-        'import { a } from "a"; export { default } from "a"',
-      ),
-      {
-        imports: {
-          a: new Set(["default", "a"]),
-        },
-        exports: new Set(["default"]),
-      },
-    );
-  });
+    describe("Named.", { concurrency: true }, () => {
+      describe("Identifiers.", { concurrency: true }, () => {
+        it("Not aliased.", async () => {
+          deepStrictEqual(await scanModuleCode('export { a, b } from "a"'), {
+            imports: {
+              a: new Set(["a", "b"]),
+            },
+            exports: new Set(["a", "b"]),
+          });
+        });
 
-  it("Export default as name from.", async () => {
-    deepStrictEqual(await scanModuleCode('export { default as a } from "a"'), {
-      imports: {
-        a: new Set(["default"]),
-      },
-      exports: new Set(["a"]),
+        it("Aliased to identifiers.", async () => {
+          deepStrictEqual(
+            await scanModuleCode(
+              'export { a as default, b as c, c as d } from "a"',
+            ),
+            {
+              imports: {
+                a: new Set(["a", "b", "c"]),
+              },
+              exports: new Set(["default", "c", "d"]),
+            },
+          );
+        });
+
+        it("Aliased to string literals.", async () => {
+          deepStrictEqual(
+            await scanModuleCode('export { a as "b-b", c as "d-d" } from "a"'),
+            {
+              imports: {
+                a: new Set(["a", "c"]),
+              },
+              exports: new Set(["b-b", "d-d"]),
+            },
+          );
+        });
+      });
+
+      describe("String literals.", { concurrency: true }, () => {
+        it("Not aliased.", async () => {
+          deepStrictEqual(
+            await scanModuleCode('export { "a-a", "b-b" } from "a"'),
+            {
+              imports: {
+                a: new Set(["a-a", "b-b"]),
+              },
+              exports: new Set(["a-a", "b-b"]),
+            },
+          );
+        });
+
+        it("Aliased to identifiers.", async () => {
+          deepStrictEqual(
+            await scanModuleCode('export { "a-a" as b, "c-c" as d } from "a"'),
+            {
+              imports: {
+                a: new Set(["a-a", "c-c"]),
+              },
+              exports: new Set(["b", "d"]),
+            },
+          );
+        });
+
+        it("Aliased to string literals.", async () => {
+          deepStrictEqual(
+            await scanModuleCode(
+              'export { "a-a" as "b-b", "c-c" as "d-d" } from "a"',
+            ),
+            {
+              imports: {
+                a: new Set(["a-a", "c-c"]),
+              },
+              exports: new Set(["b-b", "d-d"]),
+            },
+          );
+        });
+      });
     });
-  });
 
-  it("Export name as default from.", async () => {
-    deepStrictEqual(await scanModuleCode('export { a as default } from "a"'), {
-      imports: {
-        a: new Set(["a"]),
-      },
-      exports: new Set(["default"]),
-    });
-  });
+    describe("All.", { concurrency: true }, () => {
+      it("Not namespaced.", async () => {
+        deepStrictEqual(await scanModuleCode('export * from "a"'), {
+          imports: {
+            a: new Set(["*"]),
+          },
+          exports: new Set([
+            // All export names are unknown.
+          ]),
+        });
+      });
 
-  it("Export all from.", async () => {
-    deepStrictEqual(await scanModuleCode('export * from "a"'), {
-      imports: {
-        a: new Set(["*"]),
-      },
-      exports: new Set([
-        // All export names are unknown.
-      ]),
-    });
-  });
+      it("Namespaced.", async () => {
+        deepStrictEqual(await scanModuleCode('export * as a from "a"'), {
+          imports: {
+            a: new Set(["*"]),
+          },
+          exports: new Set(["a"]),
+        });
+      });
 
-  it("Export all from, existing specifier.", async () => {
-    deepStrictEqual(
-      await scanModuleCode('export { a } from "a"; export * from "a"'),
-      {
-        imports: {
-          a: new Set(["*", "a"]),
-        },
-        exports: new Set([
-          "a",
-          // All export names are unknown.
-        ]),
-      },
-    );
-  });
-
-  it("Export namespace from.", async () => {
-    deepStrictEqual(await scanModuleCode('export * as a from "a"'), {
-      imports: {
-        a: new Set(["*"]),
-      },
-      exports: new Set(["a"]),
+      it("Accumulates imports for a repeated module specifier.", async () => {
+        deepStrictEqual(
+          await scanModuleCode('export { a } from "a"; export * from "a"'),
+          {
+            imports: {
+              a: new Set(["*", "a"]),
+            },
+            exports: new Set([
+              "a",
+              // All export names are unknown.
+            ]),
+          },
+        );
+      });
     });
   });
 

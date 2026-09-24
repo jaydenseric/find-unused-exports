@@ -86,14 +86,10 @@ export default async function scanModuleCode(code, path) {
           case "ImportSpecifier": {
             // E.g. `import { a as b } from "a"`
             //                ^^^^^^
-
-            // Guard against Babel support for a non-standard string literal:
             // E.g. `import { "a-b-c" as a } from "a"`
-            //                ^^^^^^^
-            types.assertIdentifier(specifier.imported);
-
+            //                ^^^^^^^^^^^^
             analysis.imports[path.node.source.value].add(
-              specifier.imported.name,
+              getModuleExportName(specifier.imported),
             );
             break;
           }
@@ -160,8 +156,8 @@ export default async function scanModuleCode(code, path) {
       else if (path.node.source) {
         // E.g. `export { default } from "a"`
         //       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        // E.g. `export { default as a, a as b } from "a"`
-        //       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        // E.g. `export { default as a, a as b, c as "a-b-c" } from "a"`
+        //       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         // E.g. `export * as a, { a as b } from "a"`
         //       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         // There may be multiple statements for the same specifier.
@@ -177,51 +173,43 @@ export default async function scanModuleCode(code, path) {
               analysis.imports[path.node.source.value].add("*");
               break;
             case "ExportSpecifier": {
-              // Guard against Babel support for a non-standard string literal:
-              // E.g. `export { "a-b-c" as a } from "a"`
-              //                ^^^^^^^
-              types.assertIdentifier(specifier.local);
+              const localName = getModuleExportName(specifier.local);
 
-              if (specifier.local.name === "default")
+              if (localName === "default")
                 // E.g. `export { default as a } from "a"`
                 //                ^^^^^^^
                 analysis.imports[path.node.source.value].add("default");
               // E.g. `export { a as b } from "a"`
               //                ^
-              else
-                analysis.imports[path.node.source.value].add(
-                  specifier.local.name,
-                );
+              // E.g. `export { "a-b-c" as a } from "a"`
+              //                ^^^^^^^
+              else analysis.imports[path.node.source.value].add(localName);
               break;
             }
           }
 
-          // Guard against Babel support for a non-standard string literal:
-          // E.g. `export { a as "a-b-c" } from "a"`
-          //                     ^^^^^^^
-          types.assertIdentifier(specifier.exported);
+          const exportedName = getModuleExportName(specifier.exported);
 
           // Process the export.
-          if (specifier.exported.name === "default") {
+          if (exportedName === "default") {
             // E.g. `export { a as default } from "a"`
             //                     ^^^^^^^
             analysis.exports.add("default");
           } else {
             // E.g. `export { a as b } from "a"`
             //                     ^
-            analysis.exports.add(specifier.exported.name);
+            // E.g. `export { a as "a-b-c" } from "a"`
+            //                     ^^^^^^^
+            analysis.exports.add(exportedName);
           }
         }
       } else {
         // E.g. `const a = 1; export { a }`
         //                    ^^^^^^^^^^^^
+        // E.g. `const a = 1; export { a as "a-b-c" }`
+        //                    ^^^^^^^^^^^^^^^^^^^^^^^
         for (const { exported } of path.node.specifiers) {
-          // Guard against Babel support for a non-standard string literal:
-          // E.g. `const a = 1; export { a as "a-b-c" }`
-          //                                  ^^^^^^^
-          types.assertIdentifier(exported);
-
-          analysis.exports.add(exported.name);
+          analysis.exports.add(getModuleExportName(exported));
         }
       }
     },
@@ -250,6 +238,16 @@ export default async function scanModuleCode(code, path) {
     }
 
   return analysis;
+}
+
+/**
+ * Gets a module export name from a Babel AST node that could be for an
+ * identifier (e.g. `default`) or a string literal (e.g. `"a-b-c"`).
+ * @param {types.Identifier | types.StringLiteral} node Babel AST node.
+ * @returns {string} Module export name.
+ */
+function getModuleExportName(node) {
+  return node.type === "Identifier" ? node.name : node.value;
 }
 
 /**

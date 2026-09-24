@@ -7,10 +7,15 @@
 - Updated Node.js support to `^22.22.2 || >=24.15.0`.
 - Migrated to Babel v8. Project Babel config must now be Babel v8 compatible.
 
+### Minor
+
+- Added support for string literal import and export names.
+
 ### Patch
 
 - Fixed class exports not being detected, via [#11](https://github.com/jaydenseric/find-unused-exports/pull/11).
 - Fixed dynamic imports within default or named exports not being detected.
+- Improved the function `scanModuleCode` test structure.
 - Updated dev dependencies.
 - Updated package scripts.
 - Updated GitHub Actions CI config:
