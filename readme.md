@@ -15,6 +15,8 @@ To install [`find-unused-exports`](https://npm.im/find-unused-exports) with [npm
 npm install find-unused-exports --save-dev
 ```
 
+If the project has [Babel](https://babeljs.io) configured, ensure the modules to analyze are not Babel ignored because this tool uses the Babel parser to scan module code for imports and exports.
+
 Then, either use the [CLI](#cli) command [`find-unused-exports`](#command-find-unused-exports) or import and use the function [`findUnusedExports`](./findUnusedExports.mjs).
 
 ## Excluding modules

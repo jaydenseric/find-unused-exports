@@ -1,10 +1,10 @@
 // @ts-check
 
-/** @import { InputOptions } from "@babel/core" */
+/** @import { InputOptions, types } from "@babel/core" */
 
 // Use `@babel/core` instead of `@babel/parser` and `@babel/traverse` directly
 // so that project Babel config will be respected when parsing code.
-import { parseAsync, traverse, types } from "@babel/core";
+import { parseAsync, traverse } from "@babel/core";
 
 import getVariableDeclarationIdentifierNames from "./getVariableDeclarationIdentifierNames.mjs";
 
@@ -14,8 +14,8 @@ import getVariableDeclarationIdentifierNames from "./getVariableDeclarationIdent
  * module may only contain dynamic imports, but because it might be source code
  * to be bundled or transpiled, regular imports and exports are still analyzed.
  * @param {string} code JavaScript code.
- * @param {string} [path] Path to the file the code is from, for more useful
- *   Babel parse errors.
+ * @param {string} path Path to the file the code is from, for Babel
+ *   config/ignore resolution and more useful parse error messages.
  * @returns {Promise<ModuleScan>} Resolves an analysis of the module’s imports
  *   and exports.
  */
@@ -23,7 +23,7 @@ export default async function scanModuleCode(code, path) {
   if (typeof code !== "string")
     throw new TypeError("Argument 1 `code` must be a string.");
 
-  if (path !== undefined && typeof path !== "string")
+  if (typeof path !== "string")
     throw new TypeError("Argument 2 `path` must be a string.");
 
   /** @type {ModuleScan} */
@@ -39,31 +39,32 @@ export default async function scanModuleCode(code, path) {
     "decorators",
   ];
 
-  if (path) {
-    if (
-      // Path is a TypeScript module.
-      path.endsWith(".mts") ||
-      path.endsWith(".cts") ||
-      path.endsWith(".ts") ||
-      path.endsWith(".tsx")
-    )
-      // Allow parsing code containing TypeScript syntax.
-      plugins.push("typescript");
+  if (
+    // Path is a TypeScript module.
+    path.endsWith(".mts") ||
+    path.endsWith(".cts") ||
+    path.endsWith(".ts") ||
+    path.endsWith(".tsx")
+  )
+    // Allow parsing code containing TypeScript syntax.
+    plugins.push("typescript");
 
-    // Allow parsing code containing JSX syntax.
-    if (path.endsWith(".tsx") || path.endsWith(".jsx")) plugins.push("jsx");
-  }
+  // Allow parsing code containing JSX syntax.
+  if (path.endsWith(".tsx") || path.endsWith(".jsx")) plugins.push("jsx");
 
   const ast = await parseAsync(code, {
-    // Provide the code file path for more useful Babel parse errors.
+    // Provide the code file path for Babel config/ignore resolution and more
+    // useful parse error messages.
     filename: path,
     parserOpts: {
       plugins,
     },
   });
 
-  // Todo: Clarify what might cause `ast` to not be a `File`.
-  types.assertFile(ast);
+  if (!ast)
+    throw new Error(
+      `Babel won’t parse this module, perhaps it’s ignored by project Babel config: ${path}`,
+    );
 
   traverse(ast, {
     ImportDeclaration(path) {

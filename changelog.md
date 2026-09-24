@@ -10,12 +10,17 @@
 ### Minor
 
 - Added support for string literal import and export names.
+- Better support the scenario where module analysis fails because the module is ignored by project Babel config and Babel won’t parse the module.
+  - Explain in the readme installation instructions that to analyze modules they mustn’t be Babel ignored.
+  - Made the error message more helpful.
+  - Added tests.
 
 ### Patch
 
 - Fixed class exports not being detected, via [#11](https://github.com/jaydenseric/find-unused-exports/pull/11).
 - Fixed dynamic imports within default or named exports not being detected.
-- Improved the function `scanModuleCode`:
+- Improved the internal function `scanModuleCode`:
+  - Make argument 2 `path` required, and better explain in comments it’s purpose.
   - Removed redundant conditions.
   - Avoid using a TypeScript ignore comment.
 - Improved the function `scanModuleCode` test structure.

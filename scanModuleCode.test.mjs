@@ -2,6 +2,7 @@
 
 import { deepStrictEqual, rejects } from "node:assert";
 import { suite, test } from "node:test";
+import { fileURLToPath } from "node:url";
 
 import scanModuleCode from "./scanModuleCode.mjs";
 
@@ -11,6 +12,7 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
       scanModuleCode(
         // @ts-expect-error Testing invalid.
         true,
+        "a.mjs",
       ),
       new TypeError("Argument 1 `code` must be a string."),
     );
@@ -55,10 +57,26 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
         exports: new Set(),
       });
     });
+
+    test("Module ignored by project Babel config.", async () => {
+      const path = fileURLToPath(
+        new URL(
+          "./test-helpers/fixtures/babel-ignored-module/a.mjs",
+          import.meta.url,
+        ),
+      );
+
+      await rejects(
+        scanModuleCode("", path),
+        new Error(
+          `Babel won’t parse this module, perhaps it’s ignored by project Babel config: ${path}`,
+        ),
+      );
+    });
   });
 
   test("No imports or exports.", async () => {
-    deepStrictEqual(await scanModuleCode(""), {
+    deepStrictEqual(await scanModuleCode("", "a.mjs"), {
       imports: {},
       exports: new Set(),
     });
@@ -66,7 +84,7 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
 
   suite("Static imports.", { concurrency: true }, () => {
     test("Default.", async () => {
-      deepStrictEqual(await scanModuleCode('import a from "a"'), {
+      deepStrictEqual(await scanModuleCode('import a from "a"', "a.mjs"), {
         imports: {
           a: new Set(["default"]),
         },
@@ -77,17 +95,20 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
     suite("Named.", { concurrency: true }, () => {
       suite("Identifiers.", { concurrency: true }, () => {
         test("Not aliased.", async () => {
-          deepStrictEqual(await scanModuleCode('import { a, b } from "a"'), {
-            imports: {
-              a: new Set(["a", "b"]),
+          deepStrictEqual(
+            await scanModuleCode('import { a, b } from "a"', "a.mjs"),
+            {
+              imports: {
+                a: new Set(["a", "b"]),
+              },
+              exports: new Set(),
             },
-            exports: new Set(),
-          });
+          );
         });
 
         test("Aliased to identifiers.", async () => {
           deepStrictEqual(
-            await scanModuleCode('import { a as b, c as d } from "a"'),
+            await scanModuleCode('import { a as b, c as d } from "a"', "a.mjs"),
             {
               imports: {
                 a: new Set(["a", "c"]),
@@ -101,7 +122,10 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
       suite("String literals.", { concurrency: true }, () => {
         test("Aliased to identifiers.", async () => {
           deepStrictEqual(
-            await scanModuleCode('import { "a-a" as a, "b-b" as b } from "a"'),
+            await scanModuleCode(
+              'import { "a-a" as a, "b-b" as b } from "a"',
+              "a.mjs",
+            ),
             {
               imports: {
                 a: new Set(["a-a", "b-b"]),
@@ -114,7 +138,7 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
     });
 
     test("Namespaced.", async () => {
-      deepStrictEqual(await scanModuleCode('import * as a from "a"'), {
+      deepStrictEqual(await scanModuleCode('import * as a from "a"', "a.mjs"), {
         imports: {
           a: new Set(["*"]),
         },
@@ -123,26 +147,35 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
     });
 
     test("Default and namespaced.", async () => {
-      deepStrictEqual(await scanModuleCode('import a, * as b from "a"'), {
-        imports: {
-          a: new Set(["default", "*"]),
+      deepStrictEqual(
+        await scanModuleCode('import a, * as b from "a"', "a.mjs"),
+        {
+          imports: {
+            a: new Set(["default", "*"]),
+          },
+          exports: new Set(),
         },
-        exports: new Set(),
-      });
+      );
     });
 
     test("Default and named.", async () => {
-      deepStrictEqual(await scanModuleCode('import a, { b, c } from "a"'), {
-        imports: {
-          a: new Set(["default", "b", "c"]),
+      deepStrictEqual(
+        await scanModuleCode('import a, { b, c } from "a"', "a.mjs"),
+        {
+          imports: {
+            a: new Set(["default", "b", "c"]),
+          },
+          exports: new Set(),
         },
-        exports: new Set(),
-      });
+      );
     });
 
     test("Accumulates imports for a repeated module specifier.", async () => {
       deepStrictEqual(
-        await scanModuleCode('import { a } from "a"; import b from "a"'),
+        await scanModuleCode(
+          'import { a } from "a"; import b from "a"',
+          "a.mjs",
+        ),
         {
           imports: {
             a: new Set(["default", "a"]),
@@ -155,7 +188,7 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
 
   suite("Dynamic imports.", { concurrency: true }, () => {
     test("Standalone.", async () => {
-      deepStrictEqual(await scanModuleCode('import("a")'), {
+      deepStrictEqual(await scanModuleCode('import("a")', "a.mjs"), {
         imports: {
           a: new Set(["default", "*"]),
         },
@@ -164,27 +197,33 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
     });
 
     test("In a default export.", async () => {
-      deepStrictEqual(await scanModuleCode('export default import("a")'), {
-        imports: {
-          a: new Set(["default", "*"]),
+      deepStrictEqual(
+        await scanModuleCode('export default import("a")', "a.mjs"),
+        {
+          imports: {
+            a: new Set(["default", "*"]),
+          },
+          exports: new Set(["default"]),
         },
-        exports: new Set(["default"]),
-      });
+      );
     });
 
     test("In a named export.", async () => {
-      deepStrictEqual(await scanModuleCode('export const a = import("a")'), {
-        imports: {
-          a: new Set(["default", "*"]),
+      deepStrictEqual(
+        await scanModuleCode('export const a = import("a")', "a.mjs"),
+        {
+          imports: {
+            a: new Set(["default", "*"]),
+          },
+          exports: new Set(["a"]),
         },
-        exports: new Set(["a"]),
-      });
+      );
     });
   });
 
   suite("Exports.", { concurrency: true }, () => {
     test("Default.", async () => {
-      deepStrictEqual(await scanModuleCode("export default 1"), {
+      deepStrictEqual(await scanModuleCode("export default 1", "a.mjs"), {
         imports: {},
         exports: new Set(["default"]),
       });
@@ -193,26 +232,32 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
     suite("Named.", { concurrency: true }, () => {
       suite("Declaration.", { concurrency: true }, () => {
         test("Class.", async () => {
-          deepStrictEqual(await scanModuleCode("export class A {}"), {
+          deepStrictEqual(await scanModuleCode("export class A {}", "a.mjs"), {
             imports: {},
             exports: new Set(["A"]),
           });
         });
 
         test("Function.", async () => {
-          deepStrictEqual(await scanModuleCode("export function a() {}"), {
-            imports: {},
-            exports: new Set(["a"]),
-          });
+          deepStrictEqual(
+            await scanModuleCode("export function a() {}", "a.mjs"),
+            {
+              imports: {},
+              exports: new Set(["a"]),
+            },
+          );
         });
 
         suite("Variable.", { concurrency: true }, () => {
           suite("Single.", { concurrency: true }, () => {
             test("Simple identifier.", async () => {
-              deepStrictEqual(await scanModuleCode("export const a = 1"), {
-                imports: {},
-                exports: new Set(["a"]),
-              });
+              deepStrictEqual(
+                await scanModuleCode("export const a = 1", "a.mjs"),
+                {
+                  imports: {},
+                  exports: new Set(["a"]),
+                },
+              );
             });
 
             suite("Object pattern.", { concurrency: true }, () => {
@@ -220,6 +265,7 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
                 deepStrictEqual(
                   await scanModuleCode(
                     "export const { a, b } = { a: 1, b: 1 }",
+                    "a.mjs",
                   ),
                   {
                     imports: {},
@@ -232,6 +278,7 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
                 deepStrictEqual(
                   await scanModuleCode(
                     "export const { a, b: c } = { a: 1, b: 1 }",
+                    "a.mjs",
                   ),
                   {
                     imports: {},
@@ -244,6 +291,7 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
                 deepStrictEqual(
                   await scanModuleCode(
                     "export const { a, ...b } = { a: 1, b: 1, c: 1 }",
+                    "a.mjs",
                   ),
                   {
                     imports: {},
@@ -256,6 +304,7 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
                 deepStrictEqual(
                   await scanModuleCode(
                     "export const { a, b: [c]} = { a: 1, b: [1] }",
+                    "a.mjs",
                   ),
                   {
                     imports: {},
@@ -268,6 +317,7 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
                 deepStrictEqual(
                   await scanModuleCode(
                     "export const { a, b: { c }} = { a: 1, b: { c: 1 } }",
+                    "a.mjs",
                   ),
                   {
                     imports: {},
@@ -280,7 +330,7 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
             suite("Array pattern.", { concurrency: true }, () => {
               test("No skipping.", async () => {
                 deepStrictEqual(
-                  await scanModuleCode("export const [a, b] = [1, 2]"),
+                  await scanModuleCode("export const [a, b] = [1, 2]", "a.mjs"),
                   {
                     imports: {},
                     exports: new Set(["a", "b"]),
@@ -290,7 +340,7 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
 
               test("Skipping.", async () => {
                 deepStrictEqual(
-                  await scanModuleCode("export const [, b] = [1, 2]"),
+                  await scanModuleCode("export const [, b] = [1, 2]", "a.mjs"),
                   {
                     imports: {},
                     exports: new Set(["b"]),
@@ -300,7 +350,10 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
 
               test("Rest element.", async () => {
                 deepStrictEqual(
-                  await scanModuleCode("export const [a, ...b] = [1, 2, 3]"),
+                  await scanModuleCode(
+                    "export const [a, ...b] = [1, 2, 3]",
+                    "a.mjs",
+                  ),
                   {
                     imports: {},
                     exports: new Set(["a", "b"]),
@@ -312,6 +365,7 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
                 deepStrictEqual(
                   await scanModuleCode(
                     "export const [a, [b]] = [1, [1, 2, 3]]",
+                    "a.mjs",
                   ),
                   {
                     imports: {},
@@ -324,6 +378,7 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
                 deepStrictEqual(
                   await scanModuleCode(
                     "export const [a, { b }] = [1, { b: 1 }]",
+                    "a.mjs",
                   ),
                   {
                     imports: {},
@@ -335,17 +390,23 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
           });
 
           test("Multiple.", async () => {
-            deepStrictEqual(await scanModuleCode("export var a, b = 1"), {
-              imports: {},
-              exports: new Set(["a", "b"]),
-            });
+            deepStrictEqual(
+              await scanModuleCode("export var a, b = 1", "a.mjs"),
+              {
+                imports: {},
+                exports: new Set(["a", "b"]),
+              },
+            );
           });
         });
 
         suite("Export specifier.", { concurrency: true }, () => {
           test("Identifiers.", async () => {
             deepStrictEqual(
-              await scanModuleCode("const a = 1, b = 2; export { a, b }"),
+              await scanModuleCode(
+                "const a = 1, b = 2; export { a, b }",
+                "a.mjs",
+              ),
               {
                 imports: {},
                 exports: new Set(["a", "b"]),
@@ -357,6 +418,7 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
             deepStrictEqual(
               await scanModuleCode(
                 'const a = 1, b = 2; export { a as "a-a", b as "b-b" }',
+                "a.mjs",
               ),
               {
                 imports: {},
@@ -370,7 +432,7 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
 
     test("Named and default.", async () => {
       deepStrictEqual(
-        await scanModuleCode("export const a = 1; export default 1"),
+        await scanModuleCode("export const a = 1; export default 1", "a.mjs"),
         {
           imports: {},
           exports: new Set(["default", "a"]),
@@ -380,23 +442,29 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
   });
 
   test("Import and export.", async () => {
-    deepStrictEqual(await scanModuleCode('import a from "a"; export { a }'), {
-      imports: {
-        a: new Set(["default"]),
+    deepStrictEqual(
+      await scanModuleCode('import a from "a"; export { a }', "a.mjs"),
+      {
+        imports: {
+          a: new Set(["default"]),
+        },
+        exports: new Set(["a"]),
       },
-      exports: new Set(["a"]),
-    });
+    );
   });
 
   suite("Re-exports.", { concurrency: true }, () => {
     suite("Default.", { concurrency: true }, () => {
       test("Not aliased.", async () => {
-        deepStrictEqual(await scanModuleCode('export { default } from "a"'), {
-          imports: {
-            a: new Set(["default"]),
+        deepStrictEqual(
+          await scanModuleCode('export { default } from "a"', "a.mjs"),
+          {
+            imports: {
+              a: new Set(["default"]),
+            },
+            exports: new Set(["default"]),
           },
-          exports: new Set(["default"]),
-        });
+        );
       });
 
       suite("Aliased.", { concurrency: true }, () => {
@@ -404,6 +472,7 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
           deepStrictEqual(
             await scanModuleCode(
               'export { default as a, default as b } from "a"',
+              "a.mjs",
             ),
             {
               imports: {
@@ -418,6 +487,7 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
           deepStrictEqual(
             await scanModuleCode(
               'export { default as "a-a", default as "b-b" } from "a"',
+              "a.mjs",
             ),
             {
               imports: {
@@ -433,6 +503,7 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
         deepStrictEqual(
           await scanModuleCode(
             'import { a } from "a"; export { default } from "a"',
+            "a.mjs",
           ),
           {
             imports: {
@@ -447,18 +518,22 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
     suite("Named.", { concurrency: true }, () => {
       suite("Identifiers.", { concurrency: true }, () => {
         test("Not aliased.", async () => {
-          deepStrictEqual(await scanModuleCode('export { a, b } from "a"'), {
-            imports: {
-              a: new Set(["a", "b"]),
+          deepStrictEqual(
+            await scanModuleCode('export { a, b } from "a"', "a.mjs"),
+            {
+              imports: {
+                a: new Set(["a", "b"]),
+              },
+              exports: new Set(["a", "b"]),
             },
-            exports: new Set(["a", "b"]),
-          });
+          );
         });
 
         test("Aliased to identifiers.", async () => {
           deepStrictEqual(
             await scanModuleCode(
               'export { a as default, b as c, c as d } from "a"',
+              "a.mjs",
             ),
             {
               imports: {
@@ -471,7 +546,10 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
 
         test("Aliased to string literals.", async () => {
           deepStrictEqual(
-            await scanModuleCode('export { a as "b-b", c as "d-d" } from "a"'),
+            await scanModuleCode(
+              'export { a as "b-b", c as "d-d" } from "a"',
+              "a.mjs",
+            ),
             {
               imports: {
                 a: new Set(["a", "c"]),
@@ -485,7 +563,7 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
       suite("String literals.", { concurrency: true }, () => {
         test("Not aliased.", async () => {
           deepStrictEqual(
-            await scanModuleCode('export { "a-a", "b-b" } from "a"'),
+            await scanModuleCode('export { "a-a", "b-b" } from "a"', "a.mjs"),
             {
               imports: {
                 a: new Set(["a-a", "b-b"]),
@@ -497,7 +575,10 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
 
         test("Aliased to identifiers.", async () => {
           deepStrictEqual(
-            await scanModuleCode('export { "a-a" as b, "c-c" as d } from "a"'),
+            await scanModuleCode(
+              'export { "a-a" as b, "c-c" as d } from "a"',
+              "a.mjs",
+            ),
             {
               imports: {
                 a: new Set(["a-a", "c-c"]),
@@ -511,6 +592,7 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
           deepStrictEqual(
             await scanModuleCode(
               'export { "a-a" as "b-b", "c-c" as "d-d" } from "a"',
+              "a.mjs",
             ),
             {
               imports: {
@@ -525,7 +607,7 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
 
     suite("All.", { concurrency: true }, () => {
       test("Not namespaced.", async () => {
-        deepStrictEqual(await scanModuleCode('export * from "a"'), {
+        deepStrictEqual(await scanModuleCode('export * from "a"', "a.mjs"), {
           imports: {
             a: new Set(["*"]),
           },
@@ -536,17 +618,23 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
       });
 
       test("Namespaced.", async () => {
-        deepStrictEqual(await scanModuleCode('export * as a from "a"'), {
-          imports: {
-            a: new Set(["*"]),
+        deepStrictEqual(
+          await scanModuleCode('export * as a from "a"', "a.mjs"),
+          {
+            imports: {
+              a: new Set(["*"]),
+            },
+            exports: new Set(["a"]),
           },
-          exports: new Set(["a"]),
-        });
+        );
       });
 
       test("Accumulates imports for a repeated module specifier.", async () => {
         deepStrictEqual(
-          await scanModuleCode('export { a } from "a"; export * from "a"'),
+          await scanModuleCode(
+            'export { a } from "a"; export * from "a"',
+            "a.mjs",
+          ),
           {
             imports: {
               a: new Set(["*", "a"]),
@@ -564,10 +652,13 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
   suite("Ignore unused exports comment.", { concurrency: true }, () => {
     test("No names.", async () => {
       deepStrictEqual(
-        await scanModuleCode(`// ignore unused exports
+        await scanModuleCode(
+          `// ignore unused exports
 export const a = 1;
 export default 1;
-`),
+`,
+          "a.mjs",
+        ),
         {
           imports: {},
           exports: new Set(),
@@ -577,10 +668,13 @@ export default 1;
 
     test("Case insensitivity.", async () => {
       deepStrictEqual(
-        await scanModuleCode(`// iGnOrE UnUsEd eXpOrTs
+        await scanModuleCode(
+          `// iGnOrE UnUsEd eXpOrTs
 export const a = 1;
 export default 1;
-`),
+`,
+          "a.mjs",
+        ),
         {
           imports: {},
           exports: new Set(),
@@ -597,6 +691,7 @@ export const a = 1;
 export const b = 1;
 export const c = 1;
 `,
+          "a.mjs",
         ),
         {
           imports: {},
@@ -607,10 +702,13 @@ export const c = 1;
 
     test("One name.", async () => {
       deepStrictEqual(
-        await scanModuleCode(`// ignore unused exports default
+        await scanModuleCode(
+          `// ignore unused exports default
 export const a = 1;
 export default 1;
-`),
+`,
+          "a.mjs",
+        ),
         {
           imports: {},
           exports: new Set(["a"]),
@@ -620,11 +718,14 @@ export default 1;
 
     test("Multiple names.", async () => {
       deepStrictEqual(
-        await scanModuleCode(`// ignore unused exports a, default
+        await scanModuleCode(
+          `// ignore unused exports a, default
 export const a = 1;
 export const b = 1;
 export default 1;
-`),
+`,
+          "a.mjs",
+        ),
         {
           imports: {},
           exports: new Set(["b"]),
@@ -634,9 +735,12 @@ export default 1;
 
     test("Invalid names.", async () => {
       deepStrictEqual(
-        await scanModuleCode(`// ignore unused exports default,,
+        await scanModuleCode(
+          `// ignore unused exports default,,
 export default 1;
-`),
+`,
+          "a.mjs",
+        ),
         {
           imports: {},
           exports: new Set(["default"]),
@@ -647,11 +751,14 @@ export default 1;
     suite("Multiple.", { concurrency: true }, () => {
       test("Same name.", async () => {
         deepStrictEqual(
-          await scanModuleCode(`// ignore unused exports default
+          await scanModuleCode(
+            `// ignore unused exports default
 // ignore unused exports default
 export const a = 1;
 export default 1;
-`),
+`,
+            "a.mjs",
+          ),
           {
             imports: {},
             exports: new Set(["a"]),
@@ -661,12 +768,15 @@ export default 1;
 
       test("Different names.", async () => {
         deepStrictEqual(
-          await scanModuleCode(`// ignore unused exports a
+          await scanModuleCode(
+            `// ignore unused exports a
 // ignore unused exports b
 export const a = 1;
 export const b = 1;
 export default 1;
-`),
+`,
+            "a.mjs",
+          ),
           {
             imports: {},
             exports: new Set(["default"]),
@@ -677,10 +787,13 @@ export default 1;
 
     test("Comment block.", async () => {
       deepStrictEqual(
-        await scanModuleCode(`/* ignore unused exports a */
+        await scanModuleCode(
+          `/* ignore unused exports a */
 export const a = 1;
 export default 1;
-`),
+`,
+          "a.mjs",
+        ),
         {
           imports: {},
           exports: new Set(["default"]),
