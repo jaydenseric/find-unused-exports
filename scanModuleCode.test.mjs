@@ -140,6 +140,24 @@ describe("Function `scanModuleCode`.", { concurrency: true }, () => {
     });
   });
 
+  it("Dynamic import in a default export.", async () => {
+    deepStrictEqual(await scanModuleCode('export default import("a")'), {
+      imports: {
+        a: new Set(["default", "*"]),
+      },
+      exports: new Set(["default"]),
+    });
+  });
+
+  it("Dynamic import in a named export.", async () => {
+    deepStrictEqual(await scanModuleCode('export const a = import("a")'), {
+      imports: {
+        a: new Set(["default", "*"]),
+      },
+      exports: new Set(["a"]),
+    });
+  });
+
   it("Default export.", async () => {
     deepStrictEqual(await scanModuleCode("export default 1"), {
       imports: {},

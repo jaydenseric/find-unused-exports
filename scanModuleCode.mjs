@@ -116,12 +116,10 @@ export default async function scanModuleCode(code, path) {
         analysis.imports[source.value].add("*");
       }
     },
-    ExportDefaultDeclaration(path) {
+    ExportDefaultDeclaration() {
       // E.g. `export default 1`
       //       ^^^^^^^^^^^^^^^^
       analysis.exports.add("default");
-
-      path.skip();
     },
     ExportAllDeclaration(path) {
       // E.g. `export * from "a"`
@@ -226,8 +224,6 @@ export default async function scanModuleCode(code, path) {
           analysis.exports.add(exported.name);
         }
       }
-
-      path.skip();
     },
   });
 
