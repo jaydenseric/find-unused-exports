@@ -154,7 +154,10 @@ export default async function scanModuleCode(code, path) {
       // either exporting an existing declaration or is “export from” syntax.
       if (path.node.declaration)
         switch (path.node.declaration.type) {
+          case "ClassDeclaration":
           case "FunctionDeclaration":
+            // E.g. `export class A {}`
+            //              ^^^^^^^^^^
             // E.g. `export function a() {}`
             //              ^^^^^^^^^^^^^^^
             analysis.exports.add(

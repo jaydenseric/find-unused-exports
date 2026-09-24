@@ -4,6 +4,7 @@
 
 ### Patch
 
+- Fixed class exports not being detected, via [#11](https://github.com/jaydenseric/find-unused-exports/pull/11).
 - Updated package scripts.
 - Updated GitHub Actions CI config:
   - Improved triggers.
