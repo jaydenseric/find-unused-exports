@@ -156,7 +156,7 @@ export default async function scanModuleCode(code, path) {
         switch (path.node.declaration.type) {
           case "ClassDeclaration":
           case "FunctionDeclaration":
-            // E.g. `export class a {}`
+            // E.g. `export class A {}`
             //              ^^^^^^^^^^
             // E.g. `export function a() {}`
             //              ^^^^^^^^^^^^^^^
