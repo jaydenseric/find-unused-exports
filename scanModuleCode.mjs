@@ -161,7 +161,7 @@ export default async function scanModuleCode(code, path) {
             // E.g. `export function a() {}`
             //              ^^^^^^^^^^^^^^^
             analysis.exports.add(
-              // @ts-ignore `id` must exist in export declarations.
+              // @ts-expect-error `id` must exist in export declarations.
               path.node.declaration.id.name,
             );
             break;
