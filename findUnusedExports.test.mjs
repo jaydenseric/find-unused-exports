@@ -12,7 +12,7 @@ suite("Function `findUnusedExports`.", { concurrency: true }, () => {
       await findUnusedExports({
         cwd: fileURLToPath(
           new URL(
-            "./test/fixtures/files-without-exports-imports",
+            "./test-helpers/fixtures/files-without-exports-imports",
             import.meta.url,
           ),
         ),
@@ -26,7 +26,7 @@ suite("Function `findUnusedExports`.", { concurrency: true }, () => {
       await findUnusedExports({
         cwd: fileURLToPath(
           new URL(
-            "./test/fixtures/multiple-files-importing-from-same-file",
+            "./test-helpers/fixtures/multiple-files-importing-from-same-file",
             import.meta.url,
           ),
         ),
@@ -39,7 +39,7 @@ suite("Function `findUnusedExports`.", { concurrency: true }, () => {
     deepStrictEqual(
       await findUnusedExports({
         cwd: fileURLToPath(
-          new URL("./test/fixtures/no-unused-exports", import.meta.url),
+          new URL("./test-helpers/fixtures/no-unused-exports", import.meta.url),
         ),
       }),
       {},
@@ -50,7 +50,10 @@ suite("Function `findUnusedExports`.", { concurrency: true }, () => {
     deepStrictEqual(
       await findUnusedExports({
         cwd: fileURLToPath(
-          new URL("./test/fixtures/some-unused-exports", import.meta.url),
+          new URL(
+            "./test-helpers/fixtures/some-unused-exports",
+            import.meta.url,
+          ),
         ),
       }),
       {
@@ -65,7 +68,7 @@ suite("Function `findUnusedExports`.", { concurrency: true }, () => {
       await findUnusedExports({
         cwd: fileURLToPath(
           new URL(
-            "./test/fixtures/namespace-import-and-default-import",
+            "./test-helpers/fixtures/namespace-import-and-default-import",
             import.meta.url,
           ),
         ),
@@ -79,7 +82,7 @@ suite("Function `findUnusedExports`.", { concurrency: true }, () => {
       await findUnusedExports({
         cwd: fileURLToPath(
           new URL(
-            "./test/fixtures/namespace-import-without-default-import",
+            "./test-helpers/fixtures/namespace-import-without-default-import",
             import.meta.url,
           ),
         ),
@@ -92,7 +95,10 @@ suite("Function `findUnusedExports`.", { concurrency: true }, () => {
     deepStrictEqual(
       await findUnusedExports({
         cwd: fileURLToPath(
-          new URL("./test/fixtures/bare-import-specifier", import.meta.url),
+          new URL(
+            "./test-helpers/fixtures/bare-import-specifier",
+            import.meta.url,
+          ),
         ),
       }),
       {},
@@ -104,7 +110,7 @@ suite("Function `findUnusedExports`.", { concurrency: true }, () => {
       await findUnusedExports({
         cwd: fileURLToPath(
           new URL(
-            "./test/fixtures/protocol-node-import-specifier",
+            "./test-helpers/fixtures/protocol-node-import-specifier",
             import.meta.url,
           ),
         ),
@@ -119,7 +125,10 @@ suite("Function `findUnusedExports`.", { concurrency: true }, () => {
     deepStrictEqual(
       await findUnusedExports({
         cwd: fileURLToPath(
-          new URL("./test/fixtures/side-effect-import", import.meta.url),
+          new URL(
+            "./test-helpers/fixtures/side-effect-import",
+            import.meta.url,
+          ),
         ),
       }),
       {
@@ -133,7 +142,7 @@ suite("Function `findUnusedExports`.", { concurrency: true }, () => {
       await findUnusedExports({
         cwd: fileURLToPath(
           new URL(
-            "./test/fixtures/unresolvable-import-specifier",
+            "./test-helpers/fixtures/unresolvable-import-specifier",
             import.meta.url,
           ),
         ),
@@ -149,7 +158,7 @@ suite("Function `findUnusedExports`.", { concurrency: true }, () => {
       await findUnusedExports({
         cwd: fileURLToPath(
           new URL(
-            "./test/fixtures/ignore-unused-exports-comments",
+            "./test-helpers/fixtures/ignore-unused-exports-comments",
             import.meta.url,
           ),
         ),
@@ -176,7 +185,7 @@ suite("Function `findUnusedExports`.", { concurrency: true }, () => {
       deepStrictEqual(
         await findUnusedExports({
           cwd: fileURLToPath(
-            new URL("./test/fixtures/excludeGlob", import.meta.url),
+            new URL("./test-helpers/fixtures/excludeGlob", import.meta.url),
           ),
           excludeGlob: "**/b.mjs",
         }),
@@ -229,7 +238,7 @@ suite("Function `findUnusedExports`.", { concurrency: true }, () => {
       deepStrictEqual(
         await findUnusedExports({
           cwd: fileURLToPath(
-            new URL("./test/fixtures/option-ignore", import.meta.url),
+            new URL("./test-helpers/fixtures/option-ignore", import.meta.url),
           ),
           ignore: {
             "a.mjs": ["default"],
@@ -247,7 +256,7 @@ suite("Function `findUnusedExports`.", { concurrency: true }, () => {
       deepStrictEqual(
         await findUnusedExports({
           cwd: fileURLToPath(
-            new URL("./test/fixtures/option-ignore", import.meta.url),
+            new URL("./test-helpers/fixtures/option-ignore", import.meta.url),
           ),
           ignore: {
             "**/*.mjs": ["*"],
@@ -281,7 +290,7 @@ suite("Function `findUnusedExports`.", { concurrency: true }, () => {
       deepStrictEqual(
         await findUnusedExports({
           cwd: fileURLToPath(
-            new URL("./test/fixtures/import-map", import.meta.url),
+            new URL("./test-helpers/fixtures/import-map", import.meta.url),
           ),
           importMap: {
             imports: {
@@ -311,7 +320,7 @@ suite("Function `findUnusedExports`.", { concurrency: true }, () => {
       deepStrictEqual(
         await findUnusedExports({
           cwd: fileURLToPath(
-            new URL("./test/fixtures/moduleGlob", import.meta.url),
+            new URL("./test-helpers/fixtures/moduleGlob", import.meta.url),
           ),
           moduleGlob: "**/*.txt",
         }),
@@ -386,7 +395,7 @@ suite("Function `findUnusedExports`.", { concurrency: true }, () => {
         await findUnusedExports({
           cwd: fileURLToPath(
             new URL(
-              "./test/fixtures/extensionless-import-specifiers",
+              "./test-helpers/fixtures/extensionless-import-specifiers",
               import.meta.url,
             ),
           ),
@@ -426,7 +435,7 @@ suite("Function `findUnusedExports`.", { concurrency: true }, () => {
       await findUnusedExports({
         cwd: fileURLToPath(
           new URL(
-            "./test/fixtures/extensionless-import-specifiers-and-index-files",
+            "./test-helpers/fixtures/extensionless-import-specifiers-and-index-files",
             import.meta.url,
           ),
         ),

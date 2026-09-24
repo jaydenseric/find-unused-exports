@@ -28,7 +28,7 @@ suite("Function `reportCliError`.", { concurrency: true }, () => {
         [
           fileURLToPath(
             new URL(
-              "./test/fixtures/reportCliError/Error-instance-with-stack.mjs",
+              "./test-helpers/fixtures/reportCliError/Error-instance-with-stack.mjs",
               import.meta.url,
             ),
           ),
@@ -48,7 +48,7 @@ suite("Function `reportCliError`.", { concurrency: true }, () => {
       await assertSnapshot(
         replaceStackTraces(stderr.toString()),
         new URL(
-          "./test/snapshots/reportCliError/Error-instance-with-stack-stderr.ans",
+          "./test-helpers/snapshots/reportCliError/Error-instance-with-stack-stderr.ans",
           import.meta.url,
         ),
       );
@@ -62,7 +62,7 @@ suite("Function `reportCliError`.", { concurrency: true }, () => {
         [
           fileURLToPath(
             new URL(
-              "./test/fixtures/reportCliError/Error-instance-without-stack.mjs",
+              "./test-helpers/fixtures/reportCliError/Error-instance-without-stack.mjs",
               import.meta.url,
             ),
           ),
@@ -82,7 +82,7 @@ suite("Function `reportCliError`.", { concurrency: true }, () => {
       await assertSnapshot(
         replaceStackTraces(stderr.toString()),
         new URL(
-          "./test/snapshots/reportCliError/Error-instance-without-stack-stderr.ans",
+          "./test-helpers/snapshots/reportCliError/Error-instance-without-stack-stderr.ans",
           import.meta.url,
         ),
       );
@@ -97,7 +97,7 @@ suite("Function `reportCliError`.", { concurrency: true }, () => {
       [
         fileURLToPath(
           new URL(
-            "./test/fixtures/reportCliError/CliError-instance.mjs",
+            "./test-helpers/fixtures/reportCliError/CliError-instance.mjs",
             import.meta.url,
           ),
         ),
@@ -117,7 +117,7 @@ suite("Function `reportCliError`.", { concurrency: true }, () => {
     await assertSnapshot(
       replaceStackTraces(stderr.toString()),
       new URL(
-        "./test/snapshots/reportCliError/CliError-instance-stderr.ans",
+        "./test-helpers/snapshots/reportCliError/CliError-instance-stderr.ans",
         import.meta.url,
       ),
     );
@@ -131,7 +131,7 @@ suite("Function `reportCliError`.", { concurrency: true }, () => {
       [
         fileURLToPath(
           new URL(
-            "./test/fixtures/reportCliError/primitive-value.mjs",
+            "./test-helpers/fixtures/reportCliError/primitive-value.mjs",
             import.meta.url,
           ),
         ),
@@ -151,7 +151,7 @@ suite("Function `reportCliError`.", { concurrency: true }, () => {
     await assertSnapshot(
       replaceStackTraces(stderr.toString()),
       new URL(
-        "./test/snapshots/reportCliError/primitive-value-stderr.ans",
+        "./test-helpers/snapshots/reportCliError/primitive-value-stderr.ans",
         import.meta.url,
       ),
     );

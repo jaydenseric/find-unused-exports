@@ -18,6 +18,8 @@
 - Removed redundant conditions in the function `scanModuleCode`.
 - Improved the function `scanModuleCode` test structure.
 - Refactored tests from `describe` and `it` to `suite` and `test`.
+- Renamed the test helper directory from `test` to `test-helpers` to avoid the Node.js test runner assuming the modules within are tests.
+- Removed the dev dependency [`coverage-node`](https://npm.im/coverage-node) and switched to the Node.js test runner to enforce code coverage.
 - Updated dev dependencies.
 - Updated package scripts.
 - Updated GitHub Actions CI config:

@@ -18,7 +18,10 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
       "node",
       [FIND_UNUSED_EXPORTS_CLI_PATH],
       {
-        cwd: new URL("./test/fixtures/no-unused-exports", import.meta.url),
+        cwd: new URL(
+          "./test-helpers/fixtures/no-unused-exports",
+          import.meta.url,
+        ),
         env: {
           ...process.env,
           FORCE_COLOR: "1",
@@ -31,7 +34,7 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
     await assertSnapshot(
       stdout.toString(),
       new URL(
-        "./test/snapshots/find-unused-exports/no-unused-exports-stdout.ans",
+        "./test-helpers/snapshots/find-unused-exports/no-unused-exports-stdout.ans",
         import.meta.url,
       ),
     );
@@ -44,7 +47,10 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
       "node",
       [FIND_UNUSED_EXPORTS_CLI_PATH],
       {
-        cwd: new URL("./test/fixtures/some-unused-exports", import.meta.url),
+        cwd: new URL(
+          "./test-helpers/fixtures/some-unused-exports",
+          import.meta.url,
+        ),
         env: {
           ...process.env,
           FORCE_COLOR: "1",
@@ -58,7 +64,7 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
     await assertSnapshot(
       stderr.toString(),
       new URL(
-        "./test/snapshots/find-unused-exports/some-unused-exports-stderr.ans",
+        "./test-helpers/snapshots/find-unused-exports/some-unused-exports-stderr.ans",
         import.meta.url,
       ),
     );
@@ -70,7 +76,10 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
       "node",
       [FIND_UNUSED_EXPORTS_CLI_PATH],
       {
-        cwd: new URL("./test/fixtures/typescript-syntax", import.meta.url),
+        cwd: new URL(
+          "./test-helpers/fixtures/typescript-syntax",
+          import.meta.url,
+        ),
         env: {
           ...process.env,
           FORCE_COLOR: "1",
@@ -84,7 +93,7 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
     await assertSnapshot(
       stderr.toString(),
       new URL(
-        "./test/snapshots/find-unused-exports/typescript-syntax-stderr.ans",
+        "./test-helpers/snapshots/find-unused-exports/typescript-syntax-stderr.ans",
         import.meta.url,
       ),
     );
@@ -96,7 +105,7 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
       "node",
       [FIND_UNUSED_EXPORTS_CLI_PATH, "--exclude-glob", "**/b.mjs"],
       {
-        cwd: new URL("./test/fixtures/excludeGlob", import.meta.url),
+        cwd: new URL("./test-helpers/fixtures/excludeGlob", import.meta.url),
         env: {
           ...process.env,
           FORCE_COLOR: "1",
@@ -110,7 +119,7 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
     await assertSnapshot(
       stderr.toString(),
       new URL(
-        "./test/snapshots/find-unused-exports/exclude-glob-stderr.ans",
+        "./test-helpers/snapshots/find-unused-exports/exclude-glob-stderr.ans",
         import.meta.url,
       ),
     );
@@ -123,7 +132,10 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
         "node",
         [FIND_UNUSED_EXPORTS_CLI_PATH, "--ignore", "_"],
         {
-          cwd: new URL("./test/fixtures/option-ignore", import.meta.url),
+          cwd: new URL(
+            "./test-helpers/fixtures/option-ignore",
+            import.meta.url,
+          ),
           env: {
             ...process.env,
             FORCE_COLOR: "1",
@@ -137,7 +149,7 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
       await assertSnapshot(
         stderr.toString(),
         new URL(
-          "./test/snapshots/find-unused-exports/ignore-invalid-stderr.ans",
+          "./test-helpers/snapshots/find-unused-exports/ignore-invalid-stderr.ans",
           import.meta.url,
         ),
       );
@@ -156,7 +168,10 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
           }),
         ],
         {
-          cwd: new URL("./test/fixtures/option-ignore", import.meta.url),
+          cwd: new URL(
+            "./test-helpers/fixtures/option-ignore",
+            import.meta.url,
+          ),
           env: {
             ...process.env,
             FORCE_COLOR: "1",
@@ -170,7 +185,7 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
       await assertSnapshot(
         stderr.toString(),
         new URL(
-          "./test/snapshots/find-unused-exports/ignore-valid-stderr.ans",
+          "./test-helpers/snapshots/find-unused-exports/ignore-valid-stderr.ans",
           import.meta.url,
         ),
       );
@@ -184,7 +199,7 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
         "node",
         [FIND_UNUSED_EXPORTS_CLI_PATH, "--import-map", "_"],
         {
-          cwd: new URL("./test/fixtures/import-map", import.meta.url),
+          cwd: new URL("./test-helpers/fixtures/import-map", import.meta.url),
           env: {
             ...process.env,
             FORCE_COLOR: "1",
@@ -198,7 +213,7 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
       await assertSnapshot(
         stderr.toString(),
         new URL(
-          "./test/snapshots/find-unused-exports/import-map-invalid-stderr.ans",
+          "./test-helpers/snapshots/find-unused-exports/import-map-invalid-stderr.ans",
           import.meta.url,
         ),
       );
@@ -218,7 +233,7 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
           '"$(cat import-map.json)"',
         ].join(" "),
         {
-          cwd: new URL("./test/fixtures/import-map", import.meta.url),
+          cwd: new URL("./test-helpers/fixtures/import-map", import.meta.url),
           env: {
             ...process.env,
             FORCE_COLOR: "1",
@@ -233,7 +248,7 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
       await assertSnapshot(
         stderr.toString(),
         new URL(
-          "./test/snapshots/find-unused-exports/import-map-valid-stderr.ans",
+          "./test-helpers/snapshots/find-unused-exports/import-map-valid-stderr.ans",
           import.meta.url,
         ),
       );
@@ -246,7 +261,7 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
       "node",
       [FIND_UNUSED_EXPORTS_CLI_PATH, "--module-glob", "**/*.txt"],
       {
-        cwd: new URL("./test/fixtures/moduleGlob", import.meta.url),
+        cwd: new URL("./test-helpers/fixtures/moduleGlob", import.meta.url),
         env: {
           ...process.env,
           FORCE_COLOR: "1",
@@ -260,7 +275,7 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
     await assertSnapshot(
       stderr.toString(),
       new URL(
-        "./test/snapshots/find-unused-exports/module-glob-stderr.ans",
+        "./test-helpers/snapshots/find-unused-exports/module-glob-stderr.ans",
         import.meta.url,
       ),
     );
@@ -273,7 +288,7 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
       [FIND_UNUSED_EXPORTS_CLI_PATH, "--resolve-file-extensions", "mjs,a.mjs"],
       {
         cwd: new URL(
-          "./test/fixtures/extensionless-import-specifiers",
+          "./test-helpers/fixtures/extensionless-import-specifiers",
           import.meta.url,
         ),
         env: {
@@ -289,7 +304,7 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
     await assertSnapshot(
       stderr.toString(),
       new URL(
-        "./test/snapshots/find-unused-exports/resolve-file-extensions-stderr.ans",
+        "./test-helpers/snapshots/find-unused-exports/resolve-file-extensions-stderr.ans",
         import.meta.url,
       ),
     );
@@ -307,7 +322,7 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
       ],
       {
         cwd: new URL(
-          "./test/fixtures/extensionless-import-specifiers-and-index-files",
+          "./test-helpers/fixtures/extensionless-import-specifiers-and-index-files",
           import.meta.url,
         ),
         env: {
@@ -323,7 +338,7 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
     await assertSnapshot(
       stderr.toString(),
       new URL(
-        "./test/snapshots/find-unused-exports/resolve-file-extensions-and-index-files-stderr.ans",
+        "./test-helpers/snapshots/find-unused-exports/resolve-file-extensions-and-index-files-stderr.ans",
         import.meta.url,
       ),
     );
@@ -336,7 +351,7 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
       [FIND_UNUSED_EXPORTS_CLI_PATH, "--resolve-index-files"],
       {
         cwd: new URL(
-          "./test/fixtures/extensionless-import-specifiers-and-index-files",
+          "./test-helpers/fixtures/extensionless-import-specifiers-and-index-files",
           import.meta.url,
         ),
         env: {
@@ -352,7 +367,7 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
     await assertSnapshot(
       stderr.toString(),
       new URL(
-        "./test/snapshots/find-unused-exports/resolve-index-files-without-resolve-file-extensions-stderr.ans",
+        "./test-helpers/snapshots/find-unused-exports/resolve-index-files-without-resolve-file-extensions-stderr.ans",
         import.meta.url,
       ),
     );
@@ -361,7 +376,7 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
 
   test("Module Babel can’t parse.", async () => {
     const fixtureProjectPath = fileURLToPath(
-      new URL("./test/fixtures/unparsable-module", import.meta.url),
+      new URL("./test-helpers/fixtures/unparsable-module", import.meta.url),
     );
     const { stdout, stderr, status, error } = spawnSync(
       "node",
@@ -383,7 +398,7 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
         stderr.toString().replace(fixtureProjectPath, "<path>"),
       ),
       new URL(
-        "./test/snapshots/find-unused-exports/unparsable-module-stderr.ans",
+        "./test-helpers/snapshots/find-unused-exports/unparsable-module-stderr.ans",
         import.meta.url,
       ),
     );
