@@ -2,13 +2,13 @@
 
 import { ok, strictEqual } from "node:assert";
 import { matchesGlob } from "node:path";
-import { describe, it } from "node:test";
+import { suite, test } from "node:test";
 
 import EXCLUDE_GLOB from "./EXCLUDE_GLOB.mjs";
 
-describe("Constant `EXCLUDE_GLOB`.", { concurrency: true }, () => {
+suite("Constant `EXCLUDE_GLOB`.", { concurrency: true }, () => {
   for (const extension of ["d.mts", "d.cts", "d.ts"])
-    describe(
+    suite(
       `Matching TypeScript declaration file extension \`${extension}\`.`,
       { concurrency: true },
       () => {
@@ -24,33 +24,29 @@ describe("Constant `EXCLUDE_GLOB`.", { concurrency: true }, () => {
           `a.a..${extension}`,
           `a.a.a.${extension}`,
         ])
-          describe(`Filename \`${filename}\`.`, { concurrency: true }, () => {
-            it("Not nested.", () => {
+          suite(`Filename \`${filename}\`.`, { concurrency: true }, () => {
+            test("Not nested.", () => {
               ok(matchesGlob(filename, EXCLUDE_GLOB));
             });
 
-            it("Nested.", () => {
+            test("Nested.", () => {
               ok(matchesGlob(`a/${filename}`, EXCLUDE_GLOB));
             });
           });
       },
     );
 
-  describe(
-    "Matching `node_modules` directories.",
-    { concurrency: true },
-    () => {
-      it("Not nested.", () => {
-        ok(matchesGlob("node_modules/a.mjs", EXCLUDE_GLOB));
-      });
+  suite("Matching `node_modules` directories.", { concurrency: true }, () => {
+    test("Not nested.", () => {
+      ok(matchesGlob("node_modules/a.mjs", EXCLUDE_GLOB));
+    });
 
-      it("Nested.", () => {
-        ok(matchesGlob("a/node_modules/a.mjs", EXCLUDE_GLOB));
-      });
-    },
-  );
+    test("Nested.", () => {
+      ok(matchesGlob("a/node_modules/a.mjs", EXCLUDE_GLOB));
+    });
+  });
 
-  it("Not matching.", () => {
+  test("Not matching.", () => {
     strictEqual(matchesGlob("a.a.ts", EXCLUDE_GLOB), false);
     strictEqual(matchesGlob("a/a.mjs", EXCLUDE_GLOB), false);
   });

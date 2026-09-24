@@ -17,6 +17,7 @@
 - Fixed dynamic imports within default or named exports not being detected.
 - Removed redundant conditions in the function `scanModuleCode`.
 - Improved the function `scanModuleCode` test structure.
+- Refactored tests from `describe` and `it` to `suite` and `test`.
 - Updated dev dependencies.
 - Updated package scripts.
 - Updated GitHub Actions CI config:

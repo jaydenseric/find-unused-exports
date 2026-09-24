@@ -3,17 +3,17 @@
 /** @import { types } from "@babel/core" */
 
 import { deepStrictEqual, throws } from "node:assert";
-import { describe, it } from "node:test";
+import { suite, test } from "node:test";
 
 import { template } from "@babel/core";
 
 import getVariableDeclarationIdentifierNames from "./getVariableDeclarationIdentifierNames.mjs";
 
-describe(
+suite(
   "Function `getVariableDeclarationIdentifierNames`.",
   { concurrency: true },
   () => {
-    it("Argument 1 `variableDeclaration` not a `VariableDeclaration` Babel AST node.", () => {
+    test("Argument 1 `variableDeclaration` not a `VariableDeclaration` Babel AST node.", () => {
       throws(
         () =>
           getVariableDeclarationIdentifierNames(
@@ -26,8 +26,8 @@ describe(
       );
     });
 
-    describe("Single declaration.", { concurrency: true }, () => {
-      it("Simple identifier.", () => {
+    suite("Single declaration.", { concurrency: true }, () => {
+      test("Simple identifier.", () => {
         deepStrictEqual(
           getVariableDeclarationIdentifierNames(
             /** @type {types.VariableDeclaration} */ (
@@ -38,8 +38,8 @@ describe(
         );
       });
 
-      describe("Single declaration.", { concurrency: true }, () => {
-        it("No renaming.", () => {
+      suite("Single declaration.", { concurrency: true }, () => {
+        test("No renaming.", () => {
           deepStrictEqual(
             getVariableDeclarationIdentifierNames(
               /** @type {types.VariableDeclaration} */ (
@@ -50,7 +50,7 @@ describe(
           );
         });
 
-        it("Renaming.", () => {
+        test("Renaming.", () => {
           deepStrictEqual(
             getVariableDeclarationIdentifierNames(
               /** @type {types.VariableDeclaration} */ (
@@ -61,7 +61,7 @@ describe(
           );
         });
 
-        it("Rest element.", () => {
+        test("Rest element.", () => {
           deepStrictEqual(
             getVariableDeclarationIdentifierNames(
               /** @type {types.VariableDeclaration} */ (
@@ -72,7 +72,7 @@ describe(
           );
         });
 
-        it("Nested array pattern.", () => {
+        test("Nested array pattern.", () => {
           deepStrictEqual(
             getVariableDeclarationIdentifierNames(
               /** @type {types.VariableDeclaration} */ (
@@ -83,7 +83,7 @@ describe(
           );
         });
 
-        it("Nested object pattern.", () => {
+        test("Nested object pattern.", () => {
           deepStrictEqual(
             getVariableDeclarationIdentifierNames(
               /** @type {types.VariableDeclaration} */ (
@@ -95,8 +95,8 @@ describe(
         });
       });
 
-      describe("Array pattern.", { concurrency: true }, () => {
-        it("No skipping.", () => {
+      suite("Array pattern.", { concurrency: true }, () => {
+        test("No skipping.", () => {
           deepStrictEqual(
             getVariableDeclarationIdentifierNames(
               /** @type {types.VariableDeclaration} */ (
@@ -107,7 +107,7 @@ describe(
           );
         });
 
-        it("Skipping.", () => {
+        test("Skipping.", () => {
           deepStrictEqual(
             getVariableDeclarationIdentifierNames(
               /** @type {types.VariableDeclaration} */ (
@@ -118,7 +118,7 @@ describe(
           );
         });
 
-        it("Rest element.", () => {
+        test("Rest element.", () => {
           deepStrictEqual(
             getVariableDeclarationIdentifierNames(
               /** @type {types.VariableDeclaration} */ (
@@ -129,7 +129,7 @@ describe(
           );
         });
 
-        it("Nested array pattern.", () => {
+        test("Nested array pattern.", () => {
           deepStrictEqual(
             getVariableDeclarationIdentifierNames(
               /** @type {types.VariableDeclaration} */ (
@@ -140,7 +140,7 @@ describe(
           );
         });
 
-        it("Nested object pattern.", () => {
+        test("Nested object pattern.", () => {
           deepStrictEqual(
             getVariableDeclarationIdentifierNames(
               /** @type {types.VariableDeclaration} */ (
@@ -153,7 +153,7 @@ describe(
       });
     });
 
-    it("Multiple declarations.", () => {
+    test("Multiple declarations.", () => {
       deepStrictEqual(
         getVariableDeclarationIdentifierNames(
           /** @type {types.VariableDeclaration} */ (

@@ -1,13 +1,13 @@
 // @ts-check
 
 import { rejects, strictEqual } from "node:assert";
-import { describe, it } from "node:test";
+import { suite, test } from "node:test";
 import { fileURLToPath } from "node:url";
 
 import isDirectoryPath from "./isDirectoryPath.mjs";
 
-describe("Function `isDirectoryPath`.", { concurrency: true }, () => {
-  it("Argument 1 `path` not a string.", async () => {
+suite("Function `isDirectoryPath`.", { concurrency: true }, () => {
+  test("Argument 1 `path` not a string.", async () => {
     await rejects(
       isDirectoryPath(
         // @ts-expect-error Testing invalid.
@@ -17,18 +17,18 @@ describe("Function `isDirectoryPath`.", { concurrency: true }, () => {
     );
   });
 
-  it("Directory path.", async () => {
+  test("Directory path.", async () => {
     strictEqual(
       await isDirectoryPath(fileURLToPath(new URL("./", import.meta.url))),
       true,
     );
   });
 
-  it("File path.", async () => {
+  test("File path.", async () => {
     strictEqual(await isDirectoryPath(fileURLToPath(import.meta.url)), false);
   });
 
-  it("Nonexistent path.", async () => {
+  test("Nonexistent path.", async () => {
     strictEqual(
       await isDirectoryPath(
         fileURLToPath(new URL("nonexistent", import.meta.url)),

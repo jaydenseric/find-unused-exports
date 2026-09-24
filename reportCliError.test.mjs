@@ -2,7 +2,7 @@
 
 import { strictEqual, throws } from "node:assert";
 import { spawnSync } from "node:child_process";
-import { describe, it } from "node:test";
+import { suite, test } from "node:test";
 import { fileURLToPath } from "node:url";
 
 import replaceStackTraces from "replace-stack-traces";
@@ -10,8 +10,8 @@ import assertSnapshot from "snapshot-assertion";
 
 import reportCliError from "./reportCliError.mjs";
 
-describe("Function `reportCliError`.", { concurrency: true }, () => {
-  it("Argument 1 `cliDescription` not a string.", () => {
+suite("Function `reportCliError`.", { concurrency: true }, () => {
+  test("Argument 1 `cliDescription` not a string.", () => {
     throws(() => {
       reportCliError(
         // @ts-expect-error Testing invalid.
@@ -21,8 +21,8 @@ describe("Function `reportCliError`.", { concurrency: true }, () => {
     }, new TypeError("Argument 1 `cliDescription` must be a string."));
   });
 
-  describe("`Error` instance.", { concurrency: true }, () => {
-    it("With stack.", async () => {
+  suite("`Error` instance.", { concurrency: true }, () => {
+    test("With stack.", async () => {
       const { stdout, stderr, status, error } = spawnSync(
         "node",
         [
@@ -56,7 +56,7 @@ describe("Function `reportCliError`.", { concurrency: true }, () => {
       strictEqual(status, 0);
     });
 
-    it("Without stack.", async () => {
+    test("Without stack.", async () => {
       const { stdout, stderr, status, error } = spawnSync(
         "node",
         [
@@ -91,7 +91,7 @@ describe("Function `reportCliError`.", { concurrency: true }, () => {
     });
   });
 
-  it("`CliError` instance.", async () => {
+  test("`CliError` instance.", async () => {
     const { stdout, stderr, status, error } = spawnSync(
       "node",
       [
@@ -125,7 +125,7 @@ describe("Function `reportCliError`.", { concurrency: true }, () => {
     strictEqual(status, 0);
   });
 
-  it("Primitive value.", async () => {
+  test("Primitive value.", async () => {
     const { stdout, stderr, status, error } = spawnSync(
       "node",
       [

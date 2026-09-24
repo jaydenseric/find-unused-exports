@@ -1,13 +1,13 @@
 // @ts-check
 
 import { deepStrictEqual, ok, rejects, strictEqual } from "node:assert";
-import { describe, it } from "node:test";
+import { suite, test } from "node:test";
 import { fileURLToPath } from "node:url";
 
 import findUnusedExports from "./findUnusedExports.mjs";
 
-describe("Function `findUnusedExports`.", { concurrency: true }, () => {
-  it("Files but no exports or imports.", async () => {
+suite("Function `findUnusedExports`.", { concurrency: true }, () => {
+  test("Files but no exports or imports.", async () => {
     deepStrictEqual(
       await findUnusedExports({
         cwd: fileURLToPath(
@@ -21,7 +21,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
     );
   });
 
-  it("Multiple files importing from the same file.", async () => {
+  test("Multiple files importing from the same file.", async () => {
     deepStrictEqual(
       await findUnusedExports({
         cwd: fileURLToPath(
@@ -35,7 +35,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
     );
   });
 
-  it("No unused exports.", async () => {
+  test("No unused exports.", async () => {
     deepStrictEqual(
       await findUnusedExports({
         cwd: fileURLToPath(
@@ -46,7 +46,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
     );
   });
 
-  it("Some unused exports.", async () => {
+  test("Some unused exports.", async () => {
     deepStrictEqual(
       await findUnusedExports({
         cwd: fileURLToPath(
@@ -60,7 +60,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
     );
   });
 
-  it("Namespace import and a default import.", async () => {
+  test("Namespace import and a default import.", async () => {
     deepStrictEqual(
       await findUnusedExports({
         cwd: fileURLToPath(
@@ -74,7 +74,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
     );
   });
 
-  it("Namespace import without a default import.", async () => {
+  test("Namespace import without a default import.", async () => {
     deepStrictEqual(
       await findUnusedExports({
         cwd: fileURLToPath(
@@ -88,7 +88,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
     );
   });
 
-  it("Bare import specifier.", async () => {
+  test("Bare import specifier.", async () => {
     deepStrictEqual(
       await findUnusedExports({
         cwd: fileURLToPath(
@@ -99,7 +99,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
     );
   });
 
-  it("Protocol `node:` import specifier.", async () => {
+  test("Protocol `node:` import specifier.", async () => {
     deepStrictEqual(
       await findUnusedExports({
         cwd: fileURLToPath(
@@ -115,7 +115,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
     );
   });
 
-  it("Side effect import.", async () => {
+  test("Side effect import.", async () => {
     deepStrictEqual(
       await findUnusedExports({
         cwd: fileURLToPath(
@@ -128,7 +128,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
     );
   });
 
-  it("Unresolvable import specifier.", async () => {
+  test("Unresolvable import specifier.", async () => {
     deepStrictEqual(
       await findUnusedExports({
         cwd: fileURLToPath(
@@ -144,7 +144,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
     );
   });
 
-  it("Ignore unused exports comments.", async () => {
+  test("Ignore unused exports comments.", async () => {
     deepStrictEqual(
       await findUnusedExports({
         cwd: fileURLToPath(
@@ -161,8 +161,8 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
     );
   });
 
-  describe("Option `excludeGlob`.", { concurrency: true }, () => {
-    it("Not a string.", async () => {
+  suite("Option `excludeGlob`.", { concurrency: true }, () => {
+    test("Not a string.", async () => {
       await rejects(
         findUnusedExports({
           // @ts-expect-error Testing invalid.
@@ -172,7 +172,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
       );
     });
 
-    it("Valid.", async () => {
+    test("Valid.", async () => {
       deepStrictEqual(
         await findUnusedExports({
           cwd: fileURLToPath(
@@ -187,8 +187,8 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
     });
   });
 
-  describe("Option `ignore`.", { concurrency: true }, () => {
-    it("Not an object.", async () => {
+  suite("Option `ignore`.", { concurrency: true }, () => {
+    test("Not an object.", async () => {
       await rejects(
         findUnusedExports({
           // @ts-expect-error Testing invalid.
@@ -198,7 +198,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
       );
     });
 
-    it("Object with an entry not an array.", async () => {
+    test("Object with an entry not an array.", async () => {
       await rejects(
         findUnusedExports({
           ignore: {
@@ -210,7 +210,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
       );
     });
 
-    it("Object with an entry array with an item not a string.", async () => {
+    test("Object with an entry array with an item not a string.", async () => {
       await rejects(
         findUnusedExports({
           ignore: {
@@ -225,7 +225,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
       );
     });
 
-    it("Ignoring some unused exports.", async () => {
+    test("Ignoring some unused exports.", async () => {
       deepStrictEqual(
         await findUnusedExports({
           cwd: fileURLToPath(
@@ -243,7 +243,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
       );
     });
 
-    it("Ignoring all unused exports.", async () => {
+    test("Ignoring all unused exports.", async () => {
       deepStrictEqual(
         await findUnusedExports({
           cwd: fileURLToPath(
@@ -258,8 +258,8 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
     });
   });
 
-  describe("Option `importMap`.", { concurrency: true }, () => {
-    it("Invalid.", async () => {
+  suite("Option `importMap`.", { concurrency: true }, () => {
+    test("Invalid.", async () => {
       await rejects(
         findUnusedExports({
           // @ts-expect-error Testing invalid.
@@ -277,7 +277,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
       );
     });
 
-    it("Valid.", async () => {
+    test("Valid.", async () => {
       deepStrictEqual(
         await findUnusedExports({
           cwd: fileURLToPath(
@@ -296,8 +296,8 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
     });
   });
 
-  describe("Option `moduleGlob`.", { concurrency: true }, () => {
-    it("Not a string.", async () => {
+  suite("Option `moduleGlob`.", { concurrency: true }, () => {
+    test("Not a string.", async () => {
       await rejects(
         findUnusedExports({
           // @ts-expect-error Testing invalid.
@@ -307,7 +307,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
       );
     });
 
-    it("Valid.", async () => {
+    test("Valid.", async () => {
       deepStrictEqual(
         await findUnusedExports({
           cwd: fileURLToPath(
@@ -322,8 +322,8 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
     });
   });
 
-  describe("Option `cwd`.", { concurrency: true }, () => {
-    it("Not a string.", async () => {
+  suite("Option `cwd`.", { concurrency: true }, () => {
+    test("Not a string.", async () => {
       await rejects(
         findUnusedExports({
           // @ts-expect-error Testing invalid.
@@ -333,7 +333,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
       );
     });
 
-    it("Inaccessible directory path.", async () => {
+    test("Inaccessible directory path.", async () => {
       await rejects(
         findUnusedExports({
           cwd: fileURLToPath(new URL("nonexistent", import.meta.url)),
@@ -343,8 +343,8 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
     });
   });
 
-  describe("Option `resolveFileExtensions`.", { concurrency: true }, () => {
-    it("Not an array.", async () => {
+  suite("Option `resolveFileExtensions`.", { concurrency: true }, () => {
+    test("Not an array.", async () => {
       await rejects(
         findUnusedExports({
           // @ts-expect-error Testing invalid.
@@ -356,7 +356,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
       );
     });
 
-    it("Empty array.", async () => {
+    test("Empty array.", async () => {
       await rejects(
         findUnusedExports({ resolveFileExtensions: [] }),
         new TypeError(
@@ -365,7 +365,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
       );
     });
 
-    it("Array with an item not a string.", async () => {
+    test("Array with an item not a string.", async () => {
       await rejects(
         findUnusedExports({
           resolveFileExtensions: [
@@ -381,7 +381,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
       );
     });
 
-    it("Valid.", async () => {
+    test("Valid.", async () => {
       deepStrictEqual(
         await findUnusedExports({
           cwd: fileURLToPath(
@@ -399,8 +399,8 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
     });
   });
 
-  describe("Option `resolveIndexFiles`.", { concurrency: true }, () => {
-    it("Not a boolean.", async () => {
+  suite("Option `resolveIndexFiles`.", { concurrency: true }, () => {
+    test("Not a boolean.", async () => {
       await rejects(
         findUnusedExports({
           resolveFileExtensions: ["js"],
@@ -411,7 +411,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
       );
     });
 
-    it("Without using option `resolveFileExtensions`.", async () => {
+    test("Without using option `resolveFileExtensions`.", async () => {
       await rejects(
         findUnusedExports({ resolveIndexFiles: true }),
         new TypeError(
@@ -421,7 +421,7 @@ describe("Function `findUnusedExports`.", { concurrency: true }, () => {
     });
   });
 
-  it("Options `resolveFileExtensions` and `resolveIndexFiles`.", async () => {
+  test("Options `resolveFileExtensions` and `resolveIndexFiles`.", async () => {
     deepStrictEqual(
       await findUnusedExports({
         cwd: fileURLToPath(

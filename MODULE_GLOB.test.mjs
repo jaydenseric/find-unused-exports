@@ -2,11 +2,11 @@
 
 import { ok, strictEqual } from "node:assert";
 import { matchesGlob } from "node:path";
-import { describe, it } from "node:test";
+import { suite, test } from "node:test";
 
 import MODULE_GLOB from "./MODULE_GLOB.mjs";
 
-describe("Constant `MODULE_GLOB`.", { concurrency: true }, () => {
+suite("Constant `MODULE_GLOB`.", { concurrency: true }, () => {
   for (const extension of [
     "cjs",
     "cts",
@@ -17,7 +17,7 @@ describe("Constant `MODULE_GLOB`.", { concurrency: true }, () => {
     "ts",
     "tsx",
   ])
-    describe(
+    suite(
       `Matching module file extension \`${extension}\`.`,
       { concurrency: true },
       () => {
@@ -33,19 +33,19 @@ describe("Constant `MODULE_GLOB`.", { concurrency: true }, () => {
           `a.a..${extension}`,
           `a.a.a.${extension}`,
         ])
-          describe(`Filename \`${filename}\`.`, { concurrency: true }, () => {
-            it("Not nested.", () => {
+          suite(`Filename \`${filename}\`.`, { concurrency: true }, () => {
+            test("Not nested.", () => {
               ok(matchesGlob(filename, MODULE_GLOB));
             });
 
-            it("Nested.", () => {
+            test("Nested.", () => {
               ok(matchesGlob(`a/${filename}`, MODULE_GLOB));
             });
           });
       },
     );
 
-  it("Not matching.", () => {
+  test("Not matching.", () => {
     strictEqual(matchesGlob("/a.txt", MODULE_GLOB), false);
   });
 });

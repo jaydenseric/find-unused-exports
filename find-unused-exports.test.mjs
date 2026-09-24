@@ -2,18 +2,18 @@
 
 import { strictEqual } from "node:assert";
 import { spawnSync } from "node:child_process";
-import { describe, it } from "node:test";
+import { suite, test } from "node:test";
 import { fileURLToPath } from "node:url";
 
 import replaceStackTraces from "replace-stack-traces";
 import assertSnapshot from "snapshot-assertion";
 
-describe("CLI command `find-unused-exports`.", { concurrency: true }, () => {
+suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
   const FIND_UNUSED_EXPORTS_CLI_PATH = fileURLToPath(
     new URL("./find-unused-exports.mjs", import.meta.url),
   );
 
-  it("No unused exports.", async () => {
+  test("No unused exports.", async () => {
     const { stdout, stderr, status, error } = spawnSync(
       "node",
       [FIND_UNUSED_EXPORTS_CLI_PATH],
@@ -39,7 +39,7 @@ describe("CLI command `find-unused-exports`.", { concurrency: true }, () => {
     strictEqual(status, 0);
   });
 
-  it("Some unused exports.", async () => {
+  test("Some unused exports.", async () => {
     const { stdout, stderr, status, error } = spawnSync(
       "node",
       [FIND_UNUSED_EXPORTS_CLI_PATH],
@@ -65,7 +65,7 @@ describe("CLI command `find-unused-exports`.", { concurrency: true }, () => {
     strictEqual(status, 1);
   });
 
-  it("Module containing TypeScript syntax.", async () => {
+  test("Module containing TypeScript syntax.", async () => {
     const { stdout, stderr, status, error } = spawnSync(
       "node",
       [FIND_UNUSED_EXPORTS_CLI_PATH],
@@ -91,7 +91,7 @@ describe("CLI command `find-unused-exports`.", { concurrency: true }, () => {
     strictEqual(status, 1);
   });
 
-  it("Arg `--exclude-glob`.", async () => {
+  test("Arg `--exclude-glob`.", async () => {
     const { stdout, stderr, status, error } = spawnSync(
       "node",
       [FIND_UNUSED_EXPORTS_CLI_PATH, "--exclude-glob", "**/b.mjs"],
@@ -117,8 +117,8 @@ describe("CLI command `find-unused-exports`.", { concurrency: true }, () => {
     strictEqual(status, 1);
   });
 
-  describe("Arg `--ignore`.", { concurrency: true }, () => {
-    it("Invalid.", async () => {
+  suite("Arg `--ignore`.", { concurrency: true }, () => {
+    test("Invalid.", async () => {
       const { stdout, stderr, status, error } = spawnSync(
         "node",
         [FIND_UNUSED_EXPORTS_CLI_PATH, "--ignore", "_"],
@@ -144,7 +144,7 @@ describe("CLI command `find-unused-exports`.", { concurrency: true }, () => {
       strictEqual(status, 1);
     });
 
-    it("Valid.", async () => {
+    test("Valid.", async () => {
       const { stdout, stderr, status, error } = spawnSync(
         "node",
         [
@@ -178,8 +178,8 @@ describe("CLI command `find-unused-exports`.", { concurrency: true }, () => {
     });
   });
 
-  describe("Arg `--import-map`.", { concurrency: true }, () => {
-    it("Invalid.", async () => {
+  suite("Arg `--import-map`.", { concurrency: true }, () => {
+    test("Invalid.", async () => {
       const { stdout, stderr, status, error } = spawnSync(
         "node",
         [FIND_UNUSED_EXPORTS_CLI_PATH, "--import-map", "_"],
@@ -205,7 +205,7 @@ describe("CLI command `find-unused-exports`.", { concurrency: true }, () => {
       strictEqual(status, 1);
     });
 
-    it("Valid.", async () => {
+    test("Valid.", async () => {
       const { stdout, stderr, status, error } = spawnSync(
         // Workaround Node.js deprecating passing args with shell enabled:
         // https://nodejs.org/api/deprecations.html#DEP0190
@@ -241,7 +241,7 @@ describe("CLI command `find-unused-exports`.", { concurrency: true }, () => {
     });
   });
 
-  it("Arg `--module-glob`.", async () => {
+  test("Arg `--module-glob`.", async () => {
     const { stdout, stderr, status, error } = spawnSync(
       "node",
       [FIND_UNUSED_EXPORTS_CLI_PATH, "--module-glob", "**/*.txt"],
@@ -267,7 +267,7 @@ describe("CLI command `find-unused-exports`.", { concurrency: true }, () => {
     strictEqual(status, 1);
   });
 
-  it("Arg `--resolve-file-extensions`.", async () => {
+  test("Arg `--resolve-file-extensions`.", async () => {
     const { stdout, stderr, status, error } = spawnSync(
       "node",
       [FIND_UNUSED_EXPORTS_CLI_PATH, "--resolve-file-extensions", "mjs,a.mjs"],
@@ -296,7 +296,7 @@ describe("CLI command `find-unused-exports`.", { concurrency: true }, () => {
     strictEqual(status, 1);
   });
 
-  it("Args `--resolve-file-extensions` and `--resolve-index-files`.", async () => {
+  test("Args `--resolve-file-extensions` and `--resolve-index-files`.", async () => {
     const { stdout, stderr, status, error } = spawnSync(
       "node",
       [
@@ -330,7 +330,7 @@ describe("CLI command `find-unused-exports`.", { concurrency: true }, () => {
     strictEqual(status, 1);
   });
 
-  it("Arg `--resolve-index-files` without using arg `--resolve-file-extensions`.", async () => {
+  test("Arg `--resolve-index-files` without using arg `--resolve-file-extensions`.", async () => {
     const { stdout, stderr, status, error } = spawnSync(
       "node",
       [FIND_UNUSED_EXPORTS_CLI_PATH, "--resolve-index-files"],
@@ -359,7 +359,7 @@ describe("CLI command `find-unused-exports`.", { concurrency: true }, () => {
     strictEqual(status, 1);
   });
 
-  it("Module Babel can’t parse.", async () => {
+  test("Module Babel can’t parse.", async () => {
     const fixtureProjectPath = fileURLToPath(
       new URL("./test/fixtures/unparsable-module", import.meta.url),
     );
