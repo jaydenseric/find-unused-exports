@@ -28,26 +28,16 @@ suite("Function `scanModuleCode`.", { concurrency: true }, () => {
       );
     });
 
-    test("`.mts` file, TypeScript syntax.", async () => {
-      deepStrictEqual(await scanModuleCode("let a: boolean;", "a.mts"), {
-        imports: {},
-        exports: new Set(),
+    for (const extension of ["mts", "cts", "ts"])
+      test(`\`.${extension}\` file, TypeScript syntax.`, async () => {
+        deepStrictEqual(
+          await scanModuleCode("let a: boolean;", `a.${extension}`),
+          {
+            imports: {},
+            exports: new Set(),
+          },
+        );
       });
-    });
-
-    test("`.cts` file, TypeScript syntax.", async () => {
-      deepStrictEqual(await scanModuleCode("let a: boolean;", "a.cts"), {
-        imports: {},
-        exports: new Set(),
-      });
-    });
-
-    test("`.ts` file, TypeScript syntax.", async () => {
-      deepStrictEqual(await scanModuleCode("let a: boolean;", "a.ts"), {
-        imports: {},
-        exports: new Set(),
-      });
-    });
 
     test("`.tsx` file, TypeScript and JSX syntax.", async () => {
       deepStrictEqual(
