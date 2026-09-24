@@ -173,35 +173,27 @@ export default async function scanModuleCode(code, path) {
               analysis.imports[path.node.source.value].add("*");
               break;
             case "ExportSpecifier": {
-              const localName = getModuleExportName(specifier.local);
-
-              if (localName === "default")
-                // E.g. `export { default as a } from "a"`
-                //                ^^^^^^^
-                analysis.imports[path.node.source.value].add("default");
+              // E.g. `export { default as a } from "a"`
+              //                ^^^^^^^
               // E.g. `export { a as b } from "a"`
               //                ^
               // E.g. `export { "a-b-c" as a } from "a"`
               //                ^^^^^^^
-              else analysis.imports[path.node.source.value].add(localName);
+              analysis.imports[path.node.source.value].add(
+                getModuleExportName(specifier.local),
+              );
               break;
             }
           }
 
-          const exportedName = getModuleExportName(specifier.exported);
-
           // Process the export.
-          if (exportedName === "default") {
-            // E.g. `export { a as default } from "a"`
-            //                     ^^^^^^^
-            analysis.exports.add("default");
-          } else {
-            // E.g. `export { a as b } from "a"`
-            //                     ^
-            // E.g. `export { a as "a-b-c" } from "a"`
-            //                     ^^^^^^^
-            analysis.exports.add(exportedName);
-          }
+          // E.g. `export { a as default } from "a"`
+          //                     ^^^^^^^
+          // E.g. `export { a as b } from "a"`
+          //                     ^
+          // E.g. `export { a as "a-b-c" } from "a"`
+          //                     ^^^^^^^
+          analysis.exports.add(getModuleExportName(specifier.exported));
         }
       } else {
         // E.g. `const a = 1; export { a }`

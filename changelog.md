@@ -15,6 +15,7 @@
 
 - Fixed class exports not being detected, via [#11](https://github.com/jaydenseric/find-unused-exports/pull/11).
 - Fixed dynamic imports within default or named exports not being detected.
+- Removed redundant conditions in the function `scanModuleCode`.
 - Improved the function `scanModuleCode` test structure.
 - Updated dev dependencies.
 - Updated package scripts.
