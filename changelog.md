@@ -15,7 +15,9 @@
 
 - Fixed class exports not being detected, via [#11](https://github.com/jaydenseric/find-unused-exports/pull/11).
 - Fixed dynamic imports within default or named exports not being detected.
-- Removed redundant conditions in the function `scanModuleCode`.
+- Improved the function `scanModuleCode`:
+  - Removed redundant conditions.
+  - Avoid using a TypeScript ignore comment.
 - Improved the function `scanModuleCode` test structure.
 - Refactored tests from `describe` and `it` to `suite` and `test`.
 - Renamed the test helper directory from `test` to `test-helpers` to avoid the Node.js test runner assuming the modules within are tests.

@@ -140,8 +140,11 @@ export default async function scanModuleCode(code, path) {
             // E.g. `export function a() {}`
             //              ^^^^^^^^^^^^^^^
             analysis.exports.add(
-              // @ts-expect-error `id` must exist in export declarations.
-              path.node.declaration.id.name,
+              // Babel parser enforces that named export class or function
+              // declarations aren’t anonymous, but the AST node types are
+              // shared with other situations like default exports where they
+              // may be.
+              /** @type {types.Identifier} */ (path.node.declaration.id).name,
             );
             break;
           case "VariableDeclaration": {
