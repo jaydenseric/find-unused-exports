@@ -64,7 +64,6 @@
     "globals": "^17.12.0",
     "prettier": "^3.9.9",
     "replace-stack-traces": "^2.0.0",
-    "snapshot-assertion": "^5.0.0",
     "typescript": "^6.0.3"
   },
   "scripts": {

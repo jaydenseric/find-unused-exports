@@ -2,18 +2,19 @@
 
 import { strictEqual } from "node:assert";
 import { spawnSync } from "node:child_process";
-import { suite, test } from "node:test";
+import { snapshot, suite, test } from "node:test";
 import { fileURLToPath } from "node:url";
 
 import replaceStackTraces from "replace-stack-traces";
-import assertSnapshot from "snapshot-assertion";
+
+snapshot.setDefaultSnapshotSerializers([String]);
 
 suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
   const FIND_UNUSED_EXPORTS_CLI_PATH = fileURLToPath(
     new URL("./find-unused-exports.mjs", import.meta.url),
   );
 
-  test("No unused exports.", async () => {
+  test("No unused exports.", (context) => {
     const { stdout, stderr, status, error } = spawnSync(
       "node",
       [FIND_UNUSED_EXPORTS_CLI_PATH],
@@ -31,18 +32,20 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
 
     if (error) throw error;
 
-    await assertSnapshot(
+    context.assert.fileSnapshot(
       stdout.toString(),
-      new URL(
-        "./test-helpers/snapshots/find-unused-exports/no-unused-exports-stdout.ans",
-        import.meta.url,
+      fileURLToPath(
+        new URL(
+          "./test-helpers/snapshots/find-unused-exports/no-unused-exports-stdout.ans",
+          import.meta.url,
+        ),
       ),
     );
     strictEqual(stderr.toString(), "");
     strictEqual(status, 0);
   });
 
-  test("Some unused exports.", async () => {
+  test("Some unused exports.", (context) => {
     const { stdout, stderr, status, error } = spawnSync(
       "node",
       [FIND_UNUSED_EXPORTS_CLI_PATH],
@@ -61,17 +64,19 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
     if (error) throw error;
 
     strictEqual(stdout.toString(), "");
-    await assertSnapshot(
+    context.assert.fileSnapshot(
       stderr.toString(),
-      new URL(
-        "./test-helpers/snapshots/find-unused-exports/some-unused-exports-stderr.ans",
-        import.meta.url,
+      fileURLToPath(
+        new URL(
+          "./test-helpers/snapshots/find-unused-exports/some-unused-exports-stderr.ans",
+          import.meta.url,
+        ),
       ),
     );
     strictEqual(status, 1);
   });
 
-  test("Module containing TypeScript syntax.", async () => {
+  test("Module containing TypeScript syntax.", (context) => {
     const { stdout, stderr, status, error } = spawnSync(
       "node",
       [FIND_UNUSED_EXPORTS_CLI_PATH],
@@ -90,17 +95,19 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
     if (error) throw error;
 
     strictEqual(stdout.toString(), "");
-    await assertSnapshot(
+    context.assert.fileSnapshot(
       stderr.toString(),
-      new URL(
-        "./test-helpers/snapshots/find-unused-exports/typescript-syntax-stderr.ans",
-        import.meta.url,
+      fileURLToPath(
+        new URL(
+          "./test-helpers/snapshots/find-unused-exports/typescript-syntax-stderr.ans",
+          import.meta.url,
+        ),
       ),
     );
     strictEqual(status, 1);
   });
 
-  test("Arg `--exclude-glob`.", async () => {
+  test("Arg `--exclude-glob`.", (context) => {
     const { stdout, stderr, status, error } = spawnSync(
       "node",
       [FIND_UNUSED_EXPORTS_CLI_PATH, "--exclude-glob", "**/b.mjs"],
@@ -116,18 +123,20 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
     if (error) throw error;
 
     strictEqual(stdout.toString(), "");
-    await assertSnapshot(
+    context.assert.fileSnapshot(
       stderr.toString(),
-      new URL(
-        "./test-helpers/snapshots/find-unused-exports/exclude-glob-stderr.ans",
-        import.meta.url,
+      fileURLToPath(
+        new URL(
+          "./test-helpers/snapshots/find-unused-exports/exclude-glob-stderr.ans",
+          import.meta.url,
+        ),
       ),
     );
     strictEqual(status, 1);
   });
 
   suite("Arg `--ignore`.", { concurrency: true }, () => {
-    test("Invalid.", async () => {
+    test("Invalid.", (context) => {
       const { stdout, stderr, status, error } = spawnSync(
         "node",
         [FIND_UNUSED_EXPORTS_CLI_PATH, "--ignore", "_"],
@@ -146,17 +155,19 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
       if (error) throw error;
 
       strictEqual(stdout.toString(), "");
-      await assertSnapshot(
+      context.assert.fileSnapshot(
         stderr.toString(),
-        new URL(
-          "./test-helpers/snapshots/find-unused-exports/ignore-invalid-stderr.ans",
-          import.meta.url,
+        fileURLToPath(
+          new URL(
+            "./test-helpers/snapshots/find-unused-exports/ignore-invalid-stderr.ans",
+            import.meta.url,
+          ),
         ),
       );
       strictEqual(status, 1);
     });
 
-    test("Valid.", async () => {
+    test("Valid.", (context) => {
       const { stdout, stderr, status, error } = spawnSync(
         "node",
         [
@@ -182,11 +193,13 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
       if (error) throw error;
 
       strictEqual(stdout.toString(), "");
-      await assertSnapshot(
+      context.assert.fileSnapshot(
         stderr.toString(),
-        new URL(
-          "./test-helpers/snapshots/find-unused-exports/ignore-valid-stderr.ans",
-          import.meta.url,
+        fileURLToPath(
+          new URL(
+            "./test-helpers/snapshots/find-unused-exports/ignore-valid-stderr.ans",
+            import.meta.url,
+          ),
         ),
       );
       strictEqual(status, 1);
@@ -194,7 +207,7 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
   });
 
   suite("Arg `--import-map`.", { concurrency: true }, () => {
-    test("Invalid.", async () => {
+    test("Invalid.", (context) => {
       const { stdout, stderr, status, error } = spawnSync(
         "node",
         [FIND_UNUSED_EXPORTS_CLI_PATH, "--import-map", "_"],
@@ -210,17 +223,19 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
       if (error) throw error;
 
       strictEqual(stdout.toString(), "");
-      await assertSnapshot(
+      context.assert.fileSnapshot(
         stderr.toString(),
-        new URL(
-          "./test-helpers/snapshots/find-unused-exports/import-map-invalid-stderr.ans",
-          import.meta.url,
+        fileURLToPath(
+          new URL(
+            "./test-helpers/snapshots/find-unused-exports/import-map-invalid-stderr.ans",
+            import.meta.url,
+          ),
         ),
       );
       strictEqual(status, 1);
     });
 
-    test("Valid.", async () => {
+    test("Valid.", (context) => {
       const { stdout, stderr, status, error } = spawnSync(
         // Workaround Node.js deprecating passing args with shell enabled:
         // https://nodejs.org/api/deprecations.html#DEP0190
@@ -245,18 +260,20 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
       if (error) throw error;
 
       strictEqual(stdout.toString(), "");
-      await assertSnapshot(
+      context.assert.fileSnapshot(
         stderr.toString(),
-        new URL(
-          "./test-helpers/snapshots/find-unused-exports/import-map-valid-stderr.ans",
-          import.meta.url,
+        fileURLToPath(
+          new URL(
+            "./test-helpers/snapshots/find-unused-exports/import-map-valid-stderr.ans",
+            import.meta.url,
+          ),
         ),
       );
       strictEqual(status, 1);
     });
   });
 
-  test("Arg `--module-glob`.", async () => {
+  test("Arg `--module-glob`.", (context) => {
     const { stdout, stderr, status, error } = spawnSync(
       "node",
       [FIND_UNUSED_EXPORTS_CLI_PATH, "--module-glob", "**/*.txt"],
@@ -272,17 +289,19 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
     if (error) throw error;
 
     strictEqual(stdout.toString(), "");
-    await assertSnapshot(
+    context.assert.fileSnapshot(
       stderr.toString(),
-      new URL(
-        "./test-helpers/snapshots/find-unused-exports/module-glob-stderr.ans",
-        import.meta.url,
+      fileURLToPath(
+        new URL(
+          "./test-helpers/snapshots/find-unused-exports/module-glob-stderr.ans",
+          import.meta.url,
+        ),
       ),
     );
     strictEqual(status, 1);
   });
 
-  test("Arg `--resolve-file-extensions`.", async () => {
+  test("Arg `--resolve-file-extensions`.", (context) => {
     const { stdout, stderr, status, error } = spawnSync(
       "node",
       [FIND_UNUSED_EXPORTS_CLI_PATH, "--resolve-file-extensions", "mjs,a.mjs"],
@@ -301,17 +320,19 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
     if (error) throw error;
 
     strictEqual(stdout.toString(), "");
-    await assertSnapshot(
+    context.assert.fileSnapshot(
       stderr.toString(),
-      new URL(
-        "./test-helpers/snapshots/find-unused-exports/resolve-file-extensions-stderr.ans",
-        import.meta.url,
+      fileURLToPath(
+        new URL(
+          "./test-helpers/snapshots/find-unused-exports/resolve-file-extensions-stderr.ans",
+          import.meta.url,
+        ),
       ),
     );
     strictEqual(status, 1);
   });
 
-  test("Args `--resolve-file-extensions` and `--resolve-index-files`.", async () => {
+  test("Args `--resolve-file-extensions` and `--resolve-index-files`.", (context) => {
     const { stdout, stderr, status, error } = spawnSync(
       "node",
       [
@@ -335,17 +356,19 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
     if (error) throw error;
 
     strictEqual(stdout.toString(), "");
-    await assertSnapshot(
+    context.assert.fileSnapshot(
       stderr.toString(),
-      new URL(
-        "./test-helpers/snapshots/find-unused-exports/resolve-file-extensions-and-index-files-stderr.ans",
-        import.meta.url,
+      fileURLToPath(
+        new URL(
+          "./test-helpers/snapshots/find-unused-exports/resolve-file-extensions-and-index-files-stderr.ans",
+          import.meta.url,
+        ),
       ),
     );
     strictEqual(status, 1);
   });
 
-  test("Arg `--resolve-index-files` without using arg `--resolve-file-extensions`.", async () => {
+  test("Arg `--resolve-index-files` without using arg `--resolve-file-extensions`.", (context) => {
     const { stdout, stderr, status, error } = spawnSync(
       "node",
       [FIND_UNUSED_EXPORTS_CLI_PATH, "--resolve-index-files"],
@@ -364,17 +387,19 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
     if (error) throw error;
 
     strictEqual(stdout.toString(), "");
-    await assertSnapshot(
+    context.assert.fileSnapshot(
       stderr.toString(),
-      new URL(
-        "./test-helpers/snapshots/find-unused-exports/resolve-index-files-without-resolve-file-extensions-stderr.ans",
-        import.meta.url,
+      fileURLToPath(
+        new URL(
+          "./test-helpers/snapshots/find-unused-exports/resolve-index-files-without-resolve-file-extensions-stderr.ans",
+          import.meta.url,
+        ),
       ),
     );
     strictEqual(status, 1);
   });
 
-  test("Module Babel can’t parse.", async () => {
+  test("Module Babel can’t parse.", (context) => {
     const fixtureProjectPath = fileURLToPath(
       new URL("./test-helpers/fixtures/unparsable-module", import.meta.url),
     );
@@ -393,13 +418,15 @@ suite("CLI command `find-unused-exports`.", { concurrency: true }, () => {
     if (error) throw error;
 
     strictEqual(stdout.toString(), "");
-    await assertSnapshot(
+    context.assert.fileSnapshot(
       replaceStackTraces(
         stderr.toString().replace(fixtureProjectPath, "<path>"),
       ),
-      new URL(
-        "./test-helpers/snapshots/find-unused-exports/unparsable-module-stderr.ans",
-        import.meta.url,
+      fileURLToPath(
+        new URL(
+          "./test-helpers/snapshots/find-unused-exports/unparsable-module-stderr.ans",
+          import.meta.url,
+        ),
       ),
     );
     strictEqual(status, 1);

@@ -2,13 +2,14 @@
 
 import { strictEqual, throws } from "node:assert";
 import { spawnSync } from "node:child_process";
-import { suite, test } from "node:test";
+import { snapshot, suite, test } from "node:test";
 import { fileURLToPath } from "node:url";
 
 import replaceStackTraces from "replace-stack-traces";
-import assertSnapshot from "snapshot-assertion";
 
 import reportCliError from "./reportCliError.mjs";
+
+snapshot.setDefaultSnapshotSerializers([String]);
 
 suite("Function `reportCliError`.", { concurrency: true }, () => {
   test("Argument 1 `cliDescription` not a string.", () => {
@@ -22,7 +23,7 @@ suite("Function `reportCliError`.", { concurrency: true }, () => {
   });
 
   suite("`Error` instance.", { concurrency: true }, () => {
-    test("With stack.", async () => {
+    test("With stack.", (context) => {
       const { stdout, stderr, status, error } = spawnSync(
         "node",
         [
@@ -45,18 +46,20 @@ suite("Function `reportCliError`.", { concurrency: true }, () => {
 
       strictEqual(stdout.toString(), "");
 
-      await assertSnapshot(
+      context.assert.fileSnapshot(
         replaceStackTraces(stderr.toString()),
-        new URL(
-          "./test-helpers/snapshots/reportCliError/Error-instance-with-stack-stderr.ans",
-          import.meta.url,
+        fileURLToPath(
+          new URL(
+            "./test-helpers/snapshots/reportCliError/Error-instance-with-stack-stderr.ans",
+            import.meta.url,
+          ),
         ),
       );
 
       strictEqual(status, 0);
     });
 
-    test("Without stack.", async () => {
+    test("Without stack.", (context) => {
       const { stdout, stderr, status, error } = spawnSync(
         "node",
         [
@@ -79,11 +82,13 @@ suite("Function `reportCliError`.", { concurrency: true }, () => {
 
       strictEqual(stdout.toString(), "");
 
-      await assertSnapshot(
+      context.assert.fileSnapshot(
         replaceStackTraces(stderr.toString()),
-        new URL(
-          "./test-helpers/snapshots/reportCliError/Error-instance-without-stack-stderr.ans",
-          import.meta.url,
+        fileURLToPath(
+          new URL(
+            "./test-helpers/snapshots/reportCliError/Error-instance-without-stack-stderr.ans",
+            import.meta.url,
+          ),
         ),
       );
 
@@ -91,7 +96,7 @@ suite("Function `reportCliError`.", { concurrency: true }, () => {
     });
   });
 
-  test("`CliError` instance.", async () => {
+  test("`CliError` instance.", (context) => {
     const { stdout, stderr, status, error } = spawnSync(
       "node",
       [
@@ -114,18 +119,20 @@ suite("Function `reportCliError`.", { concurrency: true }, () => {
 
     strictEqual(stdout.toString(), "");
 
-    await assertSnapshot(
+    context.assert.fileSnapshot(
       replaceStackTraces(stderr.toString()),
-      new URL(
-        "./test-helpers/snapshots/reportCliError/CliError-instance-stderr.ans",
-        import.meta.url,
+      fileURLToPath(
+        new URL(
+          "./test-helpers/snapshots/reportCliError/CliError-instance-stderr.ans",
+          import.meta.url,
+        ),
       ),
     );
 
     strictEqual(status, 0);
   });
 
-  test("Primitive value.", async () => {
+  test("Primitive value.", (context) => {
     const { stdout, stderr, status, error } = spawnSync(
       "node",
       [
@@ -148,11 +155,13 @@ suite("Function `reportCliError`.", { concurrency: true }, () => {
 
     strictEqual(stdout.toString(), "");
 
-    await assertSnapshot(
+    context.assert.fileSnapshot(
       replaceStackTraces(stderr.toString()),
-      new URL(
-        "./test-helpers/snapshots/reportCliError/primitive-value-stderr.ans",
-        import.meta.url,
+      fileURLToPath(
+        new URL(
+          "./test-helpers/snapshots/reportCliError/primitive-value-stderr.ans",
+          import.meta.url,
+        ),
       ),
     );
 
