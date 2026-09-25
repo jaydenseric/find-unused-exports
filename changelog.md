@@ -21,7 +21,7 @@
 - Fixed class exports not being detected, via [#11](https://github.com/jaydenseric/find-unused-exports/pull/11).
 - Fixed dynamic imports within default or named exports not being detected.
 - Improved the internal function `scanModuleCode`:
-  - Make argument 2 `path` required, and better explain in comments it’s purpose.
+  - Make argument 2 `path` required, and better explain its purpose in comments.
   - Removed redundant conditions.
   - Avoid using a TypeScript ignore comment.
 - Improved the function `scanModuleCode` test structure.
