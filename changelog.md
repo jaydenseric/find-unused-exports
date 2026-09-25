@@ -1,6 +1,6 @@
 # find-unused-exports changelog
 
-## Next
+## 10.0.0
 
 ### Major
 
