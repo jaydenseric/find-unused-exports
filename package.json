@@ -49,7 +49,7 @@
     "find-unused-exports": "find-unused-exports.mjs"
   },
   "engines": {
-    "node": "^22.22.2 || >=24.15.0"
+    "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
   },
   "dependencies": {
     "@babel/core": "^8.0.0",

@@ -145,7 +145,7 @@ Line or block comments can be used:
 
 Supported runtime environments:
 
-- [Node.js](https://nodejs.org) versions `^22.22.2 || >=24.15.0`.
+- [Node.js](https://nodejs.org) versions `^22.22.2 || ^24.15.0 || >=26.0.0`.
 
 Projects must configure [TypeScript](https://typescriptlang.org) to use types from the ECMAScript modules that have a `// @ts-check` comment:
 
