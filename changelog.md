@@ -37,6 +37,7 @@
   - Updated `actions/checkout` to v7.
   - Updated `actions/setup-node` to v7.
 - Added a `.gitattributes` file to enforce LF line endings.
+- Sorted config in `.editorconfig`.
 
 ## 9.0.0
 
