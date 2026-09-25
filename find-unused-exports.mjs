@@ -6,9 +6,7 @@
  * @import { IgnoreExportsMap } from "./findUnusedExports.mjs"
  */
 
-import { styleText } from "node:util";
-
-import arg from "arg";
+import { parseArgs, styleText } from "node:util";
 
 import CliError from "./CliError.mjs";
 import errorConsole from "./errorConsole.mjs";
@@ -22,19 +20,23 @@ import reportCliError from "./reportCliError.mjs";
 async function findUnusedExportsCli() {
   try {
     const {
-      "--exclude-glob": excludeGlob,
-      "--ignore": ignoreJson,
-      "--import-map": importMapJson,
-      "--module-glob": moduleGlob,
-      "--resolve-file-extensions": resolveFileExtensionsList,
-      "--resolve-index-files": resolveIndexFiles,
-    } = arg({
-      "--exclude-glob": String,
-      "--ignore": String,
-      "--import-map": String,
-      "--module-glob": String,
-      "--resolve-file-extensions": String,
-      "--resolve-index-files": Boolean,
+      values: {
+        "exclude-glob": excludeGlob,
+        ignore: ignoreJson,
+        "import-map": importMapJson,
+        "module-glob": moduleGlob,
+        "resolve-file-extensions": resolveFileExtensionsList,
+        "resolve-index-files": resolveIndexFiles,
+      },
+    } = parseArgs({
+      options: {
+        "exclude-glob": { type: "string" },
+        ignore: { type: "string" },
+        "import-map": { type: "string" },
+        "module-glob": { type: "string" },
+        "resolve-file-extensions": { type: "string" },
+        "resolve-index-files": { type: "boolean" },
+      },
     });
 
     /** @type {IgnoreExportsMap | undefined} */

@@ -6,6 +6,7 @@
 
 - Updated Node.js support to `^22.22.2 || >=24.15.0`.
 - Migrated to Babel v8. Project Babel config must now be Babel v8 compatible.
+- Replaced the dependency [`arg`](https://npm.im/arg) with the native Node.js API [`parseArgs` from `node:util`](https://nodejs.org/api/util.html#utilparseargsconfig). The CLI command `find-unused-exports` arguments haven’t changed, but how they are parsed is now stricter.
 
 ### Minor
 
